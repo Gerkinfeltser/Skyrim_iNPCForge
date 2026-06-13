@@ -22,8 +22,7 @@ Use this skill when asked to:
 ## Prerequisites
 
 - **Spriggit** 0.40.0 installed (`dotnet tool install --global Spriggit.Yaml.Skyrim`)
-- Skyrim SE Data folder available at `D:\Steam\steamapps\common\Skyrim Special Edition\Data`
-- This repo at `D:\gerkgit\Skyrim_NPCTemplate`
+- `$env:SKYRIM_DATA` set to your Skyrim SE Data folder (see `AGENTS.md` → Commands)
 
 ## Pipeline Overview
 
@@ -309,7 +308,7 @@ ESL constraint.
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
   --InputPath "output\{PluginName}_spriggit" `
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
-  --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
+  --DataFolder "$env:SKYRIM_DATA"
 ```
 
 ### 3j: ESL Flagging (Automatic)

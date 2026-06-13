@@ -34,11 +34,16 @@ npc.config.yaml ──► Spriggit YAML ──► {PluginName}.esp   (record lay
 
 ## Commands (Windows / PowerShell)
 
-This repo is Windows-only. Target Skyrim SE Data folder:
+This repo is Windows-only. Set the Skyrim SE Data folder once per session:
 
+```powershell
+# Adjust path to your Steam install. Examples:
+#   $env:SKYRIM_DATA = "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
+#   $env:SKYRIM_DATA = "C:\Program Files (x86)\Steam\steamapps\common\Skyrim Special Edition\Data"
+$env:SKYRIM_DATA = "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 ```
-D:\Steam\steamapps\common\Skyrim Special Edition\Data
-```
+
+Spriggit installs to `$env:USERPROFILE\.dotnet\tools\` (portable — resolves to any user).
 
 **Serialize Spriggit YAML → .esp:**
 
@@ -46,7 +51,7 @@ D:\Steam\steamapps\common\Skyrim Special Edition\Data
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
   --InputPath "output\{PluginName}_spriggit" `
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
-  --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
+  --DataFolder "$env:SKYRIM_DATA"
 ```
 
 **Reverse (CK edit → YAML, to keep source in sync):**
@@ -55,7 +60,7 @@ D:\Steam\steamapps\common\Skyrim Special Edition\Data
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" serialize `
   --InputPath "output\{PluginName}\{PluginName}.esp" `
   --OutputPath "output\{PluginName}_spriggit" `
-  --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
+  --DataFolder "$env:SKYRIM_DATA"
 ```
 
 Spriggit 0.40.0 is pinned via `.spriggit`. Install with

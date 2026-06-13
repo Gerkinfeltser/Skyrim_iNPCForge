@@ -47,7 +47,7 @@ Edit any YAML in `GrokTheSmith_spriggit/`, then re-serialize:
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
   --InputPath "examples/GrokTheSmith_output/GrokTheSmith_spriggit" `
   --OutputPath "examples/GrokTheSmith_output/GrokTheSmith.esp" `
-  --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
+  --DataFolder "$env:SKYRIM_DATA"
 ```
 
 No Creation Kit required for YAML-level edits.
