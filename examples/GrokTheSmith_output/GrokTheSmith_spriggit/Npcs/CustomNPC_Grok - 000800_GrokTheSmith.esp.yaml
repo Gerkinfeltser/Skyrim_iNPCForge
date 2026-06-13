@@ -1,0 +1,129 @@
+FormKey: 000800:GrokTheSmith.esp
+IsCompressed: True
+MajorRecordFlagsRaw: 262144
+EditorID: CustomNPC_Grok
+SkyrimMajorRecordFlags:
+- Compressed
+ObjectBounds:
+  First: -22, -14, 0
+  Second: 22, 14, 128
+Configuration:
+  Flags:
+  - AutoCalcStats
+  - Unique
+  Level:
+    MutagenObjectType: NpcLevel
+    Level: 25
+  SpeedMultiplier: 100
+  DispositionBase: 35
+Factions:
+- Faction: 028E42:Skyrim.esm
+  Rank: 0
+  Fluff: 0x000000
+Race: 013747:Skyrim.esm
+Voice: 013AEA:Skyrim.esm
+Class: 017008:Skyrim.esm
+AIData:
+  Aggression: Unaggressive
+  Confidence: Average
+  EnergyLevel: 50
+  Assistance: HelpsFriendsAndAllies
+  Responsibility: NoCrime
+  Unused: 119
+Name:
+  TargetLanguage: English
+  Value: Grok
+DefaultOutfit: 000801:GrokTheSmith.esp
+Packages:
+- 0BAD0A:Skyrim.esm
+Items:
+- Item:
+    Item: 01398B:Skyrim.esm
+    Count: 1
+- Item:
+    Item: 00000F:Skyrim.esm
+    Count: 50
+PlayerSkills:
+  SkillValues:
+  - Key: OneHanded
+    Value: 20
+  - Key: TwoHanded
+    Value: 25
+  - Key: Archery
+    Value: 15
+  - Key: Block
+    Value: 20
+  - Key: Smithing
+    Value: 35
+  - Key: HeavyArmor
+    Value: 20
+  - Key: LightArmor
+    Value: 15
+  - Key: Pickpocket
+    Value: 15
+  - Key: Lockpicking
+    Value: 15
+  - Key: Sneak
+    Value: 15
+  - Key: Alchemy
+    Value: 15
+  - Key: Speech
+    Value: 15
+  - Key: Alteration
+    Value: 15
+  - Key: Conjuration
+    Value: 15
+  - Key: Destruction
+    Value: 15
+  - Key: Illusion
+    Value: 15
+  - Key: Restoration
+    Value: 15
+  - Key: Enchanting
+    Value: 15
+  SkillOffsets:
+  - Key: OneHanded
+    Value: 0
+  - Key: TwoHanded
+    Value: 0
+  - Key: Archery
+    Value: 0
+  - Key: Block
+    Value: 0
+  - Key: Smithing
+    Value: 0
+  - Key: HeavyArmor
+    Value: 0
+  - Key: LightArmor
+    Value: 0
+  - Key: Pickpocket
+    Value: 0
+  - Key: Lockpicking
+    Value: 0
+  - Key: Sneak
+    Value: 0
+  - Key: Alchemy
+    Value: 0
+  - Key: Speech
+    Value: 0
+  - Key: Alteration
+    Value: 0
+  - Key: Conjuration
+    Value: 0
+  - Key: Destruction
+    Value: 0
+  - Key: Illusion
+    Value: 0
+  - Key: Restoration
+    Value: 0
+  - Key: Enchanting
+    Value: 0
+  Health: 50
+  Magicka: 50
+  Stamina: 50
+  GearedUpWeapons: 1
+Height: 1
+Weight: 100
+SoundLevel: Normal
+MajorFlags:
+- 0x40000

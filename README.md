@@ -17,6 +17,10 @@ npc.config.yaml ──► {PluginName}.esp (ESL, compiled)
 
 ## Quick Start
 
+### See a Complete Example
+
+**[`examples/GrokTheSmith_output/`](examples/GrokTheSmith_output/)** — a fully verified, in-game tested output (2026-06-13). Orc blacksmith at Warmaiden's forge in Whiterun, custom outfit, sandbox AI, SkyrimNet personality, world knowledge. Every file is there: the `.esp`, the Spriggit YAML source, the `.prompt`, and the `.sknpack`. See its [README](examples/GrokTheSmith_output/README.md) for details.
+
 ### For Agents
 
 Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recipe.
@@ -59,7 +63,8 @@ Skyrim_NPCTemplate/
 │   └── knowledge/
 │       └── world_knowledge.sknpack # World knowledge pack template
 ├── examples/
-│   ├── grok_the_smith.yaml       # Friendly NPC (full example)
+│   ├── grok_the_smith.yaml       # Friendly NPC config (input)
+│   ├── GrokTheSmith_output/      # Complete verified output (ESL .esp + YAML + prompt + sknpack)
 │   └── hostile_bandit.yaml       # Hostile NPC (minimal example)
 └── output/                       # Generated plugins land here
 ```

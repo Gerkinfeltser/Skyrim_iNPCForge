@@ -1,0 +1,9 @@
+{
+  "PackageName": "Spriggit.Yaml.Skyrim",
+  "Release": "SkyrimSE",
+  "Version": "0.40.0",
+  "KnownMasters": [
+    { "ModKey": "Skyrim.esm", "Style": "Full" },
+    { "ModKey": "Update.esm", "Style": "Full" }
+  ]
+}

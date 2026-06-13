@@ -1,0 +1,15 @@
+SpriggitSource:
+  PackageName: Spriggit.Yaml.Skyrim
+  Version: 0.40.0
+ModKey: GrokTheSmith.esp
+GameRelease: SkyrimSE
+ModHeader:
+  Flags:
+  - 0x200         # ESL flag — light plugin
+  Author: Generated via iNPCForge
+  MasterReferences:
+  - Master: Skyrim.esm
+    FileSize: 0
+  - Master: Update.esm
+    FileSize: 0
+  INTV: 1

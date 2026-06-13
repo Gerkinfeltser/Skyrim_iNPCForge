@@ -1,0 +1,33 @@
+FormKey: 01DB4E:Skyrim.esm
+IsCompressed: True
+MajorRecordFlagsRaw: 262144
+EditorID: WhiterunWarmaidens
+SkyrimMajorRecordFlags:
+- Compressed
+Flags:
+- IsInteriorCell
+- PublicArea
+Lighting:
+  Inherits:
+  - AmbientColor
+  - DirectionalColor
+  - FogColor
+  - FogNear
+  - FogFar
+  - ClipDistance
+WaterHeight: -2.1474836E+09
+Persistent: []
+Temporary:
+- MutagenObjectType: PlacedNpc
+  FormKey: 000802:GrokTheSmith.esp
+  MajorRecordFlagsRaw: 1024
+  SkyrimMajorRecordFlags:
+  - 0x400
+  Base: 000800:GrokTheSmith.esp
+  Placement:
+    Position: 50.0, -30.0, 0.0
+    Rotation: 0, -0, 1.5708
+  MajorFlags:
+  - Persistent
+MajorFlags:
+- 0x40000
