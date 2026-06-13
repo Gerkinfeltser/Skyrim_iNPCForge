@@ -5,18 +5,9 @@
 # the actual plugin name.
 #
 # ESL FLAGGING:
-#   Spriggit does NOT set the ESL flag automatically.
-#   After deserialization, the agent must either:
-#   A) Use .esl extension (automatically ESL), OR
-#   B) Generate .esp and run xEdit to add ESL flag, OR
-#   C) Set the ESL flag bit in the binary header manually
-#
-#   For MVP: generate as .esp, then instruct user to ESL-flag
-#   via xEdit (right-click → "Compact FormIDs for ESL" →
-#   "Add ESL flag"). This is a one-time step.
-#
-#   Alternatively, the agent can set ModHeader flags directly
-#   in this YAML by adding the ESL flag to the header.
+#   Set automatically via ModHeader.Flags: [0x200] below.
+#   FormIDs must be in the 0x000-0xFFF range (ESL constraint).
+#   The MVP allocation (0x800+) satisfies this.
 # ============================================================
 
 SpriggitSource:
@@ -25,6 +16,8 @@ SpriggitSource:
 ModKey: GrokTheSmith.esp
 GameRelease: SkyrimSE
 ModHeader:
+  Flags:
+  - 0x200                             # ESL flag — light plugin (light plugins don't count against 255 limit)
   Author: Generated via iNPCForge
   MasterReferences:
   - Master: Skyrim.esm
@@ -32,6 +25,13 @@ ModHeader:
   - Master: Update.esm
     FileSize: 0
   INTV: 1
+
+# ============================================================
+# ESL FLAG:
+#   The 0x200 flag in ModHeader.Flags sets the ESL bit in the
+#   TES4 record header at creation time. No xEdit step needed.
+#   Requires FormIDs in the 0x000-0xFFF range (ESL constraint).
+# ============================================================
 
 # ============================================================
 # MASTERS:

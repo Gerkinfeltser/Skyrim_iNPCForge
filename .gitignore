@@ -1,1 +1,9 @@
+# Scratch space — never commit
 _tmp/
+
+# Generated plugins are disposable; YAML source in _spriggit/ is the artifact.
+# Re-serialize from output/{PluginName}/{PluginName}_spriggit/ if needed.
+output/
+
+# Magic Context plugin runtime data (session state, not project config)
+.opencode/magic-context/

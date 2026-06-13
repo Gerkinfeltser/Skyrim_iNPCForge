@@ -61,9 +61,10 @@ D:\Steam\steamapps\common\Skyrim Special Edition\Data
 Spriggit 0.40.0 is pinned via `.spriggit`. Install with
 `dotnet tool install --global Spriggit.Yaml.Skyrim`.
 
-**ESL flagging is NOT automatic.** Spriggit produces a plain `.esp`. After
-deserialization, either rename to `.esl` or set the ESL flag in xEdit
-(right-click → "Compact FormIDs for ESL" → "Add ESL flag" → save).
+**ESL flagging is automatic.** The `ModHeader.Flags: [0x200]` field in
+RecordData.yaml sets the ESL bit at deserialization time. FormIDs must be in
+the `0x000–0xFFF` range (ESL constraint); the MVP allocation `0x800+`
+satisfies this. No xEdit post-processing required.
 
 **No lint/test/typecheck commands exist.** Verification is manual:
 `.esp` is non-zero, `.prompt` has all 10 blocks filled, prompt filename matches
@@ -118,6 +119,8 @@ Hostile NPCs generally skip the personality prompt entirely — see
 | `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml` |
 | `templates/prompt/character.prompt` | 10-block personality Jinja template |
 | `templates/knowledge/world_knowledge.sknpack` | World knowledge pack template |
+| `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
+| `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
 | `examples/grok_the_smith.yaml` | Full friendly-NPC worked example |
 | `examples/hostile_bandit.yaml` | Minimal hostile-NPC example |
 | `output/` | Generated plugins land here (gitkept) |

@@ -49,9 +49,16 @@ Grok.esp   grok_800.prompt
 ├── {PluginName}_spriggit/                  # Spriggit YAML source (editable, re-serializable)
 │   ├── .spriggit                           # Spriggit config
 │   ├── RecordData.yaml                     # Mod header
-│   └── Npcs/
-│       └── {editor_id}.yaml                # NPC record (edit + re-serialize, no CK needed)
-├── {PluginName}.sknpack                    # SkyrimNet knowledge pack (import via Web UI)
+│   ├── Npcs/
+│   │   └── {editor_id}.yaml                # NPC record (edit + re-serialize, no CK needed)
+│   ├── Outfits/                            # Present only if outfit_items used
+│   │   └── {editor_id}_Outfit.yaml         # Custom OTFT record
+│   └── Cells/
+│       └── {group_path}/                   # e.g. 0/1/ for cell FormID 01DB4E
+│           └── {cell_editor_id} - {formID}_Skyrim.esm/
+│               └── RecordData.yaml         # Cell override with PlacedNpc in Temporary
+├── WorldKnowledge/
+│   └── {PluginName}.sknpack                # SkyrimNet knowledge pack (import via Web UI)
 └── SKSE/
     └── Plugins/
         └── SkyrimNet/
@@ -59,6 +66,11 @@ Grok.esp   grok_800.prompt
                 └── characters/
                     └── {name}_{suffix}.prompt   # Personality (hot-reloadable)
 ```
+
+**The entire `{PluginName}/` folder is MO2-installable.** Zip it and drop into MO2,
+or copy its contents into your MO2 mods folder. The `_spriggit/` subfolder is
+inert to the game (MO2 only cares about the .esp, SKSE/, and Data-rooted paths)
+but keeps the mod self-contained — edit YAML + re-serialize without the repo.
 
 ## Step 1: Gather Requirements
 
@@ -268,6 +280,11 @@ Temporary:
 
 Copy from `templates/spriggit/RecordData.yaml`. Set the plugin name in `ModKey`.
 
+The template includes `ModHeader.Flags: [0x200]` which sets the ESL flag at
+deserialization time — no xEdit post-processing required. The MVP FormID
+allocation (0x800+) is within the ESL range (0x000–0xFFF), satisfying the
+ESL constraint.
+
 ### 3g: Combat Attitude → Field Mapping
 
 | Attitude | Aggression | Confidence | Factions | AI Packages |
@@ -295,16 +312,16 @@ Copy from `templates/spriggit/RecordData.yaml`. Set the plugin name in `ModKey`.
   --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 ```
 
-### 3j: ESL Flagging
+### 3j: ESL Flagging (Automatic)
 
-Spriggit does NOT auto-set the ESL flag. After generating the .esp:
+The ESL flag is set automatically via `ModHeader.Flags: [0x200]` in
+RecordData.yaml. When Spriggit deserializes the YAML to `.esp`, the TES4
+header flags field is written with bit 0x200 set — the plugin is ESL-flagged
+from creation. No xEdit step required.
 
-1. Open in xEdit (SSEEdit)
-2. Right-click → "Compact FormIDs for ESL" (if needed)
-3. Right-click → "Add ESL flag"
-4. Save
-
-Or instruct the user to do this manually. The plugin uses 0x800-0x802 which is within the ESL range (0x000-0xFFF).
+The MVP FormID allocation (0x800–0x802) is within the ESL range (0x000–0xFFF),
+satisfying the ESL constraint. ESL-flagged plugins do not count against the
+255-plugin limit.
 
 ## Step 4: Generate SkyrimNet Prompt File
 
@@ -345,9 +362,16 @@ output/{PluginName}/
 ├── {PluginName}_spriggit/
 │   ├── .spriggit
 │   ├── RecordData.yaml
-│   └── Npcs/
-│       └── {editor_id}.yaml
-├── {PluginName}.sknpack                    # Optional — skip if no world_knowledge entries
+│   ├── Npcs/
+│   │   └── {editor_id}.yaml
+│   ├── Outfits/                            # Present only if outfit_items used
+│   │   └── {editor_id}_Outfit.yaml
+│   └── Cells/
+│       └── {group_path}/
+│           └── {cell_editor_id} - {formID}_Skyrim.esm/
+│               └── RecordData.yaml
+├── WorldKnowledge/
+│   └── {PluginName}.sknpack                # Optional — skip if no world_knowledge entries
 └── SKSE/
     └── Plugins/
         └── SkyrimNet/
