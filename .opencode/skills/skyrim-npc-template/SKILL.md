@@ -57,7 +57,7 @@ Grok.esp   grok_800.prompt
 │       └── {group_path}/                   # e.g. 0/1/ for cell FormID 01DB4E
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml         # Cell override with PlacedNpc in Temporary
-├── WorldKnowledge/
+├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # SkyrimNet knowledge pack (import via Web UI)
 └── SKSE/
     └── Plugins/
@@ -370,7 +370,7 @@ output/{PluginName}/
 │       └── {group_path}/
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml
-├── WorldKnowledge/
+├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # Optional — skip if no world_knowledge entries
 └── SKSE/
     └── Plugins/
