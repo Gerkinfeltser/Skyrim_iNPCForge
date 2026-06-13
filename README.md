@@ -97,6 +97,16 @@ Two options:
 
 Interior cells only (taverns, shops, dungeons). See `data/locations.yaml` for pre-mapped locations. For exterior or unmapped locations, place the NPC manually in Creation Kit after generation.
 
+## Installation (After Generation)
+
+The `output/{PluginName}/` folder is MO2-ready. Three steps:
+
+1. **Install the mod** — copy the entire `{PluginName}/` folder into your MO2 mods directory (or zip it and drag into MO2). Enable the `.esp` in your load order.
+2. **Import world knowledge** (if you generated a `.sknpack`) — open the SkyrimNet Web UI (`http://localhost:7878` while Skyrim is running), import `WorldKnowledge-ManuallyImport/{PluginName}.sknpack`. This makes existing NPCs aware of your new NPC.
+3. **Find your NPC in-game** — they're placed at the interior cell from your config (e.g. Warmaiden's forge). Talk to them. SkyrimNet auto-generates the prompt template on first encounter using the `{name}_{formID & 0xFFF}.prompt` convention.
+
+**The `.prompt` file is hot-reloadable** — edit it and reload via the SkyrimNet Web UI without restarting the game.
+
 ## After Generation
 
 The generated plugin is an MVP — functional but basic. To customize further:
