@@ -109,7 +109,7 @@ auto-generates on first encounter, or the prompt is never loaded.
 | hostile | Frenzied | Foolhardy | none | BanditFaction (`0x00033A35`) |
 
 Hostile NPCs generally skip the personality prompt entirely — see
-`examples/hostile_bandit.yaml`.
+`examples/shank_the_bandit_hostile.yaml`.
 
 ## Directory Map
 
@@ -127,7 +127,7 @@ Hostile NPCs generally skip the personality prompt entirely — see
 | `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
 | `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
 | `examples/grok_the_smith.yaml` | Full friendly-NPC worked example |
-| `examples/hostile_bandit.yaml` | Minimal hostile-NPC example |
+| `examples/shank_the_bandit_hostile.yaml` | Minimal hostile-NPC example |
 | `output/` | Generated plugins land here (gitkept) |
 | `_tmp/` | Scratch space (gitignored) |
 

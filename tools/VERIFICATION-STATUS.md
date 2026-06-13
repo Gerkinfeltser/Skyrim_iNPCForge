@@ -19,7 +19,7 @@ MO2 instance. See that directory's README for usage.
 | `data/locations.yaml`            | Skyrim.esm CELL     | ✅ VERIFIED | Every FormID was fabricated; 6 EditorIDs wrong (WhiterunBannerMare→BanneredMare etc.); 40+ interior cells verified across all holds |
 | `templates/spriggit/outfit_custom.yaml` | Skyrim.esm ARMO     | ✅ VERIFIED | Orcish set FormIDs fixed; ClothingApron → ClothesBlackSmith; reference table with Iron/Steel/Apron verified |
 | `examples/grok_the_smith.yaml`   | (derived)           | ✅ FIXED    | ClothingApron → ClothesBlackSmith; outfit_items use Armor* prefix; inventory items verified (OrcishWarAxe 0001398B, Gold001 0000000F) |
-| `examples/hostile_bandit.yaml`   | (derived)           | ✅ FIXED    | outfit: ArmorHideAllOutfit (0001B3A8); inventory items verified (SteelWarAxe 00013983, Gold001, Lockpick 0000000A) |
+| `examples/shank_the_bandit_hostile.yaml`   | (derived)           | ✅ FIXED    | outfit: ArmorHideAllOutfit (0001B3A8); inventory items verified (SteelWarAxe 00013983, Gold001, Lockpick 0000000A) |
 
 ## TODO: DLC Coverage
 

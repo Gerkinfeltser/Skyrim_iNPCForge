@@ -65,7 +65,7 @@ Skyrim_NPCTemplate/
 ├── examples/
 │   ├── grok_the_smith.yaml       # Friendly NPC config (input)
 │   ├── GrokTheSmith_output/      # Complete verified output (ESL .esp + YAML + prompt + sknpack)
-│   └── hostile_bandit.yaml       # Hostile NPC (minimal example)
+│   └── shank_the_bandit_hostile.yaml # Hostile NPC (minimal example)
 └── output/                       # Generated plugins land here
 ```
 
