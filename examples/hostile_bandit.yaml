@@ -19,15 +19,15 @@ combat_attitude: "hostile"
 level: 15
 respawn: true                      # Named mook — respawns on cell reset
 
-# Vanilla bandit outfit
-outfit: "HideArmor"
+# Vanilla bandit outfit (hide armor set)
+outfit: "ArmorHideAllOutfit"       # 0001B3A8:Skyrim.esm
 
 inventory:
-  - item: "SteelWarAxe"
+  - item: "SteelWarAxe"            # 00013983:Skyrim.esm
     count: 1
-  - item: "Gold001"
+  - item: "Gold001"               # 0000000F:Skyrim.esm
     count: 25
-  - item: "Lockpick"
+  - item: "Lockpick"              # 0000000A:Skyrim.esm
     count: 3
 
 factions:

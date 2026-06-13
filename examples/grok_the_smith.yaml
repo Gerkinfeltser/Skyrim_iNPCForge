@@ -20,15 +20,15 @@ respawn: false
 
 # Custom outfit (generates OTFT record in plugin)
 outfit_items:
-  - "OrcishCuirass"
-  - "OrcishBoots"
-  - "OrcishGauntlets"
-  - "ClothingApron"
+  - "ArmorOrcishCuirass"
+  - "ArmorOrcishBoots"
+  - "ArmorOrcishGauntlets"
+  - "ClothesBlackSmith"
 
 inventory:
-  - item: "OrcishWarAxe"
+  - item: "OrcishWarAxe"            # 0001398B:Skyrim.esm
     count: 1
-  - item: "Gold001"
+  - item: "Gold001"                 # 0000000F:Skyrim.esm
     count: 50
 
 factions:

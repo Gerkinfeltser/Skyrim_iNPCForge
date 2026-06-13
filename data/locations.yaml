@@ -1,129 +1,199 @@
 # Common Interior Cell Locations
-# Map of friendly name → cell Editor ID and FormID (Skyrim.esm)
+# Map of friendly name → cell EditorID + FormKey (Skyrim.esm)
 # Use the location key (left side) in npc.config.yaml
+#
+# SCOPE: Vanilla Skyrim.esm ONLY.
+#   DLC cells (e.g. Castle Volkihar, Raven Rock) are NOT included.
+#
+# VERIFIED via xEdit script dump against Skyrim.esm (2026-06-13).
+# All FormIDs and EditorIDs confirmed against live CELL records.
 #
 # NOTE: These are INTERIOR cells only. Exterior world placement requires
 # WRLD records and is beyond MVP scope — use Creation Kit for that.
 # If a cell is not listed here, the agent will prompt the user to provide
-# the cell Editor ID manually.
+# the cell EditorID manually.
 
 locations:
   # === Whiterun ===
-  whiterun_breezehome: 
+  whiterun_breezehome:
     editor_id: "WhiterunBreezehome"
-    form_id: "0A2C8E:Skyrim.esm"
+    form_id: "0165A8:Skyrim.esm"
     description: "Breezehome (player home in Whiterun)"
   whiterun_drunkenhuntsman:
     editor_id: "WhiterunDrunkenHuntsman"
-    form_id: "0A2C9C:Skyrim.esm"
+    form_id: "0165B7:Skyrim.esm"
     description: "The Drunken Huntsman tavern"
   whiterun_bannermare:
-    editor_id: "WhiterunBannerMare"
-    form_id: "0A2A2D:Skyrim.esm"
+    editor_id: "WhiterunBanneredMare"
+    form_id: "01605E:Skyrim.esm"
     description: "The Bannered Mare tavern"
   whiterun_arcadia_cauldron:
     editor_id: "WhiterunArcadiasCauldron"
-    form_id: "0A2C9D:Skyrim.esm"
+    form_id: "0165B6:Skyrim.esm"
     description: "Arcadia's Cauldron (alchemy shop)"
   whiterun_warmaidens:
     editor_id: "WhiterunWarmaidens"
-    form_id: "0A2C9E:Skyrim.esm"
+    form_id: "01DB4E:Skyrim.esm"
     description: "Warmaiden's blacksmith"
-  whiterun_jarl_longhouse:
+  whiterun_dragonsreach:
     editor_id: "WhiterunDragonsreach"
-    form_id: "0A6ABB:Skyrim.esm"
+    form_id: "0165A3:Skyrim.esm"
     description: "Dragonsreach (Jarl's longhouse)"
   whiterun_jorrvaskr:
     editor_id: "WhiterunJorrvaskr"
-    form_id: "0A6D6A:Skyrim.esm"
+    form_id: "0165B5:Skyrim.esm"
     description: "Jorrvaskr (Companions hall)"
+  whiterun_beleyhors:
+    editor_id: "WhiterunBelethorsGeneralGoods"
+    form_id: "0165B3:Skyrim.esm"
+    description: "Belethor's General Goods"
+  whiterun_temple_kynareth:
+    editor_id: "WhiterunTempleofKynareth"
+    form_id: "0165A7:Skyrim.esm"
+    description: "Temple of Kynareth"
+  whiterun_hall_dead:
+    editor_id: "WhiterunHalloftheDead"
+    form_id: "0165AA:Skyrim.esm"
+    description: "Hall of the Dead"
 
   # === Solitude ===
   solitude_winking_skeever:
     editor_id: "SolitudeWinkingSkeever"
-    form_id: "0A26EF:Skyrim.esm"
+    form_id: "016A0E:Skyrim.esm"
     description: "The Winking Skeever tavern"
   solitude_radiant_raiment:
-    editor_id: "SolitudeRadiantRaiments"
-    form_id: "0A26F2:Skyrim.esm"
+    editor_id: "SolitudeRadiantRaiment"
+    form_id: "016A0F:Skyrim.esm"
     description: "Radiant Raiment clothing shop"
   solitude_blue_palace:
     editor_id: "SolitudeBluePalace"
-    form_id: "0A26D8:Skyrim.esm"
+    form_id: "016A04:Skyrim.esm"
     description: "The Blue Palace"
+  solitude_castle_dour:
+    editor_id: "SolitudeCastleDour"
+    form_id: "0213A0:Skyrim.esm"
+    description: "Castle Dour (military HQ)"
+  solitude_bards_college:
+    editor_id: "SolitudeBardsCollege"
+    form_id: "016A0C:Skyrim.esm"
+    description: "Bards College"
+  solitude_hall_dead:
+    editor_id: "SolitudeHalloftheDead"
+    form_id: "016A03:Skyrim.esm"
+    description: "Hall of the Dead"
+  solitude_proudspire_manor:
+    editor_id: "SolitudeProudspireManor"
+    form_id: "016A06:Skyrim.esm"
+    description: "Proudspire Manor (player home)"
 
   # === Riften ===
   riften_bee_and_barb:
     editor_id: "RiftenBeeandBarb"
-    form_id: "0A26D6:Skyrim.esm"
+    form_id: "016BDF:Skyrim.esm"
     description: "The Bee and Barb tavern"
   riften_ragged_flagon:
     editor_id: "RiftenRaggedFlagon"
-    form_id: "0169D2:Skyrim.esm"
+    form_id: "016BCF:Skyrim.esm"
     description: "The Ragged Flagon (Thieves Guild)"
   riften_honeyside:
     editor_id: "RiftenHoneyside"
-    form_id: "0A2C90:Skyrim.esm"
+    form_id: "016BDD:Skyrim.esm"
     description: "Honeyside (player home)"
+  riften_black_briar_meadery:
+    editor_id: "RiftenBlackBriarMeadery"
+    form_id: "016BDC:Skyrim.esm"
+    description: "Black-Briar Meadery"
+  riften_mistveil_keep:
+    editor_id: "RiftenMistveilKeep"
+    form_id: "016BD2:Skyrim.esm"
+    description: "Mistveil Keep (Jarl's keep)"
+  riften_scorched_hammer:
+    editor_id: "RiftenBlacksmith"
+    form_id: "053081:Skyrim.esm"
+    description: "The Scorched Hammer (blacksmith)"
+  riften_temple_mara:
+    editor_id: "RiftenTempleofMara"
+    form_id: "016BD7:Skyrim.esm"
+    description: "Temple of Mara"
 
   # === Windhelm ===
   windhelm_candlehearth:
     editor_id: "WindhelmCandlehearthHall"
-    form_id: "0A26F8:Skyrim.esm"
+    form_id: "016789:Skyrim.esm"
     description: "Candlehearth Hall tavern"
   windhelm_palace_kings:
     editor_id: "WindhelmPalaceoftheKings"
-    form_id: "0A26F9:Skyrim.esm"
+    form_id: "01677C:Skyrim.esm"
     description: "Palace of the Kings"
+  windhelm_temple_talos:
+    editor_id: "WindhelmTempleofTalos"
+    form_id: "016785:Skyrim.esm"
+    description: "Temple of Talos"
+  windhelm_new_gnisis:
+    editor_id: "WindhelmNewGnisisCornerclub"
+    form_id: "01677F:Skyrim.esm"
+    description: "New Gnisis Cornerclub (tavern)"
 
   # === Markarth ===
   markarth_silver_blood_inn:
     editor_id: "MarkarthSilverBloodInn"
-    form_id: "0A26D7:Skyrim.esm"
+    form_id: "016DFE:Skyrim.esm"
     description: "The Silver-Blood Inn"
   markarth_understone_keep:
-    editor_id: "MarkarthUnderstoneKeep"
-    form_id: "0A26DA:Skyrim.esm"
+    editor_id: "MarkarthUnderStoneKeep"
+    form_id: "016DF2:Skyrim.esm"
     description: "Understone Keep"
+  markarth_hags_cure:
+    editor_id: "MarkarthHagsCure"
+    form_id: "016DF6:Skyrim.esm"
+    description: "The Hag's Cure (alchemy shop)"
+  markarth_arnleif:
+    editor_id: "MarkarthArnleifandSonsTradingCompany"
+    form_id: "016DFF:Skyrim.esm"
+    description: "Arnleif and Sons Trading Company"
 
   # === Riverwood ===
   riverwood_sleeping_giant:
     editor_id: "RiverwoodSleepingGiantInn"
-    form_id: "0A2C7E:Skyrim.esm"
+    form_id: "0133C6:Skyrim.esm"
     description: "Sleeping Giant Inn"
   riverwood_trader:
-    editor_id: "RiverwoodTrader"
-    form_id: "0A2C7F:Skyrim.esm"
+    editor_id: "RiverwoodRiverwoodTrader"
+    form_id: "0133C9:Skyrim.esm"
     description: "Riverwood Trader general store"
-  riverwood_blacksmith:
-    editor_id: "RiverwoodAlvorHouse"
-    form_id: "0A2C80:Skyrim.esm"
-    description: "Alvor's house/blacksmith"
+  riverwood_alvors_house:
+    editor_id: "RiverwoodAlvorsHouse"
+    form_id: "0133C8:Skyrim.esm"
+    description: "Alvor and Sigrid's House (blacksmith)"
 
   # === Other Cities ===
   falkreath_dead_mans_drink:
     editor_id: "FalkreathDeadMansDrink"
-    form_id: "0A26E0:Skyrim.esm"
+    form_id: "03A184:Skyrim.esm"
     description: "Dead Man's Drink tavern"
   morthal_moorside:
-    editor_id: "MorthalMothAndMoth"
-    form_id: "0A26D9:Skyrim.esm"
+    editor_id: "MorthalMoorsideInn"
+    form_id: "0138CE:Skyrim.esm"
     description: "Moorside Inn"
   dawnstar_windpeak:
     editor_id: "DawnstarWindpeakInn"
-    form_id: "0A26E1:Skyrim.esm"
+    form_id: "013A7F:Skyrim.esm"
     description: "Windpeak Inn"
   winterhold_frozen_hearth:
-    editor_id: "WinterholdFrozenHearth"
-    form_id: "0A26E2:Skyrim.esm"
+    editor_id: "WinterholdTheFrozenHearth"
+    form_id: "013814:Skyrim.esm"
     description: "The Frozen Hearth tavern"
+  winterhold_college_arcanaeum:
+    editor_id: "WinterholdCollegeArcanaeum"
+    form_id: "013810:Skyrim.esm"
+    description: "The Arcanaeum (College library)"
 
   # === Generic Dungeons (for hostile NPCs) ===
   bleak_falls_barrow:
     editor_id: "BleakFallsBarrow01"
-    form_id: "0C663F:Skyrim.esm"
-    description: "Bleak Falls Barrow (dungeon)"
+    form_id: "0371DE:Skyrim.esm"
+    description: "Bleak Falls Barrow (dungeon, first zone)"
   white_river_watch:
     editor_id: "WhiteRiverWatch01"
-    form_id: "0C6B9A:Skyrim.esm"
+    form_id: "0151F9:Skyrim.esm"
     description: "White River Watch (bandit cave)"

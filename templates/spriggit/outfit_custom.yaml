@@ -10,25 +10,61 @@
 #
 # FormKey: uses a new FormID in this plugin (e.g. 0x801)
 # The NPC's DefaultOutfit field references this FormKey.
+#
+# ============================================================
+# FORMID REFERENCE — VERIFIED via xEdit (2026-06-13)
+# ============================================================
+# All FormIDs below dumped from Skyrim.esm ARMO records.
+# EditorIDs use the real Skyrim naming convention (Armor*/Clothes*).
+# Do NOT use friendly bare names like "OrcishCuirass" — the game
+# EditorID is "ArmorOrcishCuirass".
 # ============================================================
 
 FormKey: 000801:GrokTheSmith.esp
 EditorID: CustomNPC_Grok_Outfit
 
 # Items: list of armor/clothing FormKeys from Skyrim.esm
-# The agent must resolve item EditorIDs to FormKeys.
-# Common item FormIDs:
-#   OrcishCuirass:    0139ES:Skyrim.esm → 000139E5:Skyrim.esm
-#   OrcishBoots:      000139E6:Skyrim.esm
-#   OrcishGauntlets:  000139E7:Skyrim.esm
-#   OrcishHelmet:     000139E8:Skyrim.esm
-#   OrcishShield:     000139E9:Skyrim.esm
-#   ClothingApron:    000D9329:Skyrim.esm
-#   IronArmor:        00012E46:Skyrim.esm
-#   SteelArmor:       000139EC:Skyrim.esm
-# Check xEdit for exact FormIDs of items not listed here.
+# Resolve item EditorIDs to FormKeys using the reference below.
 Items:
-- 000139E5:Skyrim.esm    # OrcishCuirass
-- 000139E6:Skyrim.esm    # OrcishBoots
-- 000139E7:Skyrim.esm    # OrcishGauntlets
-- 000D9329:Skyrim.esm    # ClothingApron (if exists — verify in xEdit)
+- 013957:Skyrim.esm    # ArmorOrcishCuirass
+- 013956:Skyrim.esm    # ArmorOrcishBoots
+- 013958:Skyrim.esm    # ArmorOrcishGauntlets
+- 05B69F:Skyrim.esm    # ClothesBlackSmith (Blacksmith's Apron)
+
+# ============================================================
+# COMMON ITEM FORMID REFERENCE (all verified via xEdit)
+# ============================================================
+#
+# --- Orcish Set ---
+# ArmorOrcishCuirass:    00013957:Skyrim.esm
+# ArmorOrcishBoots:      00013956:Skyrim.esm
+# ArmorOrcishGauntlets:  00013958:Skyrim.esm
+# ArmorOrcishHelmet:     00013959:Skyrim.esm
+# ArmorOrcishShield:     00013946:Skyrim.esm
+#
+# --- Iron Set ---
+# ArmorIronCuirass:      00012E49:Skyrim.esm
+# ArmorIronBoots:        00012E4B:Skyrim.esm
+# ArmorIronGauntlets:    00012E46:Skyrim.esm
+# ArmorIronHelmet:       00012E4D:Skyrim.esm
+# ArmorIronShield:       00012EB6:Skyrim.esm
+#
+# --- Steel Set ---
+# ArmorSteelCuirassA:    00013952:Skyrim.esm  (Steel Armor)
+# ArmorSteelBootsA:      00013951:Skyrim.esm  (Steel Cuffed Boots)
+# ArmorSteelGauntletsA:  00013953:Skyrim.esm  (Steel Nordic Gauntlets)
+# ArmorSteelHelmetA:     00013954:Skyrim.esm  (Steel Helmet)
+# ArmorSteelShield:      00013955:Skyrim.esm
+#
+# --- Clothing (Blacksmith/Worker) ---
+# ClothesBlackSmith:       0005B69F:Skyrim.esm  (Blacksmith's Apron)
+# ClothesBlackSmithShoes:  0005B69E:Skyrim.esm  (Shoes)
+# ClothesBlackSmithVariant:0006FF37:Skyrim.esm  (Blacksmith's Apron variant)
+# ClothesMinerClothes:     00080697:Skyrim.esm  (Miner's Clothes)
+# ClothesChef:             0001BC82:Skyrim.esm  (Chef's Tunic)
+#
+# NOTE: There is NO "ClothingApron" record in vanilla Skyrim.
+# The blacksmith's apron is ClothesBlackSmith (0005B69F).
+#
+# For items not listed here, use tools/xedit-scripts/dump_iron_steel_apron.pas
+# or search in xEdit: Skyrim.esm -> Armor -> find by EditorID.

@@ -1,56 +1,128 @@
 # Vanilla Skyrim Outfits (OTFT Records)
-# Map of friendly name → FormID (Skyrim.esm)
+# Map of friendly name → FormKey (Skyrim.esm)
 # Use the outfit key (left side) in npc.config.yaml
+#
+# SCOPE: Vanilla Skyrim.esm ONLY.
+#   Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm outfits are NOT
+#   included. To add DLC coverage, run dump_weapons_misc_outfits.pas (which
+#   dumps OTFT records too) against each DLC master and append results here.
+#
+# VERIFIED via xEdit script dump against Skyrim.esm (2026-06-13).
+# All FormIDs confirmed against live OTFT records.
 #
 # For custom outfits, omit the 'outfit' field and use 'outfit_items' instead.
 # The agent will generate a custom OTFT record in the plugin.
 
 outfits:
-  # === Armor Sets by Material ===
-  OrcishArmor: "03BE07:Skyrim.esm"
-  SteelArmor: "03BE08:Skyrim.esm"
-  SteelPlateArmor: "03BE09:Skyrim.esm"
-  IronArmor: "03BE0A:Skyrim.esm"
-  LeatherArmor: "03BE0B:Skyrim.esm"
-  HideArmor: "03BE0C:Skyrim.esm"
-  StormcloakArmor: "03BE0D:Skyrim.esm"
-  ImperialArmor: "03BE0E:Skyrim.esm"
-  ThievesGuildArmor: "03BE0F:Skyrim.esm"
-  DarkBrotherhoodArmor: "03BE10:Skyrim.esm"
-  ElvenArmor: "03BE11:Skyrim.esm"
-  GlassArmor: "03BE12:Skyrim.esm"
-  EbonyArmor: "03BE13:Skyrim.esm"
-  DragonplateArmor: "03BE14:Skyrim.esm"
-  DragonscaleArmor: "03BE15:Skyrim.esm"
-  DaedricArmor: "03BE16:Skyrim.esm"
-  ForswornArmor: "03BE17:Skyrim.esm"
-  ScaledArmor: "03BE18:Skyrim.esm"
-  WolfArmor: "03BE19:Skyrim.esm"
-  BladesArmor: "03BE1A:Skyrim.esm"
-  DwarvenArmor: "03BE1B:Skyrim.esm"
-  NightingaleArmor: "03BE1C:Skyrim.esm"
-  CompanionsArmor: "03BE1D:Skyrim.esm"
+  # === Armor Sets (full set with helmet) ===
+  ArmorIronAllOutfit: "01697C:Skyrim.esm"
+  ArmorOrcishAllOutfit: "0579A5:Skyrim.esm"
+  ArmorSteelAllOutfit: "028B43:Skyrim.esm"
+  ArmorSteelPlateAllOutfit: "057992:Skyrim.esm"
+  ArmorLeatherAllOutfit: "057A2A:Skyrim.esm"
+  ArmorHideAllOutfit: "01B3A8:Skyrim.esm"
+  ArmorElvenAllOutfit: "057A22:Skyrim.esm"
+  ArmorElvenGildedAllOutfit: "057A2E:Skyrim.esm"
+  ArmorScaledAllOutfit: "057A24:Skyrim.esm"
+  ArmorEbonyAllOutfit: "057A1E:Skyrim.esm"
+  ArmorGlassAllOutfit: "079914:Skyrim.esm"
+  ArmorDragonplateAllOutfit: "0B1FB8:Skyrim.esm"
+  ArmorDragonscaleAllOutfit: "0B1FB7:Skyrim.esm"
+  ArmorDaedricAllOutfit: "098BB6:Skyrim.esm"
+  ArmorBandedIronAllOutfit: "0B1FAE:Skyrim.esm"
+  ArmorDwarvenAllOutfit: "057981:Skyrim.esm"
 
-  # === Clothing ===
-  MageRobes: "042026:Skyrim.esm"
-  CollegeRobes: "03D3BF:Skyrim.esm"
-  FineClothes: "042027:Skyrim.esm"
-  TavernClothes: "042028:Skyrim.esm"
-  MerchantClothes: "042029:Skyrim.esm"
-  NobleClothes: "04202A:Skyrim.esm"
-  MonkRobes: "04202B:Skyrim.esm"
-  WeddingOutfit: "04202C:Skyrim.esm"
-  PrisonerClothes: "04202D:Skyrim.esm"
-  MinerClothes: "04202E:Skyrim.esm"
-  FarmerClothes: "04202F:Skyrim.esm"
+  # === Armor Sets (no helmet variant) ===
+  ArmorOrcishNoHelmetOutfit: "057A1B:Skyrim.esm"
+  ArmorSteelNoHelmetOutfit: "028B44:Skyrim.esm"
+  ArmorSteelPlateNoHelmetOutfit: "0579A3:Skyrim.esm"
+  ArmorLeatherNoHelmetOutfit: "057A2D:Skyrim.esm"
+  ArmorElvenNoHelmetOutfit: "057A23:Skyrim.esm"
+  ArmorEbonyNoHelmetOutfit: "057A1F:Skyrim.esm"
+  ArmorDwarvenNoHelmetOutfit: "057982:Skyrim.esm"
+  ArmorIronNoHelmetOutfit: "017F21:Skyrim.esm"
+  ArmorIronBandedNoHelmetOutfit: "0B1FAF:Skyrim.esm"
 
-  # === Guard Uniforms ===
-  WhiterunGuard: "0C830D:Skyrim.esm"
-  SolitudeGuard: "0C830E:Skyrim.esm"
-  RiftenGuard: "0C830F:Skyrim.esm"
-  WindhelmGuard: "0C8310:Skyrim.esm"
-  MarkarthGuard: "0C8311:Skyrim.esm"
-  FalkreathGuard: "0C8312:Skyrim.esm"
-  DawnstarGuard: "0C8313:Skyrim.esm"
-  MorthalGuard: "0C8314:Skyrim.esm"
-  WinterholdGuard: "0C8315:Skyrim.esm"
+  # === Faction / Job Outfits ===
+  ArmorStormcloakOutfit: "0AD244:Skyrim.esm"
+  ArmorStormcloakOutfitNoHelmet: "0AD245:Skyrim.esm"
+  ArmorImperialHeavyOutfit: "0AD23C:Skyrim.esm"
+  ArmorImperialLightOutfit: "0AD23E:Skyrim.esm"
+  ArmorImperialHeavyOutfitOfficer: "0AD241:Skyrim.esm"
+  ArmorBladesOutfit: "0E3E66:Skyrim.esm"
+  ArmorBladesOutfitNoHelmet: "00108DBE:Skyrim.esm"
+  ArmorCompanionsAllOutfit: "0B3E8E:Skyrim.esm"
+  ArmorCompanionsOutfitNoHelmet: "0B3E8D:Skyrim.esm"
+  ArmorOrcStrongholdOutfit: "0763ED:Skyrim.esm"
+  ArmorOrcStrongholdNoHelmetOutfit: "0763EE:Skyrim.esm"
+  ArmorBriarheartOutfit: "0B2E0F:Skyrim.esm"
+
+  # === Bandit / Enemy Outfits ===
+  BanditArmorMeleeNoShieldOutfit: "01E608:Skyrim.esm"
+  BanditArmorMeleeHeavyOutfit: "015BE6:Skyrim.esm"
+  BanditArmorMeleeHeavyNoShieldOutfit: "0A95F7:Skyrim.esm"
+  BanditArmorMissileOutfit: "037C4D:Skyrim.esm"
+  BanditArmorHeavyBossOutfit: "03DED3:Skyrim.esm"
+  BanditArmorHeavyBossNoShieldOutfit: "0A95F8:Skyrim.esm"
+  BanditMageOutfit: "06E26F:Skyrim.esm"
+  ForswornArmorMeleeOutfit: "043BD9:Skyrim.esm"
+  ForswornArmorMissileOutfit: "043BDA:Skyrim.esm"
+  ForswornArmorBossOutfit: "044314:Skyrim.esm"
+
+  # === Guard Outfits (by hold) ===
+  GuardWhiterunOutfit: "0D33C6:Skyrim.esm"
+  GuardWhiterunOutfitNoHelmet: "0DD052:Skyrim.esm"
+  GuardOutfitRift: "047382:Skyrim.esm"          # Riften
+  GuardOutfitHjaalmarch: "047380:Skyrim.esm"     # Morthal
+  GuardPaleOutfit: "0874FA:Skyrim.esm"           # Dawnstar
+  GuardFalkreathOutfit: "0FCE7A:Skyrim.esm"
+  GuardWinterholdOutfit: "0D7885:Skyrim.esm"
+  ReachHoldGuardOutfit: "035F4E:Skyrim.esm"      # Markarth
+
+  # === Mage / College Outfits ===
+  ClothesMageRobesOutfitNoHood: "0E9AC4:Skyrim.esm"
+  CollegeArchmageOutfit: "07EAB5:Skyrim.esm"
+  MonkOutfit: "0C2A5A:Skyrim.esm"
+  NecromancerOutfit: "09EF86:Skyrim.esm"
+  NecromancerOutfitNoHood: "09EF83:Skyrim.esm"
+  WarlockOutfitLeveled: "044CD5:Skyrim.esm"
+  WarlockOutfitSimple: "001093AF:Skyrim.esm"
+
+  # === Civilian / Clothing Outfits ===
+  BlacksmithOutfit01: "057C4C:Skyrim.esm"
+  BlacksmithOutfit02: "0958AB:Skyrim.esm"
+  MerchantClothesOutfit01: "045C34:Skyrim.esm"
+  MerchantClothesOutfit01NoHat: "07144A:Skyrim.esm"
+  MinerClothesOutfit01: "09CCA1:Skyrim.esm"
+  MinerClothesOutfit02: "09595B:Skyrim.esm"
+  BarkeepClothes01: "05FB81:Skyrim.esm"
+  BarkeepClothes02: "0958AA:Skyrim.esm"
+  BeggarOutfit: "028B60:Skyrim.esm"
+  FineClothesOutfit01: "09D5E0:Skyrim.esm"
+  FineClothesOutfit02: "0E40DD:Skyrim.esm"
+  FarmClothesOutfit01: "01DC10:Skyrim.esm"
+  FarmClothesOutfit02: "02D75E:Skyrim.esm"
+  FarmClothesOutfit03: "02D75D:Skyrim.esm"
+  ClothesTavernWenchOutfit: "0F966E:Skyrim.esm"
+  PrisonerOutfit: "0A1983:Skyrim.esm"
+  ChefOutfit: "01BC5E:Skyrim.esm"
+
+  # === Guild / Special Outfits ===
+  ThievesGuildStandardOutfit: "036582:Skyrim.esm"
+  DBArmorNoHood: "0D3BF9:Skyrim.esm"             # Dark Brotherhood Shrouded
+  DBArmorWithHood: "0D3BF8:Skyrim.esm"
+  DBRobesNoHood: "0E1EC2:Skyrim.esm"
+  NightingaleOutfit: "0487DC:Skyrim.esm"
+  PenitusOculatusOutfit: "0D5EB4:Skyrim.esm"
+  VigilantOfStendarrOutfit: "0B3290:Skyrim.esm"
+  ThalmorOutfit01: "039F22:Skyrim.esm"
+  ThalmorArmorNoHelmetOutfit: "07D97E:Skyrim.esm"
+
+  # === Noble / Jarl Outfits ===
+  JarlClothesOutfit01: "06DEB9:Skyrim.esm"
+  JarlClothesOutfit02: "09D5DE:Skyrim.esm"
+  JarlClothesOutfit03: "0DAB7A:Skyrim.esm"
+
+  # === Dragon Priest / Draugr ===
+  DragonPriestOutfit: "05F281:Skyrim.esm"
+  ArmorDraugrAllOutfit: "0F82BB:Skyrim.esm"

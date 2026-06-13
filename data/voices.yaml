@@ -1,75 +1,105 @@
 # Vanilla Skyrim Voice Types
-# Map of friendly name → FormID (Skyrim.esm)
+# Map of EditorID -> FormKey (Skyrim.esm)
 # Use the EditorID (left side) in npc.config.yaml
 #
+# SCOPE: Vanilla Skyrim.esm ONLY.
+#   Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm voice types are NOT
+#   included. Some DLC unique voices (e.g. Serana, Miraak) exist but are out
+#   of MVP scope. To add DLC coverage, run dump_voices.pas against each
+#   DLC master and append the results here.
+#
+# VERIFIED via xEdit script dump against Skyrim.esm (2026-06-13).
+# All FormIDs confirmed against live records.
+#
 # IMPORTANT: Always reference vanilla voice types directly.
-# Do NOT dupe/create new VTYP records — SkyrimNet TTS maps by voice type FormID.
+# Do NOT dupe/create new VTYP records -- SkyrimNet TTS maps by voice type FormID.
 # A duped FormID will result in silent NPCs or fallback TTS.
 #
-# FormIDs are in the 02EDDx range for male voices and approximately
-# 02EDEx–02EDEy for female voices in Skyrim.esm.
-# VERIFY ALL FormIDs in xEdit before production use:
-#   1. Open xEdit (SSEEdit)
-#   2. Expand Skyrim.esm → Voice Type
-#   3. Find the voice type by EditorID
-#   4. Copy the FormID
+# RACE-SPECIFIC VOICES:
+#   Only Nord, Orc, Khajiit, Argonian, DarkElf, and ElfHaughty have
+#   race-specific voice types. Imperials, Bretons, Redguards, High Elves,
+#   and Wood Elves do NOT -- they use the generic voices below (EvenToned,
+#   Commoner, Commander, etc.). Pick a generic that fits the personality.
 
 voice_types:
-  # === Male Voices ===
-  # FormIDs in the 02EDD4–02EDE2 range (confirmed from serialization)
-  MaleNord: "02EDD4:Skyrim.esm"
-  MaleDarkElf: "02EDD5:Skyrim.esm"
-  MaleOrc: "02EDD6:Skyrim.esm"
-  MaleKhajiit: "02EDD7:Skyrim.esm"
-  MaleArgonian: "02EDD8:Skyrim.esm"
-  MaleImperial: "02EDD9:Skyrim.esm"
-  MaleBreton: "02EDDA:Skyrim.esm"
-  MaleRedguard: "02EDDB:Skyrim.esm"
-  MaleHighElf: "02EDDC:Skyrim.esm"
-  MaleWoodElf: "02EDDD:Skyrim.esm"
-  MaleCommoner: "02EDDE:Skyrim.esm"
-  MaleCommonerAccented: "02EDDF:Skyrim.esm"
-  MaleSlightElderly: "02EDE0:Skyrim.esm"
-  MaleElderly: "02EDE1:Skyrim.esm"
-  MaleDrunk: "02EDE2:Skyrim.esm"
-  # Additional male voices (verify in xEdit):
-  MaleBandit: "0DDD6A:Skyrim.esm"
-  MaleGuard: "038910:Skyrim.esm"
-  MaleCommander: "03911B:Skyrim.esm"
-  MaleSlyCynical: "039CC3:Skyrim.esm"
-  MaleYoungEager: "039CC4:Skyrim.esm"
-  MaleCoward: "039CC5:Skyrim.esm"
-  MaleBrute: "039CC6:Skyrim.esm"
-  MaleNordCommander: "03B9A4:Skyrim.esm"
+  # === Race-Specific Male Voices ===
+  MaleNord: "013AE6:Skyrim.esm"
+  MaleOrc: "013AEA:Skyrim.esm"
+  MaleKhajiit: "013AEC:Skyrim.esm"
+  MaleArgonian: "013AEE:Skyrim.esm"
+  MaleDarkElf: "013AF2:Skyrim.esm"
+  MaleElfHaughty: "013AF0:Skyrim.esm"          # High Elves, Wood Elves
 
-  # === Female Voices ===
-  # WARNING: These FormIDs need verification in xEdit.
-  # The female voice type records are in a different range than male.
-  # Open xEdit → Skyrim.esm → Voice Type → find by EditorID.
-  # The values below are UNVERIFIED — check before using.
-  FemaleNord: "VERIFY_IN_XEDIT"
-  FemaleDarkElf: "VERIFY_IN_XEDIT"
-  FemaleOrc: "VERIFY_IN_XEDIT"
-  FemaleKhajiit: "VERIFY_IN_XEDIT"
-  FemaleArgonian: "VERIFY_IN_XEDIT"
-  FemaleImperial: "VERIFY_IN_XEDIT"
-  FemaleBreton: "VERIFY_IN_XEDIT"
-  FemaleRedguard: "VERIFY_IN_XEDIT"
-  FemaleHighElf: "VERIFY_IN_XEDIT"
-  FemaleWoodElf: "VERIFY_IN_XEDIT"
-  FemaleCommoner: "VERIFY_IN_XEDIT"
-  FemaleSultry: "VERIFY_IN_XEDIT"
-  FemaleYoungEager: "VERIFY_IN_XEDIT"
-  FemaleCoward: "VERIFY_IN_XEDIT"
-  FemaleCondescending: "VERIFY_IN_XEDIT"
-  FemaleEvenToned: "VERIFY_IN_XEDIT"
-  FemaleCommander: "VERIFY_IN_XEDIT"
-  FemaleBandit: "VERIFY_IN_XEDIT"
-  FemaleGuard: "VERIFY_IN_XEDIT"
+  # === Race-Specific Female Voices ===
+  FemaleNord: "013AE7:Skyrim.esm"
+  FemaleOrc: "013AEB:Skyrim.esm"
+  FemaleKhajiit: "013AED:Skyrim.esm"
+  FemaleArgonian: "013AEF:Skyrim.esm"
+  FemaleDarkElf: "013AF3:Skyrim.esm"
+  FemaleElfHaughty: "013AF1:Skyrim.esm"         # High Elves, Wood Elves
+
+  # === Generic Male Voices (any race) ===
+  MaleEvenToned: "013AD2:Skyrim.esm"            # Default -- Imperials, Bretons, Redguards
+  MaleCommoner: "013AD3:Skyrim.esm"
+  MaleYoungEager: "013AD1:Skyrim.esm"
+  MaleCommander: "013AD8:Skyrim.esm"
+  MaleCondescending: "013AD9:Skyrim.esm"
+  MaleCoward: "013ADB:Skyrim.esm"
+  MaleBrute: "013ADA:Skyrim.esm"
+  MaleSlyCynical: "013AD5:Skyrim.esm"
+  MaleDrunk: "013AD4:Skyrim.esm"
+  MaleOldKindly: "013AD6:Skyrim.esm"
+  MaleOldGrumpy: "013AD7:Skyrim.esm"
+  MaleChild: "013AE8:Skyrim.esm"
+  MaleSoldier: "01B55F:Skyrim.esm"
+  MaleCommonerAccented: "0EA266:Skyrim.esm"
+  MaleEvenTonedAccented: "0EA267:Skyrim.esm"
+
+  # === Generic Female Voices (any race) ===
+  FemaleEvenToned: "013ADD:Skyrim.esm"          # Default -- Imperials, Bretons, Redguards
+  FemaleCommoner: "013ADE:Skyrim.esm"
+  FemaleYoungEager: "013ADC:Skyrim.esm"
+  FemaleCommander: "013AE3:Skyrim.esm"
+  FemaleCondescending: "013AE4:Skyrim.esm"
+  FemaleCoward: "013AE5:Skyrim.esm"
+  FemaleSultry: "013AE0:Skyrim.esm"
+  FemaleOldKindly: "013AE1:Skyrim.esm"
+  FemaleOldGrumpy: "013AE2:Skyrim.esm"
+  FemaleChild: "013AE9:Skyrim.esm"
+  FemaleSoldier: "01B560:Skyrim.esm"
+  FemaleShrill: "013BC3:Skyrim.esm"
+
+  # === Job/Role Male Voices ===
+  MaleBandit: "09843B:Skyrim.esm"
+  MaleForsworn: "09844F:Skyrim.esm"
+  MaleGuard: "0AA8D3:Skyrim.esm"                # All holds use MaleGuard
+  MaleWarlock: "09843A:Skyrim.esm"
+  MaleNordCommander: "0E5003:Skyrim.esm"
+
+  # NOTE: FemaleBandit and FemaleGuard do NOT exist in vanilla.
+  # Female bandits/guards use FemaleEvenToned, FemaleSoldier, or FemaleCommander.
 
   # === Unique NPC Voices (DLC + unique) ===
-  # These are safe to reference but verify in xEdit:
-  MaleUniqueUlfric: "04A3CD:Skyrim.esm"
-  MaleUniqueTullius: "04A3CE:Skyrim.esm"
-  MaleUniqueAlduin: "04A3CF:Skyrim.esm"
-  MaleUniquePaarthurnax: "04A3D0:Skyrim.esm"
+  MaleUniqueUlfric: "020C1A:Skyrim.esm"
+  MaleUniqueTullius: "01A63A:Skyrim.esm"
+  MaleUniqueAlduin: "06F44F:Skyrim.esm"         # NOTE: CrUniqueAlduin, not MaleUnique
+  MaleUniquePaarthurnax: "06F451:Skyrim.esm"    # NOTE: CrUniquePaarthurnax
+  MaleUniqueEsbern: "03BDA4:Skyrim.esm"
+  MaleUniqueDelvinMallory: "029DA8:Skyrim.esm"
+  MaleUniqueBrynjolf: "01B07E:Skyrim.esm"
+  MaleUniqueMercerFrey: "01B07B:Skyrim.esm"
+  MaleUniqueNazir: "01C3AC:Skyrim.esm"
+  MaleUniqueCicero: "01BDAF:Skyrim.esm"
+  MaleUniqueGalmar: "0E5002:Skyrim.esm"
+  MaleUniqueHadvar: "1074BF:Skyrim.esm"
+  MaleUniqueKodlakWhitemane: "01C242:Skyrim.esm"
+  MaleUniqueSheogorath: "0D87D4:Skyrim.esm"
+
+  FemaleUniqueDelphine: "014432:Skyrim.esm"
+  FemaleUniqueAstrid: "01BDB5:Skyrim.esm"
+  FemaleUniqueKarliah: "01B080:Skyrim.esm"
+  FemaleUniqueElenwen: "01A63B:Skyrim.esm"
+  FemaleUniqueMaven: "09F17B:Skyrim.esm"
+  FemaleUniqueVex: "03B5A2:Skyrim.esm"
+  FemaleUniqueNocturnal: "031894:Skyrim.esm"
+  FemaleUniqueMeridia: "04E500:Skyrim.esm"

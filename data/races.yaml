@@ -1,45 +1,116 @@
 # Vanilla Skyrim Races
-# Map of friendly name → FormID (Skyrim.esm)
+# Map of EditorID → FormKey (Skyrim.esm)
 # Use the EditorID (left side) in npc.config.yaml
+#
+# SCOPE: Vanilla Skyrim.esm ONLY.
+#   DLC races (e.g. werebear from Dawnguard, rieklings from Dragonborn) are
+#   NOT included. To add DLC coverage, run dump_races.pas against each DLC
+#   master and append results here.
+#
+# VERIFIED via xEdit script dump against Skyrim.esm (2026-06-13).
+# All FormIDs confirmed against live RACE records.
+#
+# NOTE: Race EditorIDs in Skyrim.esm are alphabetical by race name within
+# each block (Argonian, Breton, DarkElf, HighElf, Imperial, Khajiit, Nord,
+# Orc, Redguard, WoodElf). Do not assume they follow any other order.
 
 races:
-  # === Playable Races ===
-  NordRace: "013746:Skyrim.esm"
+  # === Playable Races (object IDs 013740-013749, alphabetical) ===
+  ArgonianRace: "013740:Skyrim.esm"
+  BretonRace: "013741:Skyrim.esm"
+  DarkElfRace: "013742:Skyrim.esm"
+  HighElfRace: "013743:Skyrim.esm"
   ImperialRace: "013744:Skyrim.esm"
-  BretonRace: "013743:Skyrim.esm"
-  RedguardRace: "013742:Skyrim.esm"
-  OrcRace: "013747:Skyrim.esm"
-  DarkElfRace: "013740:Skyrim.esm"
-  HighElfRace: "013739:Skyrim.esm"
-  WoodElfRace: "013741:Skyrim.esm"
   KhajiitRace: "013745:Skyrim.esm"
-  ArgonianRace: "013738:Skyrim.esm"
+  NordRace: "013746:Skyrim.esm"
+  OrcRace: "013747:Skyrim.esm"
+  RedguardRace: "013748:Skyrim.esm"
+  WoodElfRace: "013749:Skyrim.esm"
+
+  # === Child Variants ===
+  NordRaceChild: "02C65B:Skyrim.esm"
+  ImperialRaceChild: "02C659:Skyrim.esm"
+  RedguardRaceChild: "02C65A:Skyrim.esm"
+  BretonRaceChild: "02C65C:Skyrim.esm"
+  ElderRace: "067CD8:Skyrim.esm"
 
   # === Vampire Variants ===
-  NordVampireRace: "0A82B9:Skyrim.esm"
-  ImperialVampireRace: "0A82BB:Skyrim.esm"
-  BretonVampireRace: "0A82BC:Skyrim.esm"
-  RedguardVampireRace: "0A82BD:Skyrim.esm"
-  OrcVampireRace: "0A82BE:Skyrim.esm"
-  DarkElfVampireRace: "0A82BF:Skyrim.esm"
-  HighElfVampireRace: "0A82C0:Skyrim.esm"
-  WoodElfVampireRace: "0A82C1:Skyrim.esm"
-  KhajiitVampireRace: "0A82C2:Skyrim.esm"
-  ArgonianVampireRace: "0A82C3:Skyrim.esm"
+  # NOTE: EditorIDs are {Race}RaceVampire, not {Race}VampireRace.
+  NordRaceVampire: "088794:Skyrim.esm"
+  ArgonianRaceVampire: "08883A:Skyrim.esm"
+  BretonRaceVampire: "08883C:Skyrim.esm"
+  DarkElfRaceVampire: "08883D:Skyrim.esm"
+  HighElfRaceVampire: "088840:Skyrim.esm"
+  ImperialRaceVampire: "088844:Skyrim.esm"
+  KhajiitRaceVampire: "088845:Skyrim.esm"
+  RedguardRaceVampire: "088846:Skyrim.esm"
+  WoodElfRaceVampire: "088884:Skyrim.esm"
+  OrcRaceVampire: "0A82B9:Skyrim.esm"
+  ElderRaceVampire: "0A82BA:Skyrim.esm"
 
-  # === Common Creature Races ===
-  DraugrRace: "000382:Skyrim.esm"
-  SkeletonRace: "000941:Skyrim.esm"
-  GhostRace: "0C9BD5:Skyrim.esm"
-  HagravenRace: "013749:Skyrim.esm"
-  FalmerRace: "01374B:Skyrim.esm"
-  SprigganRace: "01374C:Skyrim.esm"
-  DremoraRace: "013748:Skyrim.esm"
-  GiantRace: "022C43:Skyrim.esm"
-  FrostbiteSpiderRace: "01374A:Skyrim.esm"
-  TrollRace: "01374D:Skyrim.esm"
+  # === Undead / Draugr ===
+  DraugrRace: "000D53:Skyrim.esm"
+  DragonPriestRace: "0131EF:Skyrim.esm"
+  SkeletonRace: "0B7998:Skyrim.esm"
+  RigidSkeletonRace: "0B9FD7:Skyrim.esm"
+
+  # === Daedric / Planar ===
+  DremoraRace: "0131F0:Skyrim.esm"
+
+  # === Creature Races (commonly useful for hostile NPCs) ===
+  FalmerRace: "0131F4:Skyrim.esm"
+  HagravenRace: "0131FB:Skyrim.esm"
+  SprigganRace: "013204:Skyrim.esm"
+  SprigganMatronRace: "0F3903:Skyrim.esm"
+  GiantRace: "0131F9:Skyrim.esm"
+  TrollRace: "013205:Skyrim.esm"
+  TrollFrostRace: "013206:Skyrim.esm"
+  FrostbiteSpiderRace: "0131F8:Skyrim.esm"
+  FrostbiteSpiderRaceLarge: "053477:Skyrim.esm"
+  FrostbiteSpiderRaceGiant: "04E507:Skyrim.esm"
+  SabreCatRace: "013200:Skyrim.esm"
+  SabreCatSnowyRace: "013202:Skyrim.esm"
+  WolfRace: "01320A:Skyrim.esm"
+  BearBrownRace: "0131E7:Skyrim.esm"
+  BearBlackRace: "0131E8:Skyrim.esm"
+  BearSnowRace: "0131E9:Skyrim.esm"
+  ChaurusRace: "0131EB:Skyrim.esm"
+  ChaurusReaperRace: "0A5601:Skyrim.esm"
+  HorseRace: "0131FD:Skyrim.esm"
+  DogRace: "0131EE:Skyrim.esm"
+  HorkerRace: "0131FC:Skyrim.esm"
+  MammothRace: "0131FF:Skyrim.esm"
+  GoatRace: "0131FA:Skyrim.esm"
+  CowRace: "04E785:Skyrim.esm"
+  SkeeverRace: "013201:Skyrim.esm"
+  MudcrabRace: "0BA545:Skyrim.esm"
+  SlaughterfishRace: "013203:Skyrim.esm"
+  DeerRace: "0CF89B:Skyrim.esm"
+  ElkRace: "0131ED:Skyrim.esm"
+  HareRace: "06DC99:Skyrim.esm"
+  FoxRace: "109C7C:Skyrim.esm"
+  ChickenRace: "0A919D:Skyrim.esm"
+  IceWraithRace: "0131FE:Skyrim.esm"
+  WispRace: "013208:Skyrim.esm"
+
+  # === Atronachs / Elementals ===
+  AtronachFlameRace: "0131F5:Skyrim.esm"
+  AtronachFrostRace: "0131F6:Skyrim.esm"
+  AtronachStormRace: "0131F7:Skyrim.esm"
+
+  # === Dwarven Automatons ===
+  DwarvenCenturionRace: "0131F1:Skyrim.esm"
+  DwarvenSphereRace: "0131F2:Skyrim.esm"
+  DwarvenSpiderRace: "0131F3:Skyrim.esm"
+
+  # === Dragons ===
+  DragonRace: "012E82:Skyrim.esm"
+  AlduinRace: "0E7713:Skyrim.esm"
+  UndeadDragonRace: "1052A3:Skyrim.esm"
+
+  # === Special ===
   WerewolfBeastRace: "0CDD84:Skyrim.esm"
-  BearRace: "000381:Skyrim.esm"
-  WolfRace: "000383:Skyrim.esm"
-  SabreCatRace: "01374E:Skyrim.esm"
-  HorseRace: "00037C:Skyrim.esm"
+
+  # NOTE: GhostRace and BearRace do NOT exist as EditorIDs in vanilla.
+  # Ghosts use the regular race with a visual effect/ability.
+  # Bears are split into BearBrownRace, BearBlackRace, BearSnowRace.

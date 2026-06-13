@@ -27,10 +27,10 @@ respawn: false                        # true = respawns on cell reset, false = s
 outfit: "OrcishArmor"                 # → data/outfits.yaml
 # Option B: Custom OTFT record with specific items (uncomment to use)
 # outfit_items:
-#   - "OrcishCuirass"
-#   - "OrcishBoots"
-#   - "OrcishGauntlets"
-#   - "OrcishHelmet"
+#   - "ArmorOrcishCuirass"      # 00013957:Skyrim.esm
+#   - "ArmorOrcishBoots"        # 00013956:Skyrim.esm
+#   - "ArmorOrcishGauntlets"    # 00013958:Skyrim.esm
+#   - "ArmorOrcishHelmet"       # 00013959:Skyrim.esm
 
 # --- Inventory (optional, direct items carried) ---
 inventory: []
