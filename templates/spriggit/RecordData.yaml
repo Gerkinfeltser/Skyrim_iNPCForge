@@ -1,27 +1,42 @@
 # ============================================================
-# Spriggit RecordData Template — Mod Header
+# Spriggit RecordData — Mod Header Template
 # ============================================================
 # This file defines the plugin header. The agent fills in
-# {{plugin_name}} and sets the ESL flags.
+# the actual plugin name.
 #
-# For ESL-flagged plugins:
-#   - Extension should be .esp with ESL flag, OR .esl
-#   - Records use 0x000-0xFFF object ID range
-#   - No WRLD records allowed
+# ESL FLAGGING:
+#   Spriggit does NOT set the ESL flag automatically.
+#   After deserialization, the agent must either:
+#   A) Use .esl extension (automatically ESL), OR
+#   B) Generate .esp and run xEdit to add ESL flag, OR
+#   C) Set the ESL flag bit in the binary header manually
+#
+#   For MVP: generate as .esp, then instruct user to ESL-flag
+#   via xEdit (right-click → "Compact FormIDs for ESL" →
+#   "Add ESL flag"). This is a one-time step.
+#
+#   Alternatively, the agent can set ModHeader flags directly
+#   in this YAML by adding the ESL flag to the header.
 # ============================================================
 
 SpriggitSource:
   PackageName: Spriggit.Yaml.Skyrim
   Version: 0.40.0
-ModKey: {{plugin_name}}.esp
+ModKey: GrokTheSmith.esp
 GameRelease: SkyrimSE
 ModHeader:
-  Stats:
-    Version: 1.7
-  Author: Generated via Skyrim_NPCTemplate
+  Author: Generated via iNPCForge
   MasterReferences:
   - Master: Skyrim.esm
     FileSize: 0
   - Master: Update.esm
     FileSize: 0
   INTV: 1
+
+# ============================================================
+# MASTERS:
+#   Only include masters that records in this plugin actually reference.
+#   MVP plugins reference Skyrim.esm (races, items, factions, packages).
+#   Update.esm is sometimes needed — include it to be safe.
+#   Do NOT include DLC masters unless records reference them.
+# ============================================================

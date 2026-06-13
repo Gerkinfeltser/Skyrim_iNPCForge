@@ -154,7 +154,7 @@ Copy from `templates/spriggit/RecordData.yaml`. Replace `{{plugin_name}}` with t
 
 ### 3c: NPC YAML
 
-Use the real Spriggit NPC record format (based on Spriggit 0.40.0 serialization). Key fields:
+Use the real Spriggit NPC record format from `templates/spriggit/npc_base.yaml`. Key fields (verified against actual serializations):
 
 ```yaml
 FormKey: 000800:{PluginName}.esp
@@ -167,53 +167,116 @@ SkyrimMajorRecordFlags:
 Configuration:
   Flags:
   - AutoCalcStats
-  # Add conditionally:
-  # - Unique       (for unique named NPCs)
-  # - Respawn      (for respawning mooks)
-  # - Essential    (for plot-critical NPCs)
+  - Unique                    # for named NPCs
+  # - Respawn                 # for respawning mooks
+  # - Essential               # for unkillable NPCs
+  # - Protected               # can only be killed by player
   Level:
-    MutagenObjectType: PcLevelMult
-    LevelMult: 1
+    MutagenObjectType: NpcLevel
+    Level: {level}
   SpeedMultiplier: 100
   DispositionBase: 35
 
-Race: {race_formkey}          # e.g. 013747:Skyrim.esm
-AIData:
-  Aggression: {value}         # See combat attitude mapping below
-  Confidence: {value}         # Foolhardy for hostile, Average for friendly
-  EnergyLevel: 50
-  Responsibility: NoCrime
-Voice: {voice_formkey}
+Factions:
+- Faction: {faction_formkey}
+  Rank: {rank}
+  Fluff: 0x000000
 
-Class: {class_formkey}        # e.g. 017008:Skyrim.esm (Warrior)
+Race: {race_formkey}             # e.g. 013747:Skyrim.esm
+Voice: {voice_formkey}           # e.g. 02EDD6:Skyrim.esm
+Class: 017008:Skyrim.esm         # Warrior class
+
+AIData:
+  Aggression: {value}            # Unaggressive / Aggressive / Frenzied
+  Confidence: {value}            # Average (friendly) / Foolhardy (hostile)
+  EnergyLevel: 50
+  Assistance: HelpsFriendsAndAllies
+  Responsibility: NoCrime
+
 Name:
   TargetLanguage: English
   Value: {display_name}
 
-DefaultOutfit: {outfit_formkey}    # If using vanilla ref
-# OR generate a custom OTFT record
+DefaultOutfit: {outfit_formkey}
+Packages:
+- 0BAD0A:Skyrim.esm              # DefaultSandboxEditorLink (friendly only)
 
-# PackageList for AI (sandbox only for friendly NPCs)
-PackageList:
-- 0BAD0A:Skyrim.esm            # DefaultSandboxEditorLink
+Items:
+- Item:
+    Item: {item_formkey}
+    Count: {count}
 
-Height: 1
-Weight: 100
-SoundLevel: Normal
-
-MajorFlags:
-- 0x40000
+# Full PlayerSkills block with all 18 skills (see template)
+# Height, Weight, SoundLevel, MajorFlags
 ```
 
-### 3d: Combat Attitude → Field Mapping
+### 3d: Custom Outfit (if using outfit_items)
+
+If the config uses `outfit_items` instead of `outfit`, generate an OTFT record:
+
+```yaml
+# Outfits/{editor_id}_Outfit - {formID}_{plugin}.esp.yaml
+FormKey: 000801:{PluginName}.esp
+EditorID: {editor_id}_Outfit
+Items:
+- {item_formkey_1}
+- {item_formkey_2}
+```
+
+Then reference `000801:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
+
+### 3e: Cell Placement (REFR) — CRITICAL
+
+The NPC must be placed in a cell via a PlacedNoc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
+
+The PlacedNpc goes INSIDE a cell override record. See `templates/spriggit/cell_placement.yaml`.
+
+For interior cells, create a cell override:
+```
+Cells/{group_path}/{cell_editor_id} - {cell_formID}_Skyrim.esm/RecordData.yaml
+```
+
+The group path is derived from the cell FormID's first hex digits:
+- FormID 0A2C9E → path: Cells/0/A/
+
+Inside the cell RecordData.yaml, add the PlacedNpc to the `Temporary` list:
+
+```yaml
+Temporary:
+- MutagenObjectType: PlacedNpc
+  FormKey: 000802:{PluginName}.esp     # New REFR FormID in this plugin
+  MajorRecordFlagsRaw: 1024
+  SkyrimMajorRecordFlags:
+  - 0x400
+  Base: 000800:{PluginName}.esp        # References the NPC record
+  Placement:
+    Position: {x}, {y}, {z}            # From config (game units)
+    Rotation: 0, -0, {z_radians}       # Convert degrees to radians
+  MajorFlags:
+  - Persistent
+```
+
+**Rotation conversion:** degrees × (π / 180). Common: 90° = 1.5708, 180° = 3.1416.
+
+**FormID allocation for ESL plugin:**
+- 0x800: NPC record
+- 0x801: Custom outfit (if outfit_items used)
+- 0x802: REFR placement
+- 0x803+: additional records
+
+### 3f: RecordData.yaml (Mod Header)
+
+Copy from `templates/spriggit/RecordData.yaml`. Set the plugin name in `ModKey`.
+
+### 3g: Combat Attitude → Field Mapping
 
 | Attitude | Aggression | Confidence | Factions | AI Packages |
 |----------|-----------|------------|----------|-------------|
 | friendly | Unaggressive | Average | none/TownFaction | DefaultSandboxEditorLink |
 | neutral | Aggressive | Brave | none | sandbox or none |
-| hostile | Frenzied | Foolhardy | BanditFaction/etc | none |
+| hostile | Frenzied | Foolhardy | BanditFaction (0x00033A35) | none |
 
-### 3e: .spriggit config file
+### 3h: .spriggit config file
 
 ```json
 {
@@ -223,7 +286,7 @@ MajorFlags:
 }
 ```
 
-### 3f: Serialize to .esp
+### 3i: Serialize to .esp
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
@@ -231,6 +294,17 @@ MajorFlags:
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
   --DataFolder "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 ```
+
+### 3j: ESL Flagging
+
+Spriggit does NOT auto-set the ESL flag. After generating the .esp:
+
+1. Open in xEdit (SSEEdit)
+2. Right-click → "Compact FormIDs for ESL" (if needed)
+3. Right-click → "Add ESL flag"
+4. Save
+
+Or instruct the user to do this manually. The plugin uses 0x800-0x802 which is within the ESL range (0x000-0xFFF).
 
 ## Step 4: Generate SkyrimNet Prompt File
 

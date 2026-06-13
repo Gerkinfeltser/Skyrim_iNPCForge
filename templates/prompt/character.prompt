@@ -1,5 +1,3 @@
-{% extends "dynamic_character_bio.prompt" %}
-
 {% block summary %}{{summary}}{% endblock %}
 
 {% block interject_summary %}{{interject_summary}}{% endblock %}

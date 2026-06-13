@@ -1,99 +1,125 @@
 # ============================================================
-# Spriggit NPC Record Template
+# Spriggit NPC Record — Reference Template
 # ============================================================
-# Based on actual Spriggit 0.40.0 serialization of a vanilla NPC.
-# Field names match Mutagen's naming conventions exactly.
+# This is a REFERENCE for the agent, not a render template.
+# The agent generates actual Spriggit YAML based on this format.
+# Field names match Mutagen/Spriggit 0.40.0 conventions exactly,
+# verified against real plugin serializations.
 #
-# Placeholder variables (filled by agent from npc.config.yaml):
-#   {{editor_id}}       — Unique EditorID
-#   {{name}}            — Display name
-#   {{race_formkey}}    — Race FormKey from data/races.yaml
-#   {{voice_formkey}}   — Voice type FormKey from data/voices.yaml
-#   {{level}}           — NPC level
-#   {{outfit_formkey}}  — Outfit FormKey (if using vanilla reference)
-#   {{flags}}           — Configuration flags list
-#   {{aggression}}      — Aggression enum value
-#   {{confidence}}      — Confidence enum value
+# File location in generated plugin:
+#   {PluginName}_spriggit/Npcs/{editor_id} - {formID}_{plugin}.esp.yaml
 # ============================================================
 
-# FormKey for ESL: plugin name in key, object ID from record_id
-FormKey: {{record_id}}:{{plugin_name}}.esp
+# FormKey: {record_id}:{plugin_name}.esp
+# For ESL MVP: record_id is 0x800
+FormKey: 000800:GrokTheSmith.esp
 IsCompressed: True
 MajorRecordFlagsRaw: 262144
-VersionControl: 11048
-EditorID: {{editor_id}}
+EditorID: CustomNPC_Grok
 SkyrimMajorRecordFlags:
 - Compressed
+ObjectBounds:
+  First: -22, -14, 0
+  Second: 22, 14, 128
 
+# === Configuration (ACBS in CK) ===
 Configuration:
   Flags:
-{{#if unique}}
-  - Unique
-{{/if}}
-{{#if essential}}
-  - Essential
-{{/if}}
-{{#if respawn}}
-  - Respawn
-{{/if}}
   - AutoCalcStats
+  # Add conditionally based on npc.config.yaml:
+  # - Unique          → for named NPCs (set when combat_attitude != hostile or respawn: false)
+  # - Respawn         → for respawning mooks (set when respawn: true)
+  # - Essential       → for plot-critical NPCs (rare in MVP)
+  # - Protected       → can only be killed by player (good middle ground for followers)
   Level:
-    MutagenObjectType: PcLevelMult
-    LevelMult: 1
-  CalcMinLevel: {{level}}
-  CalcMaxLevel: {{level}}
+    # For fixed level:
+    MutagenObjectType: NpcLevel
+    Level: 25
+    # OR for PC-scaled:
+    # MutagenObjectType: PcLevelMult
+    # LevelMult: 1
   SpeedMultiplier: 100
   DispositionBase: 35
-  TemplateStats:
-  Flags:
-  - CalcStats
-  - CalcBSList
-  - CalcBaseSpellls
 
-{{#if factions.length}}
+# === Factions (SNAM in CK) ===
+# Optional — from npc.config.yaml factions list
+# Hostile NPCs should include: BanditFaction (0x00033A35)
 Factions:
-{{#each factions}}
-- Faction: {{faction_formkey}}
-  Rank: {{rank}}
+- Faction: 028E42:Skyrim.esm       # TownWhiterunFaction
+  Rank: 0
   Fluff: 0x000000
-{{/each}}
-{{/if}}
 
-Race: {{race_formkey}}
+# === Race and Voice ===
+Race: 013747:Skyrim.esm             # OrcRace → data/races.yaml
+Voice: 02EDD6:Skyrim.esm            # MaleOrc → data/voices.yaml
+
+# === Combat Class (CLASS) ===
+# Common options:
+#   017008:Skyrim.esm = Warrior (most melee NPCs)
+#   01327B:Skyrim.esm = Thief (rogue/sneak NPCs)
+#   01327D:Skyrim.esm = Mage (spellcasters)
+Class: 017008:Skyrim.esm
+
+# === AI Data (AIDT in CK) ===
+# Aggression mapping (from combat_attitude):
+#   friendly  → omit Aggression (defaults to Unaggressive)
+#   neutral   → Aggression: Aggressive
+#   hostile   → Aggression: Frenzied
+# Confidence mapping:
+#   friendly  → Confidence: Average
+#   hostile   → Confidence: Foolhardy
 AIData:
-  Aggression: {{aggression}}
-  Confidence: {{confidence}}
+  Aggression: Unaggressive
+  Confidence: Average
   EnergyLevel: 50
+  Assistance: HelpsFriendsAndAllies
   Responsibility: NoCrime
   Unused: 119
-{{#if voice_formkey}}
-Voice: {{voice_formkey}}
-{{/if}}
 
-Class: {{class_formkey}}
-
+# === Name ===
 Name:
   TargetLanguage: English
-  Value: {{name}}
+  Value: Grok
 
-{{#if outfit_formkey}}
-DefaultOutfit: {{outfit_formkey}}
-{{/if}}
+# === Outfit (DefaultOutfit) ===
+# Option A: vanilla reference → use FormKey from data/outfits.yaml
+DefaultOutfit: 03BE07:Skyrim.esm    # OrcishArmor
+# Option B: custom OTFT in plugin → reference the custom outfit's FormKey
+# DefaultOutfit: 000801:GrokTheSmith.esp
 
+# === AI Packages (PKFC) ===
+# Sandbox only for friendly NPCs. Reference DefaultSandboxEditorLink.
+# Hostile NPCs: omit this section entirely.
+Packages:
+- 0BAD0A:Skyrim.esm                 # DefaultSandboxEditorLink
+
+# === Inventory (CNTO in CK) ===
+# Optional — direct items carried by the NPC
+Items:
+- Item:
+    Item: 013980:Skyrim.esm         # OrcishWarAxe
+    Count: 1
+- Item:
+    Item: 00000F:Skyrim.esm         # Gold001
+    Count: 50
+
+# === Skills (PlayerSkills) ===
+# Set values appropriate to the NPC's role. AutoCalcStats will
+# compute derived stats (health, magicka, stamina) from these.
 PlayerSkills:
   SkillValues:
   - Key: OneHanded
-    Value: {{skill_onehanded}}
+    Value: 20
   - Key: TwoHanded
-    Value: {{skill_twohanded}}
+    Value: 25
   - Key: Archery
     Value: 15
   - Key: Block
-    Value: {{skill_block}}
+    Value: 20
   - Key: Smithing
-    Value: {{skill_smithing}}
+    Value: 35
   - Key: HeavyArmor
-    Value: {{skill_heavyarmor}}
+    Value: 20
   - Key: LightArmor
     Value: 15
   - Key: Pickpocket
@@ -160,26 +186,10 @@ PlayerSkills:
   Stamina: 50
   GearedUpWeapons: 1
 
+# === Appearance (optional — usually left default for MVP) ===
 Height: 1
 Weight: 100
 SoundLevel: Normal
-
-{{#if ai_packages.length}}
-PackageList:
-{{#each ai_packages}}
-- {{package_formkey}}
-{{/each}}
-{{/if}}
-
-{{#if items.length}}
-Items:
-{{#each items}}
-- Item:
-    Count: {{count}}
-    Item: {{item_formkey}}
-  Count: {{count}}
-{{/each}}
-{{/if}}
 
 MajorFlags:
 - 0x40000

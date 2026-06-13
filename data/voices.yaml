@@ -5,9 +5,18 @@
 # IMPORTANT: Always reference vanilla voice types directly.
 # Do NOT dupe/create new VTYP records — SkyrimNet TTS maps by voice type FormID.
 # A duped FormID will result in silent NPCs or fallback TTS.
+#
+# FormIDs are in the 02EDDx range for male voices and approximately
+# 02EDEx–02EDEy for female voices in Skyrim.esm.
+# VERIFY ALL FormIDs in xEdit before production use:
+#   1. Open xEdit (SSEEdit)
+#   2. Expand Skyrim.esm → Voice Type
+#   3. Find the voice type by EditorID
+#   4. Copy the FormID
 
 voice_types:
   # === Male Voices ===
+  # FormIDs in the 02EDD4–02EDE2 range (confirmed from serialization)
   MaleNord: "02EDD4:Skyrim.esm"
   MaleDarkElf: "02EDD5:Skyrim.esm"
   MaleOrc: "02EDD6:Skyrim.esm"
@@ -23,6 +32,7 @@ voice_types:
   MaleSlightElderly: "02EDE0:Skyrim.esm"
   MaleElderly: "02EDE1:Skyrim.esm"
   MaleDrunk: "02EDE2:Skyrim.esm"
+  # Additional male voices (verify in xEdit):
   MaleBandit: "0DDD6A:Skyrim.esm"
   MaleGuard: "038910:Skyrim.esm"
   MaleCommander: "03911B:Skyrim.esm"
@@ -34,35 +44,32 @@ voice_types:
 
   # === Female Voices ===
   # WARNING: These FormIDs need verification in xEdit.
-  # The vanilla female voice type FormIDs may differ from the values below.
-  # Verify before using in production. Check xEdit under VTYP records.
-  FemaleNord: "024F9F:Skyrim.esm"
-  FemaleDarkElf: "024FA0:Skyrim.esm"
-  FemaleOrc: "024FA1:Skyrim.esm"
-  FemaleKhajiit: "024FA2:Skyrim.esm"
-  FemaleArgonian: "024FA3:Skyrim.esm"
-  FemaleImperial: "024FA4:Skyrim.esm"
-  FemaleBreton: "024FA5:Skyrim.esm"
-  FemaleRedguard: "024FA6:Skyrim.esm"
-  FemaleHighElf: "024FA7:Skyrim.esm"
-  FemaleWoodElf: "024FA8:Skyrim.esm"
-  FemaleCommoner: "024FA9:Skyrim.esm"
-  FemaleSlightElderly: "024FAA:Skyrim.esm"
-  FemaleElderly: "024FAB:Skyrim.esm"
-  FemaleCondescending: "0349B6:Skyrim.esm"
-  FemaleYoungEager: "039CC0:Skyrim.esm"
-  FemaleCoward: "039CC1:Skyrim.esm"
-  FemaleBandit: "0DDD69:Skyrim.esm"
-  FemaleGuard: "038911:Skyrim.esm"
-  FemaleCommander: "03911C:Skyrim.esm"
-  FemaleSultry: "0349B5:Skyrim.esm"
+  # The female voice type records are in a different range than male.
+  # Open xEdit → Skyrim.esm → Voice Type → find by EditorID.
+  # The values below are UNVERIFIED — check before using.
+  FemaleNord: "VERIFY_IN_XEDIT"
+  FemaleDarkElf: "VERIFY_IN_XEDIT"
+  FemaleOrc: "VERIFY_IN_XEDIT"
+  FemaleKhajiit: "VERIFY_IN_XEDIT"
+  FemaleArgonian: "VERIFY_IN_XEDIT"
+  FemaleImperial: "VERIFY_IN_XEDIT"
+  FemaleBreton: "VERIFY_IN_XEDIT"
+  FemaleRedguard: "VERIFY_IN_XEDIT"
+  FemaleHighElf: "VERIFY_IN_XEDIT"
+  FemaleWoodElf: "VERIFY_IN_XEDIT"
+  FemaleCommoner: "VERIFY_IN_XEDIT"
+  FemaleSultry: "VERIFY_IN_XEDIT"
+  FemaleYoungEager: "VERIFY_IN_XEDIT"
+  FemaleCoward: "VERIFY_IN_XEDIT"
+  FemaleCondescending: "VERIFY_IN_XEDIT"
+  FemaleEvenToned: "VERIFY_IN_XEDIT"
+  FemaleCommander: "VERIFY_IN_XEDIT"
+  FemaleBandit: "VERIFY_IN_XEDIT"
+  FemaleGuard: "VERIFY_IN_XEDIT"
 
-  # === Unique NPC Voices ===
+  # === Unique NPC Voices (DLC + unique) ===
+  # These are safe to reference but verify in xEdit:
   MaleUniqueUlfric: "04A3CD:Skyrim.esm"
   MaleUniqueTullius: "04A3CE:Skyrim.esm"
   MaleUniqueAlduin: "04A3CF:Skyrim.esm"
   MaleUniquePaarthurnax: "04A3D0:Skyrim.esm"
-  MaleUniqueEsbern: "04A3D1:Skyrim.esm"
-  MaleUniqueDelvin: "04A3D2:Skyrim.esm"
-  FemaleUniqueAela: "04A3D3:Skyrim.esm"
-  FemaleUniqueSerana: "01E663:Dawnguard.esm"

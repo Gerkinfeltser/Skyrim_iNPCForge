@@ -50,12 +50,14 @@ Skyrim_NPCTemplate/
 │   └── outfits.yaml              # Vanilla outfits → FormIDs
 ├── templates/
 │   ├── spriggit/
-│   │   ├── RecordData.yaml       # Mod header template
-│   │   └── npc_base.yaml         # NPC record template
+│   │   ├── RecordData.yaml         # Mod header template
+│   │   ├── npc_base.yaml           # NPC record reference
+│   │   ├── cell_placement.yaml     # REFR placement reference (critical)
+│   │   └── outfit_custom.yaml      # Custom OTFT record reference
 │   ├── prompt/
-│   │   └── character.prompt      # Personality template (10 blocks)
+│   │   └── character.prompt        # Personality template (10 blocks)
 │   └── knowledge/
-│       └── world_knowledge.sknpack  # World knowledge pack template
+│       └── world_knowledge.sknpack # World knowledge pack template
 ├── examples/
 │   ├── grok_the_smith.yaml       # Friendly NPC (full example)
 │   └── hostile_bandit.yaml       # Hostile NPC (minimal example)

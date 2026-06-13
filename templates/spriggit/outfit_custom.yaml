@@ -1,0 +1,34 @@
+# ============================================================
+# Spriggit Outfit Record (OTFT) — Reference Template
+# ============================================================
+# Used when npc.config.yaml has outfit_items instead of outfit.
+# The agent generates one of these records in the plugin, then
+# references it from the NPC's DefaultOutfit field.
+#
+# File location in generated plugin:
+#   {PluginName}_spriggit/Outfits/{editor_id}_Outfit - {formID}_{plugin}.esp.yaml
+#
+# FormKey: uses a new FormID in this plugin (e.g. 0x801)
+# The NPC's DefaultOutfit field references this FormKey.
+# ============================================================
+
+FormKey: 000801:GrokTheSmith.esp
+EditorID: CustomNPC_Grok_Outfit
+
+# Items: list of armor/clothing FormKeys from Skyrim.esm
+# The agent must resolve item EditorIDs to FormKeys.
+# Common item FormIDs:
+#   OrcishCuirass:    0139ES:Skyrim.esm → 000139E5:Skyrim.esm
+#   OrcishBoots:      000139E6:Skyrim.esm
+#   OrcishGauntlets:  000139E7:Skyrim.esm
+#   OrcishHelmet:     000139E8:Skyrim.esm
+#   OrcishShield:     000139E9:Skyrim.esm
+#   ClothingApron:    000D9329:Skyrim.esm
+#   IronArmor:        00012E46:Skyrim.esm
+#   SteelArmor:       000139EC:Skyrim.esm
+# Check xEdit for exact FormIDs of items not listed here.
+Items:
+- 000139E5:Skyrim.esm    # OrcishCuirass
+- 000139E6:Skyrim.esm    # OrcishBoots
+- 000139E7:Skyrim.esm    # OrcishGauntlets
+- 000D9329:Skyrim.esm    # ClothingApron (if exists — verify in xEdit)

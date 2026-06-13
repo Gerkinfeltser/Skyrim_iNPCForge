@@ -1,0 +1,97 @@
+# ============================================================
+# Spriggit REFR Placement Record — Reference Template
+# ============================================================
+# This is how an NPC gets placed into a world cell.
+# The REFR (reference) is a PlacedNpc entry that goes INSIDE
+# the target cell's record, not as a standalone file.
+#
+# CRITICAL: The placement REFR does NOT get its own file.
+# It is embedded inside the Cell or Worldspace RecordData.yaml
+# under the "Persistent" or "Temporary" list.
+#
+# The agent must either:
+#   A) Add to an existing Skyrim.esm cell's Temporary list, OR
+#   B) Create a new CELL override record in the plugin
+#
+# For interior cells (MVP), option B is cleaner — create a
+# minimal cell override that adds the PlacedNpc.
+#
+# File location in generated plugin:
+#   {PluginName}_spriggit/Cells/{group}/{cell_name}/RecordData.yaml
+#
+# The agent must determine the Spriggit cell group path from
+# the cell's FormID (first 2 digits = group folder).
+# ============================================================
+
+# --- Cell Override Record ---
+# This overrides the vanilla cell to add the NPC placement.
+# The agent creates this by copying the cell's FormKey and
+# adding a PlacedNpc to the Persistent or Temporary list.
+
+# Example: Placing Grok in WhiterunWarmaidens (0x000A2C9E:Skyrim.esm)
+# Cell group path: Cells/0/A/WhiterunWarmaidens - 0A2C9E_Skyrim.esm/RecordData.yaml
+
+FormKey: 0A2C9E:Skyrim.esm           # The cell being overridden
+IsCompressed: True
+MajorRecordFlagsRaw: 262144
+EditorID: WhiterunWarmaidens
+SkyrimMajorRecordFlags:
+- Compressed
+Flags:
+- IsInteriorCell
+- PublicArea
+# Keep existing cell lighting from vanilla — don't override
+Lighting:
+  Inherits:
+  - AmbientColor
+  - DirectionalColor
+  - FogColor
+  - FogNear
+  - FogFar
+  - ClipDistance
+WaterHeight: -2.1474836E+09
+Persistent: []                        # Don't duplicate existing persistent refs
+
+# The NPC placement goes in Temporary (non-persistent refs added by this mod)
+Temporary:
+- MutagenObjectType: PlacedNpc
+  FormKey: 000801:GrokTheSmith.esp   # This plugin's REFR FormKey (0x801 = next after NPC at 0x800)
+  MajorRecordFlagsRaw: 1024
+  SkyrimMajorRecordFlags:
+  - 0x400
+  Base: 000800:GrokTheSmith.esp      # References the NPC record (FormKey from npc_base.yaml)
+  Placement:
+    Position: 50.0, -30.0, 0.0       # X, Y, Z from npc.config.yaml position
+    Rotation: 0, -0, 1.5708          # X, Y, Z radians from npc.config.yaml rotation (degrees → radians)
+  MajorFlags:
+  - Persistent
+MajorFlags:
+- 0x40000
+
+# ============================================================
+# NOTES FOR THE AGENT:
+#
+# 1. The PlacedNpc FormKey uses a NEW FormID in this plugin
+#    (e.g. 0x801 if the NPC is at 0x800, outfit at 0x802, etc.)
+#
+# 2. The Base field references the NPC record's FormKey.
+#
+# 3. Position is in game units (1 unit ≈ 1.4 cm).
+#    The agent should use the values from npc.config.yaml directly.
+#
+# 4. Rotation is in RADIANS, not degrees.
+#    Convert: radians = degrees × (π / 180)
+#    Common values: 0° = 0, 90° = 1.5708, 180° = 3.1416, 270° = 4.7124
+#
+# 5. The cell group path in Spriggit is derived from the cell FormID:
+#    FormID 0x0A2C9E → first digit "0" → group "0", next digit "A" → group "A"
+#    Path: Cells/0/A/{cell_editor_id} - {formID}_Skyrim.esm/
+#
+# 6. For interior cells, the agent should include minimal cell data
+#    (flags, lighting inherits) to avoid breaking the vanilla cell.
+#    The Spriggit serialization of the cell override should be tested.
+#
+# 7. If the cell override approach causes issues (missing vanilla data),
+#    the agent should fall back to instructing the user to place the
+#    NPC manually in Creation Kit.
+# ============================================================
