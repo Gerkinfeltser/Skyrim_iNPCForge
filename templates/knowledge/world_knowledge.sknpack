@@ -1,0 +1,28 @@
+{
+  "skyrimnet_knowledge_pack": {
+    "author": "{{author}}",
+    "description": "{{description}}",
+    "entries": [
+      {{#each entries}}
+      {
+        "always_inject": {{this.always_inject}},
+        "condition_expr": "{{this.condition_expr}}",
+        "content": "{{this.content}}",
+        "display_name": "{{this.display_name}}",
+        "emotion": "{{this.emotion}}",
+        "importance": {{this.importance}},
+        "knowledge_key": "{{this.knowledge_key}}",
+        "location": "{{this.location}}",
+        "tags": {{this.tags}},
+        "type": "{{this.type}}"
+      }{{#unless @last}},{{/unless}}
+      {{/each}}
+    ],
+    "entry_count": {{entries.length}},
+    "exported_at": "{{timestamp}}",
+    "format_version": 2,
+    "name": "{{pack_name}}",
+    "npc_groups": [],
+    "version": "1.0.0"
+  }
+}

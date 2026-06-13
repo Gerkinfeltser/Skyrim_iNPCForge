@@ -1,0 +1,27 @@
+{% extends "dynamic_character_bio.prompt" %}
+
+{% block summary %}{{summary}}{% endblock %}
+
+{% block interject_summary %}{{interject_summary}}{% endblock %}
+
+{% block background %}{{background}}{% endblock %}
+
+{% block personality %}{{personality}}{% endblock %}
+
+{% block appearance %}{{appearance}}{% endblock %}
+
+{% block aspirations %}
+{{aspirations}}
+{% endblock %}
+
+{% block relationships %}
+{{relationships}}
+{% endblock %}
+
+{% block occupation %}{{occupation}}{% endblock %}
+
+{% block skills %}
+{{skills}}
+{% endblock %}
+
+{% block speech_style %}{{speech_style}}{% endblock %}

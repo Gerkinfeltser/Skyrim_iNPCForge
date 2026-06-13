@@ -1,0 +1,68 @@
+# Vanilla Skyrim Voice Types
+# Map of friendly name → FormID (Skyrim.esm)
+# Use the EditorID (left side) in npc.config.yaml
+#
+# IMPORTANT: Always reference vanilla voice types directly.
+# Do NOT dupe/create new VTYP records — SkyrimNet TTS maps by voice type FormID.
+# A duped FormID will result in silent NPCs or fallback TTS.
+
+voice_types:
+  # === Male Voices ===
+  MaleNord: "02EDD4:Skyrim.esm"
+  MaleDarkElf: "02EDD5:Skyrim.esm"
+  MaleOrc: "02EDD6:Skyrim.esm"
+  MaleKhajiit: "02EDD7:Skyrim.esm"
+  MaleArgonian: "02EDD8:Skyrim.esm"
+  MaleImperial: "02EDD9:Skyrim.esm"
+  MaleBreton: "02EDDA:Skyrim.esm"
+  MaleRedguard: "02EDDB:Skyrim.esm"
+  MaleHighElf: "02EDDC:Skyrim.esm"
+  MaleWoodElf: "02EDDD:Skyrim.esm"
+  MaleCommoner: "02EDDE:Skyrim.esm"
+  MaleCommonerAccented: "02EDDF:Skyrim.esm"
+  MaleSlightElderly: "02EDE0:Skyrim.esm"
+  MaleElderly: "02EDE1:Skyrim.esm"
+  MaleDrunk: "02EDE2:Skyrim.esm"
+  MaleBandit: "0DDD6A:Skyrim.esm"
+  MaleGuard: "038910:Skyrim.esm"
+  MaleCommander: "03911B:Skyrim.esm"
+  MaleSlyCynical: "039CC3:Skyrim.esm"
+  MaleYoungEager: "039CC4:Skyrim.esm"
+  MaleCoward: "039CC5:Skyrim.esm"
+  MaleBrute: "039CC6:Skyrim.esm"
+  MaleNordCommander: "03B9A4:Skyrim.esm"
+
+  # === Female Voices ===
+  # WARNING: These FormIDs need verification in xEdit.
+  # The vanilla female voice type FormIDs may differ from the values below.
+  # Verify before using in production. Check xEdit under VTYP records.
+  FemaleNord: "024F9F:Skyrim.esm"
+  FemaleDarkElf: "024FA0:Skyrim.esm"
+  FemaleOrc: "024FA1:Skyrim.esm"
+  FemaleKhajiit: "024FA2:Skyrim.esm"
+  FemaleArgonian: "024FA3:Skyrim.esm"
+  FemaleImperial: "024FA4:Skyrim.esm"
+  FemaleBreton: "024FA5:Skyrim.esm"
+  FemaleRedguard: "024FA6:Skyrim.esm"
+  FemaleHighElf: "024FA7:Skyrim.esm"
+  FemaleWoodElf: "024FA8:Skyrim.esm"
+  FemaleCommoner: "024FA9:Skyrim.esm"
+  FemaleSlightElderly: "024FAA:Skyrim.esm"
+  FemaleElderly: "024FAB:Skyrim.esm"
+  FemaleCondescending: "0349B6:Skyrim.esm"
+  FemaleYoungEager: "039CC0:Skyrim.esm"
+  FemaleCoward: "039CC1:Skyrim.esm"
+  FemaleBandit: "0DDD69:Skyrim.esm"
+  FemaleGuard: "038911:Skyrim.esm"
+  FemaleCommander: "03911C:Skyrim.esm"
+  FemaleSultry: "0349B5:Skyrim.esm"
+
+  # === Unique NPC Voices ===
+  MaleUniqueUlfric: "04A3CD:Skyrim.esm"
+  MaleUniqueTullius: "04A3CE:Skyrim.esm"
+  MaleUniqueAlduin: "04A3CF:Skyrim.esm"
+  MaleUniquePaarthurnax: "04A3D0:Skyrim.esm"
+  MaleUniqueEsbern: "04A3D1:Skyrim.esm"
+  MaleUniqueDelvin: "04A3D2:Skyrim.esm"
+  FemaleUniqueAela: "04A3D3:Skyrim.esm"
+  FemaleUniqueSerana: "01E663:Dawnguard.esm"

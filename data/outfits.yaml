@@ -1,0 +1,56 @@
+# Vanilla Skyrim Outfits (OTFT Records)
+# Map of friendly name → FormID (Skyrim.esm)
+# Use the outfit key (left side) in npc.config.yaml
+#
+# For custom outfits, omit the 'outfit' field and use 'outfit_items' instead.
+# The agent will generate a custom OTFT record in the plugin.
+
+outfits:
+  # === Armor Sets by Material ===
+  OrcishArmor: "03BE07:Skyrim.esm"
+  SteelArmor: "03BE08:Skyrim.esm"
+  SteelPlateArmor: "03BE09:Skyrim.esm"
+  IronArmor: "03BE0A:Skyrim.esm"
+  LeatherArmor: "03BE0B:Skyrim.esm"
+  HideArmor: "03BE0C:Skyrim.esm"
+  StormcloakArmor: "03BE0D:Skyrim.esm"
+  ImperialArmor: "03BE0E:Skyrim.esm"
+  ThievesGuildArmor: "03BE0F:Skyrim.esm"
+  DarkBrotherhoodArmor: "03BE10:Skyrim.esm"
+  ElvenArmor: "03BE11:Skyrim.esm"
+  GlassArmor: "03BE12:Skyrim.esm"
+  EbonyArmor: "03BE13:Skyrim.esm"
+  DragonplateArmor: "03BE14:Skyrim.esm"
+  DragonscaleArmor: "03BE15:Skyrim.esm"
+  DaedricArmor: "03BE16:Skyrim.esm"
+  ForswornArmor: "03BE17:Skyrim.esm"
+  ScaledArmor: "03BE18:Skyrim.esm"
+  WolfArmor: "03BE19:Skyrim.esm"
+  BladesArmor: "03BE1A:Skyrim.esm"
+  DwarvenArmor: "03BE1B:Skyrim.esm"
+  NightingaleArmor: "03BE1C:Skyrim.esm"
+  CompanionsArmor: "03BE1D:Skyrim.esm"
+
+  # === Clothing ===
+  MageRobes: "042026:Skyrim.esm"
+  CollegeRobes: "03D3BF:Skyrim.esm"
+  FineClothes: "042027:Skyrim.esm"
+  TavernClothes: "042028:Skyrim.esm"
+  MerchantClothes: "042029:Skyrim.esm"
+  NobleClothes: "04202A:Skyrim.esm"
+  MonkRobes: "04202B:Skyrim.esm"
+  WeddingOutfit: "04202C:Skyrim.esm"
+  PrisonerClothes: "04202D:Skyrim.esm"
+  MinerClothes: "04202E:Skyrim.esm"
+  FarmerClothes: "04202F:Skyrim.esm"
+
+  # === Guard Uniforms ===
+  WhiterunGuard: "0C830D:Skyrim.esm"
+  SolitudeGuard: "0C830E:Skyrim.esm"
+  RiftenGuard: "0C830F:Skyrim.esm"
+  WindhelmGuard: "0C8310:Skyrim.esm"
+  MarkarthGuard: "0C8311:Skyrim.esm"
+  FalkreathGuard: "0C8312:Skyrim.esm"
+  DawnstarGuard: "0C8313:Skyrim.esm"
+  MorthalGuard: "0C8314:Skyrim.esm"
+  WinterholdGuard: "0C8315:Skyrim.esm"

@@ -1,0 +1,185 @@
+# ============================================================
+# Spriggit NPC Record Template
+# ============================================================
+# Based on actual Spriggit 0.40.0 serialization of a vanilla NPC.
+# Field names match Mutagen's naming conventions exactly.
+#
+# Placeholder variables (filled by agent from npc.config.yaml):
+#   {{editor_id}}       — Unique EditorID
+#   {{name}}            — Display name
+#   {{race_formkey}}    — Race FormKey from data/races.yaml
+#   {{voice_formkey}}   — Voice type FormKey from data/voices.yaml
+#   {{level}}           — NPC level
+#   {{outfit_formkey}}  — Outfit FormKey (if using vanilla reference)
+#   {{flags}}           — Configuration flags list
+#   {{aggression}}      — Aggression enum value
+#   {{confidence}}      — Confidence enum value
+# ============================================================
+
+# FormKey for ESL: plugin name in key, object ID from record_id
+FormKey: {{record_id}}:{{plugin_name}}.esp
+IsCompressed: True
+MajorRecordFlagsRaw: 262144
+VersionControl: 11048
+EditorID: {{editor_id}}
+SkyrimMajorRecordFlags:
+- Compressed
+
+Configuration:
+  Flags:
+{{#if unique}}
+  - Unique
+{{/if}}
+{{#if essential}}
+  - Essential
+{{/if}}
+{{#if respawn}}
+  - Respawn
+{{/if}}
+  - AutoCalcStats
+  Level:
+    MutagenObjectType: PcLevelMult
+    LevelMult: 1
+  CalcMinLevel: {{level}}
+  CalcMaxLevel: {{level}}
+  SpeedMultiplier: 100
+  DispositionBase: 35
+  TemplateStats:
+  Flags:
+  - CalcStats
+  - CalcBSList
+  - CalcBaseSpellls
+
+{{#if factions.length}}
+Factions:
+{{#each factions}}
+- Faction: {{faction_formkey}}
+  Rank: {{rank}}
+  Fluff: 0x000000
+{{/each}}
+{{/if}}
+
+Race: {{race_formkey}}
+AIData:
+  Aggression: {{aggression}}
+  Confidence: {{confidence}}
+  EnergyLevel: 50
+  Responsibility: NoCrime
+  Unused: 119
+{{#if voice_formkey}}
+Voice: {{voice_formkey}}
+{{/if}}
+
+Class: {{class_formkey}}
+
+Name:
+  TargetLanguage: English
+  Value: {{name}}
+
+{{#if outfit_formkey}}
+DefaultOutfit: {{outfit_formkey}}
+{{/if}}
+
+PlayerSkills:
+  SkillValues:
+  - Key: OneHanded
+    Value: {{skill_onehanded}}
+  - Key: TwoHanded
+    Value: {{skill_twohanded}}
+  - Key: Archery
+    Value: 15
+  - Key: Block
+    Value: {{skill_block}}
+  - Key: Smithing
+    Value: {{skill_smithing}}
+  - Key: HeavyArmor
+    Value: {{skill_heavyarmor}}
+  - Key: LightArmor
+    Value: 15
+  - Key: Pickpocket
+    Value: 15
+  - Key: Lockpicking
+    Value: 15
+  - Key: Sneak
+    Value: 15
+  - Key: Alchemy
+    Value: 15
+  - Key: Speech
+    Value: 15
+  - Key: Alteration
+    Value: 15
+  - Key: Conjuration
+    Value: 15
+  - Key: Destruction
+    Value: 15
+  - Key: Illusion
+    Value: 15
+  - Key: Restoration
+    Value: 15
+  - Key: Enchanting
+    Value: 15
+  SkillOffsets:
+  - Key: OneHanded
+    Value: 0
+  - Key: TwoHanded
+    Value: 0
+  - Key: Archery
+    Value: 0
+  - Key: Block
+    Value: 0
+  - Key: Smithing
+    Value: 0
+  - Key: HeavyArmor
+    Value: 0
+  - Key: LightArmor
+    Value: 0
+  - Key: Pickpocket
+    Value: 0
+  - Key: Lockpicking
+    Value: 0
+  - Key: Sneak
+    Value: 0
+  - Key: Alchemy
+    Value: 0
+  - Key: Speech
+    Value: 0
+  - Key: Alteration
+    Value: 0
+  - Key: Conjuration
+    Value: 0
+  - Key: Destruction
+    Value: 0
+  - Key: Illusion
+    Value: 0
+  - Key: Restoration
+    Value: 0
+  - Key: Enchanting
+    Value: 0
+  Health: 50
+  Magicka: 50
+  Stamina: 50
+  GearedUpWeapons: 1
+
+Height: 1
+Weight: 100
+SoundLevel: Normal
+
+{{#if ai_packages.length}}
+PackageList:
+{{#each ai_packages}}
+- {{package_formkey}}
+{{/each}}
+{{/if}}
+
+{{#if items.length}}
+Items:
+{{#each items}}
+- Item:
+    Count: {{count}}
+    Item: {{item_formkey}}
+  Count: {{count}}
+{{/each}}
+{{/if}}
+
+MajorFlags:
+- 0x40000

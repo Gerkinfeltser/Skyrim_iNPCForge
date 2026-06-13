@@ -1,0 +1,45 @@
+# Vanilla Skyrim Races
+# Map of friendly name → FormID (Skyrim.esm)
+# Use the EditorID (left side) in npc.config.yaml
+
+races:
+  # === Playable Races ===
+  NordRace: "013746:Skyrim.esm"
+  ImperialRace: "013744:Skyrim.esm"
+  BretonRace: "013743:Skyrim.esm"
+  RedguardRace: "013742:Skyrim.esm"
+  OrcRace: "013747:Skyrim.esm"
+  DarkElfRace: "013740:Skyrim.esm"
+  HighElfRace: "013739:Skyrim.esm"
+  WoodElfRace: "013741:Skyrim.esm"
+  KhajiitRace: "013745:Skyrim.esm"
+  ArgonianRace: "013738:Skyrim.esm"
+
+  # === Vampire Variants ===
+  NordVampireRace: "0A82B9:Skyrim.esm"
+  ImperialVampireRace: "0A82BB:Skyrim.esm"
+  BretonVampireRace: "0A82BC:Skyrim.esm"
+  RedguardVampireRace: "0A82BD:Skyrim.esm"
+  OrcVampireRace: "0A82BE:Skyrim.esm"
+  DarkElfVampireRace: "0A82BF:Skyrim.esm"
+  HighElfVampireRace: "0A82C0:Skyrim.esm"
+  WoodElfVampireRace: "0A82C1:Skyrim.esm"
+  KhajiitVampireRace: "0A82C2:Skyrim.esm"
+  ArgonianVampireRace: "0A82C3:Skyrim.esm"
+
+  # === Common Creature Races ===
+  DraugrRace: "000382:Skyrim.esm"
+  SkeletonRace: "000941:Skyrim.esm"
+  GhostRace: "0C9BD5:Skyrim.esm"
+  HagravenRace: "013749:Skyrim.esm"
+  FalmerRace: "01374B:Skyrim.esm"
+  SprigganRace: "01374C:Skyrim.esm"
+  DremoraRace: "013748:Skyrim.esm"
+  GiantRace: "022C43:Skyrim.esm"
+  FrostbiteSpiderRace: "01374A:Skyrim.esm"
+  TrollRace: "01374D:Skyrim.esm"
+  WerewolfBeastRace: "0CDD84:Skyrim.esm"
+  BearRace: "000381:Skyrim.esm"
+  WolfRace: "000383:Skyrim.esm"
+  SabreCatRace: "01374E:Skyrim.esm"
+  HorseRace: "00037C:Skyrim.esm"

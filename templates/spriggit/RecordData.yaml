@@ -1,0 +1,27 @@
+# ============================================================
+# Spriggit RecordData Template — Mod Header
+# ============================================================
+# This file defines the plugin header. The agent fills in
+# {{plugin_name}} and sets the ESL flags.
+#
+# For ESL-flagged plugins:
+#   - Extension should be .esp with ESL flag, OR .esl
+#   - Records use 0x000-0xFFF object ID range
+#   - No WRLD records allowed
+# ============================================================
+
+SpriggitSource:
+  PackageName: Spriggit.Yaml.Skyrim
+  Version: 0.40.0
+ModKey: {{plugin_name}}.esp
+GameRelease: SkyrimSE
+ModHeader:
+  Stats:
+    Version: 1.7
+  Author: Generated via Skyrim_NPCTemplate
+  MasterReferences:
+  - Master: Skyrim.esm
+    FileSize: 0
+  - Master: Update.esm
+    FileSize: 0
+  INTV: 1

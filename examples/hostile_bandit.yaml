@@ -1,0 +1,67 @@
+# ============================================================
+# Example: Shank (Hostile Bandit NPC)
+# ============================================================
+# A hostile NPC that attacks on sight. Uses aggression flags
+# instead of AI packages. Respawns on cell reset.
+# No personality prompt needed — hostile NPCs don't talk.
+# ============================================================
+
+# === IDENTITY ===
+name: "Shank"
+editor_id: "Bandit_Shard_Shank"
+record_id: "0x800"
+plugin_name: "ShankTheBandit"
+
+# === BODY ===
+race: "NordRace"
+voice_type: "MaleBandit"
+combat_attitude: "hostile"
+level: 15
+respawn: true                      # Named mook — respawns on cell reset
+
+# Vanilla bandit outfit
+outfit: "HideArmor"
+
+inventory:
+  - item: "SteelWarAxe"
+    count: 1
+  - item: "Gold001"
+    count: 25
+  - item: "Lockpick"
+    count: 3
+
+factions:
+  - faction: "BanditFaction"
+    rank: 0
+
+# Placed in a bandit cave
+location: "white_river_watch"
+position:
+  x: 100.0
+  y: 200.0
+  z: 0.0
+rotation:
+  x: 0.0
+  y: 0.0
+  z: 180.0
+
+# === BEHAVIOR ===
+ai:
+  mode: "none"                     # Hostile — aggression handles everything
+  radius: 0
+
+# === SOUL ===
+# Hostile NPCs typically don't need SkyrimNet personality prompts.
+# If you DO want a talking bandit (e.g., taunting before combat), 
+# uncomment and fill in the personality section.
+# personality:
+#   summary: "A cruel bandit who taunts his prey..."
+#   interject_summary: "..."
+#   background: "..."
+#   personality: "..."
+#   appearance: "..."
+#   aspirations: []
+#   relationships: []
+#   occupation: "Bandit"
+#   skills: ["Ambush tactics", "Knife fighting"]
+#   speech_style: "Guttural threats and mocking laughter..."
