@@ -7,3 +7,6 @@ output/
 
 # Magic Context plugin runtime data (session state, not project config)
 .opencode/magic-context/
+
+# Local implementation worktrees
+.worktrees/
