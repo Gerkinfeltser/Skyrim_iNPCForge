@@ -72,7 +72,9 @@ or copy its contents into your MO2 mods folder. The `_spriggit/` subfolder is
 inert to the game (MO2 only cares about the .esp, SKSE/, and Data-rooted paths)
 but keeps the mod self-contained — edit YAML + re-serialize without the repo.
 
-## Interview Gate
+## Step 1: Interview, Resolution, and Provenance
+
+### Interview Gate
 
 Start every new NPC with this numbered form. The user may answer with numbers only. Ask follow-up questions only for missing required answers, contradictions, or unresolved FormKey needs.
 
@@ -96,7 +98,7 @@ Start every new NPC with this numbered form. The user may answer with numbers on
 
 Required answers: NPC name, race, combat attitude, and placement location. Everything else can be inferred or defaulted, but unresolved mod-added records (question 14) must be resolved before generation proceeds.
 
-## FormKey Resolution Gate
+### FormKey Resolution Gate
 
 SkyLinkAI is the preferred source of truth when available.
 
@@ -120,7 +122,7 @@ When SkyLinkAI cannot resolve a record, fall back to xEdit dump scripts for bulk
 
 `data/*.yaml` tables are verified fallback/cache, not a license to invent records. Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
 
-## FormKey Provenance
+### FormKey Provenance
 
 Every generated output must include a provenance file tracking where each external FormKey came from:
 
@@ -157,6 +159,8 @@ records:
 ```
 
 Generate this file from `templates/provenance/formkey-provenance.yaml` after FormKey resolution. Every external FormKey used by generated Spriggit YAML must have a provenance entry unless it is plugin-local.
+
+**Transition:** Once all FormKeys are resolved and provenance is written, proceed to fill `npc.config.yaml` (Step 2), then generate Spriggit YAML (Step 3). Before ESP serialization, Skyrim must be closed — see the Pre-Build Gate (Step 3i).
 
 ## Step 2: Fill npc.config.yaml
 
@@ -217,6 +221,8 @@ personality:
   skills: ["..."]
   speech_style: "..."
 ```
+
+With `npc.config.yaml` complete, proceed to generate the Spriggit YAML.
 
 ## Step 3: Generate Spriggit YAML → .esp
 
@@ -309,7 +315,7 @@ Then reference `000802:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
 
 ### 3e: Cell Placement (REFR) — CRITICAL
 
-The NPC must be placed in a cell via a PlacedNoc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
+The NPC must be placed in a cell via a PlacedNpc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
 
 The PlacedNpc goes INSIDE a cell override record. See `templates/spriggit/cell_placement.yaml`.
 
