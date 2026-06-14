@@ -25,7 +25,7 @@ npc.config.yaml ──► Spriggit YAML ──► {PluginName}.esp   (record lay
 ```
 
 1. Fill `npc.config.yaml` (single source of truth).
-2. Resolve FormKeys via `data/*.yaml` lookup tables.
+2. Resolve FormKeys via SkyLinkAI > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
 3. Generate Spriggit YAML into `output/{PluginName}_spriggit/` from `templates/spriggit/`.
 4. Serialize to `.esp` with the Spriggit CLI.
 5. Generate the `.prompt` file from `templates/prompt/character.prompt`.
@@ -44,6 +44,8 @@ $env:SKYRIM_DATA = "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 ```
 
 Spriggit installs to `$env:USERPROFILE\.dotnet\tools\` (portable — resolves to any user).
+
+**Pre-Build Gate:** Skyrim SHOULD be closed before deserializing. If `SkyrimSE` is running, stop and close it first.
 
 **Serialize Spriggit YAML → .esp:**
 
@@ -175,6 +177,8 @@ SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, c
 | `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml` |
 | `templates/prompt/character.prompt` | 10-block personality Jinja template |
 | `templates/knowledge/world_knowledge.sknpack` | World knowledge pack template |
+| `templates/provenance/` | FormKey provenance file template |
+| `output/{PluginName}/formkey-provenance.yaml` | Generated per-output FormKey provenance |
 | `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
 | `tools/verify_prompt.ps1` | Post-generation checker: REFR suffix, block format, faction FormIDs |
 | `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
