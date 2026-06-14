@@ -132,9 +132,9 @@ output/{PluginName}/formkey-provenance.yaml
 
 Required fields per record: `label`, `form_key`, `source`, `evidence`.
 
-Allowed sources: `skylink-live`, `xedit-dump`, `verified-table`, `user-provided`.
-
-`user-provided` FormKeys are allowed but should warn by default and fail in strict verification mode.
+Accepted sources: `skylink-live`, `xedit-dump`, `verified-table`.
+`user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
+Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
 
 Example schema:
 
