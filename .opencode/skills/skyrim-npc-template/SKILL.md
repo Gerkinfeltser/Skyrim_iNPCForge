@@ -131,9 +131,11 @@ output/{PluginName}/formkey-provenance.yaml
 ```
 
 Required fields per record: `label`, `form_key`, `source`, `evidence`.
+`evidence` is REQUIRED. For `verified-table` sources, evidence SHOULD name the table path (e.g. `data/voices.yaml`).
 
 Accepted sources: `skylink-live`, `xedit-dump`, `verified-table`.
 `user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
+Any source value outside the defined set is treated as `user-provided`-equivalent: warn by default, fail in strict mode.
 Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
 
 Example schema:

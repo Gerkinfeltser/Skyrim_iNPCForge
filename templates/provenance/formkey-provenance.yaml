@@ -3,7 +3,7 @@ records:
   # record_key:
   #   label: "Human-readable source label"
   #   form_key: "000000:Skyrim.esm"
-  #   source: "skylink-live" # skylink-live | xedit-dump | verified-table | user-provided
+  #   source: "skylink-live" # accepted: skylink-live | xedit-dump | verified-table; allowed-warn: user-provided
   #   evidence: "Tool, file, or user statement used as evidence"
   #   record_type: "OPTIONAL record category"
   #   plugin: "OPTIONAL source plugin"
