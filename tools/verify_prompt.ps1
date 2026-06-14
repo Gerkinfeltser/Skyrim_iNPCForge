@@ -1,7 +1,8 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$OutputDir,
-    [switch]$Fix
+    [switch]$Fix,
+    [switch]$Strict
 )
 
 $ErrorActionPreference = "Stop"
@@ -38,13 +39,43 @@ function Load-VerifiedFormKeys {
     return $keys
 }
 
+function Load-ProvenanceFormKeys {
+    param([string]$Path)
+    $keys = @{}
+    if (-not (Test-Path $Path)) { return $keys }
+
+    $currentFormKey = $null
+    $currentSource = $null
+    foreach ($line in Get-Content $Path) {
+        $trimmed = $line.Trim()
+        # Strip leading YAML list marker "- " so "- form_key:" matches "form_key:"
+        $trimmed = $trimmed -replace '^-+\s+', ''
+        if ($trimmed -match '^form_key:\s+(.+)$') {
+            $currentFormKey = $Matches[1].Trim().Trim('"').Trim("'")
+        }
+        elseif ($trimmed -match '^source:\s+(.+)$') {
+            $currentSource = $Matches[1].Trim().Trim('"').Trim("'")
+        }
+
+        if ($currentFormKey -and $currentSource) {
+            $keys[(Normalize-FormKey $currentFormKey)] = $currentSource
+            $currentFormKey = $null
+            $currentSource = $null
+        }
+    }
+
+    return $keys
+}
+
 function Test-VerifiedFormKey {
     param(
         [string]$Label,
         [string]$FormKey,
         [hashtable]$VerifiedKeys,
         [string]$TableName,
-        [switch]$AllowPluginLocal
+        [switch]$AllowPluginLocal,
+        [hashtable]$ProvenanceKeys = @{},
+        [switch]$Strict
     )
 
     $cleanFormKey = $FormKey.Trim().Trim('"').Trim("'")
@@ -63,12 +94,37 @@ function Test-VerifiedFormKey {
     $normalized = Normalize-FormKey $cleanFormKey
     if ($VerifiedKeys.ContainsKey($normalized)) {
         Write-Host "[PASS] $Label $cleanFormKey (verified lookup)" -ForegroundColor Green
+        return
     }
-    else {
-        Write-Host "[FAIL] $Label $cleanFormKey is not in $TableName" -ForegroundColor Red
-        Write-Host "  Verify this FormKey with xEdit or SkyLinkAI, then add it to $TableName." -ForegroundColor DarkRed
-        $script:issues += "UNVERIFIED_FORMKEY"
+
+    if ($ProvenanceKeys.ContainsKey($normalized)) {
+        $source = $ProvenanceKeys[$normalized]
+        if ($source -in @("skylink-live", "xedit-dump", "verified-table")) {
+            Write-Host "[PASS] $Label $cleanFormKey (provenance: $source)" -ForegroundColor Green
+            return
+        }
+        if ($source -eq "user-provided") {
+            if ($Strict) {
+                Write-Host "[FAIL] $Label $cleanFormKey from user-provided source not allowed in Strict mode" -ForegroundColor Red
+                $script:issues += "USER_PROVIDED_FORMKEY"
+                return
+            }
+            Write-Host "[WARN] $Label $cleanFormKey from user-provided source (use -Strict to fail)" -ForegroundColor Yellow
+            return
+        }
+        # Unknown provenance source — treat like user-provided
+        if ($Strict) {
+            Write-Host "[FAIL] $Label $cleanFormKey from unknown provenance source '$source' not allowed in Strict mode" -ForegroundColor Red
+            $script:issues += "UNKNOWN_PROVENANCE_SOURCE"
+            return
+        }
+        Write-Host "[WARN] $Label $cleanFormKey from unknown provenance source '$source' (use -Strict to fail)" -ForegroundColor Yellow
+        return
     }
+
+    Write-Host "[FAIL] $Label $cleanFormKey is not in $TableName" -ForegroundColor Red
+    Write-Host "  Verify this FormKey with xEdit or SkyLinkAI, then add it to $TableName." -ForegroundColor DarkRed
+    $script:issues += "UNVERIFIED_FORMKEY"
 }
 
 function Find-PlacedNpcFormKey {
@@ -126,6 +182,9 @@ $sanitized = $npcName.ToLowerInvariant() -replace "[\s'/\\]", "_"
 $expectedFilename = "${sanitized}_${suffix}.prompt"
 $promptDir = Join-Path $OutputDir "SKSE\Plugins\SkyrimNet\prompts\characters"
 $promptPath = Join-Path $promptDir $expectedFilename
+
+$provenancePath = Join-Path $OutputDir "formkey-provenance.yaml"
+$provenanceKeys = Load-ProvenanceFormKeys $provenancePath
 
 Write-Host "Expected prompt: $expectedFilename" -ForegroundColor Cyan
 Write-Host "Expected path: $promptPath" -ForegroundColor Cyan
@@ -223,7 +282,7 @@ Write-Host "--- FormKey Checks ---" -ForegroundColor Cyan
 foreach ($cellFile in (Get-ChildItem -Path $spriggitDir -Recurse -Filter "RecordData.yaml" | Where-Object { $_.DirectoryName -match "Cells" })) {
     $raw = Get-Content $cellFile.FullName -Raw
     if ($raw -match "(?m)^FormKey:\s+(\S+)") {
-        Test-VerifiedFormKey "Location" $Matches[1] $verifiedLocations "data\locations.yaml"
+        Test-VerifiedFormKey "Location" $Matches[1] $verifiedLocations "data\locations.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
     }
 }
 
@@ -232,28 +291,28 @@ foreach ($f in (Get-ChildItem -Path $spriggitDir -Recurse -Filter "*.yaml" | Whe
     $raw = Get-Content $f.FullName -Raw
 
     if ($raw -match "(?m)^Race:\s+(\S+)") {
-        Test-VerifiedFormKey "Race" $Matches[1] $verifiedRaces "data\races.yaml"
+        Test-VerifiedFormKey "Race" $Matches[1] $verifiedRaces "data\races.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
     }
 
     if ($raw -match "(?m)^Voice:\s+(\S+)") {
-        Test-VerifiedFormKey "Voice" $Matches[1] $verifiedVoices "data\voices.yaml"
+        Test-VerifiedFormKey "Voice" $Matches[1] $verifiedVoices "data\voices.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
     }
 
     if ($raw -match "(?m)^DefaultOutfit:\s+(\S+)") {
-        Test-VerifiedFormKey "DefaultOutfit" $Matches[1] $verifiedOutfits "data\outfits.yaml" -AllowPluginLocal
+        Test-VerifiedFormKey "DefaultOutfit" $Matches[1] $verifiedOutfits "data\outfits.yaml" -AllowPluginLocal -ProvenanceKeys $provenanceKeys -Strict:$Strict
     }
 
     $matches = [regex]::Matches($raw, "Faction:\s+(\S+)")
     foreach ($m in $matches) {
         $foundFaction = $true
         $factionKey = $m.Groups[1].Value
-        Test-VerifiedFormKey "Faction" $factionKey $verifiedFactions "data\factions.yaml"
+        Test-VerifiedFormKey "Faction" $factionKey $verifiedFactions "data\factions.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
     }
 
     if ($raw -match "(?ms)^Packages:\s*((?:\s*-\s+\S+\s*)+)") {
         $packageMatches = [regex]::Matches($Matches[1], "-\s+(\S+)")
         foreach ($packageMatch in $packageMatches) {
-            Test-VerifiedFormKey "Package" $packageMatch.Groups[1].Value $verifiedPackages "data\ai_packages.yaml"
+            Test-VerifiedFormKey "Package" $packageMatch.Groups[1].Value $verifiedPackages "data\ai_packages.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
         }
     }
 }
