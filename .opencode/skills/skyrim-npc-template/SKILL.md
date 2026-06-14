@@ -187,6 +187,10 @@ combat_attitude: "friendly"     # friendly | neutral | hostile
 level: 25
 respawn: false
 
+sex: "male"              # male | female (config-only until Spriggit Female flag mapping is verified)
+height: 1.0              # Vanilla scale. 1.0 = normal height.
+weight: 100              # 0-100 body weight/build slider.
+
 outfit: "OrcishArmor"           # vanilla ref (data/outfits.yaml)
 # OR
 outfit_items:                   # custom OTFT in plugin

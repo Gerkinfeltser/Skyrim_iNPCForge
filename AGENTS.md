@@ -201,9 +201,12 @@ SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, c
   (requires placed bed furniture references — CK territory).
 - **Generated outputs** are disposable; the YAML source in `_spriggit/` is the
   editable artifact. Re-serialize after edits.
-- **Appearance MVP** supports Tier 1 body basics and Tier 2 selectable headparts
-  when FormKeys can be verified. Captured face morphs and FaceGen mesh/texture
-  assets are backlog.
+- **Appearance MVP**: Tier 1 body basics wire race, height, weight, outfit, and equipment
+  into the Spriggit record. `sex` is collected in config but Spriggit mapping is deferred
+  until the Female flag structure (`Configuration.Flags: Female`) is verified by serializing
+  a known-female NPC. Tier 2 headparts have config placeholders (`hair`, `eyes`, `brows`,
+  `scar`, `warpaint`) but Spriggit generation is deferred until the HeadParts/Tints record
+  structure is verified. Captured face morphs and FaceGen mesh/texture assets are backlog.
 
 ## Out of Scope (MVP)
 
