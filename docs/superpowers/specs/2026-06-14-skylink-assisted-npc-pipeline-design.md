@@ -20,6 +20,7 @@ This design replaces ad hoc NPC generation with a gated workflow that prefers li
 - Build a full GUI wizard.
 - Support exterior placement or multi-NPC plugins in the MVP.
 - Automatically edit or trust unverified global lookup tables without provenance.
+- Generate captured face morphs or FaceGen mesh/texture assets in the first implementation pass.
 
 ## Pipeline Overview
 
@@ -56,6 +57,7 @@ Initial required form:
 12. Relationships/factions:
 13. World knowledge: yes/no, and who should know about them?
 14. Any mod-added gear, location, faction, or voice? If yes, is Skyrim + SkyLinkAI available for lookup?
+15. Appearance basics: sex, height, weight/build, hair, eyes, scars/warpaint, or other visible head details?
 ```
 
 Rules:
@@ -153,6 +155,22 @@ records:
 ```
 
 The verifier should accept `skylink-live`, `xedit-dump`, and `verified-table` records. It should warn or fail on `user-provided` depending on strictness.
+
+## Appearance Scope
+
+Appearance support is split into tiers so the MVP improves useful visible customization without pretending to solve Skyrim's full FaceGen pipeline immediately.
+
+In scope for the first implementation plan:
+
+- **Tier 1: Body basics** — race, sex, height, weight/build, outfit, visible armor/clothing, and carried equipment. These map cleanly to existing or near-existing NPC record fields and generated outfit/inventory data.
+- **Tier 2: Headpart choices** — hair, eyes, brows, scars, warpaint/tints, and other selectable head parts when they can be resolved to real FormKeys through SkyLinkAI, xEdit, or verified tables. These require new config fields and Spriggit template coverage, but do not require captured morph generation.
+
+Backlog for later work:
+
+- **Tier 3: Captured face morphs** — use SkyLinkAI `get_appearance` or a similar source to capture face morph values and translate them into generated NPC face data.
+- **Tier 4: FaceGen assets** — generate or import the required face mesh/texture assets for fully custom heads. This likely needs Creation Kit, xEdit, RaceMenu, or a dedicated FaceGen export/import workflow.
+
+The interview should ask for Tier 1 and Tier 2 appearance details up front. If the user asks for a sculpted/captured face, record it as backlog unless the dedicated appearance pipeline has been implemented.
 
 ## Build Gate
 
