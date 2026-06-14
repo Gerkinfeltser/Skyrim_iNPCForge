@@ -36,7 +36,7 @@ npc.config.yaml (single source of truth)
  YAML→.esp  file
     │         │
     ▼         ▼
-Grok.esp   grok_800.prompt
+ Grok.esp   grok_801.prompt
 (ESL)       (in characters/)
 ```
 
@@ -102,7 +102,7 @@ Create or edit `npc.config.yaml` in the repo root. Use `data/*.yaml` lookup tabl
 # === IDENTITY ===
 name: "Grok"
 editor_id: "CustomNPC_Grok"
-record_id: "0x800"              # ESL object ID → prompt suffix
+record_id: "0x800"              # ESL object ID (REFR at 0x801 → prompt suffix 801)
 plugin_name: "GrokTheSmith"
 
 # === BODY ===
@@ -227,14 +227,14 @@ If the config uses `outfit_items` instead of `outfit`, generate an OTFT record:
 
 ```yaml
 # Outfits/{editor_id}_Outfit - {formID}_{plugin}.esp.yaml
-FormKey: 000801:{PluginName}.esp
+FormKey: 000802:{PluginName}.esp
 EditorID: {editor_id}_Outfit
 Items:
 - {item_formkey_1}
 - {item_formkey_2}
 ```
 
-Then reference `000801:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
+Then reference `000802:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
 
 ### 3e: Cell Placement (REFR) — CRITICAL
 
@@ -255,7 +255,7 @@ Inside the cell RecordData.yaml, add the PlacedNpc to the `Temporary` list:
 ```yaml
 Temporary:
 - MutagenObjectType: PlacedNpc
-  FormKey: 000802:{PluginName}.esp     # New REFR FormID in this plugin
+  FormKey: 000801:{PluginName}.esp     # REFR FormID (ALWAYS at 0x801)
   MajorRecordFlagsRaw: 1024
   SkyrimMajorRecordFlags:
   - 0x400
@@ -269,10 +269,10 @@ Temporary:
 
 **Rotation conversion:** degrees × (π / 180). Common: 90° = 1.5708, 180° = 3.1416.
 
-**FormID allocation for ESL plugin:**
+**FormID allocation for ESL plugin (MVP):**
 - 0x800: NPC record
-- 0x801: Custom outfit (if outfit_items used)
-- 0x802: REFR placement
+- 0x801: REFR placement (ALWAYS — fixed so prompt suffix is deterministic)
+- 0x802: Custom outfit (if outfit_items used)
 - 0x803+: additional records
 
 ### 3f: RecordData.yaml (Mod Header)
@@ -290,7 +290,7 @@ ESL constraint.
 |----------|-----------|------------|----------|-------------|
 | friendly | Unaggressive | Average | none/TownFaction | DefaultSandboxEditorLink |
 | neutral | Aggressive | Brave | none | sandbox or none |
-| hostile | Frenzied | Foolhardy | BanditFaction (0x00033A35) | none |
+| hostile | Frenzied | Foolhardy | BanditFaction (0x0001BCC0) | none |
 
 ### 3h: .spriggit config file
 
@@ -328,17 +328,29 @@ satisfying the ESL constraint. ESL-flagged plugins do not count against the
 
 ```
 sanitized_name = name.lower().replace(" ", "_").replace("'", "_").replace("/", "_")
-suffix = record_id & 0xFFF formatted as 3-digit uppercase hex
+suffix = refr_id & 0xFFF formatted as 3-digit uppercase hex
 filename = f"{sanitized_name}_{suffix}.prompt"
 ```
 
-Example: "Grok" + 0x800 → `grok_800.prompt`
+REFR is ALWAYS at 0x801 (mvp allocation), so suffix is always `801`.
+Example: "Grok" + REFR at 0x801 → `grok_801.prompt`
 
 ### 4b: Fill the prompt template
 
 Use `templates/prompt/character.prompt` as the base. Each block from the config's `personality` section maps directly to a `{% block %}` in the prompt file.
 
+**CRITICAL: ALL prompt files MUST use `{% block %}` Jinja2 format.** SkyrimNet
+wraps character bios with `{% extends "dynamic_character_bio.prompt" %}` at
+render time (PromptEngine.cpp:1066). Inja's template inheritance discards any
+content that is NOT inside a `{% block %}` tag. Plain text prompts render as
+empty — the file is loaded but the personality never appears in dialogue.
+
 The prompt file extends SkyrimNet's `dynamic_character_bio.prompt`, which auto-includes all `submodules/character_bio/` components.
+
+**Hostile NPCs DO receive personality prompts.** SkyrimNet has no hostility
+gate — `GameMaster::CanNPCSpeakNearPlayer` explicitly states "Combat is NOT
+blocked" (GameMaster.cpp:491). Hostile NPCs get a combat-variant dialogue
+prompt and load bios identically to friendly NPCs.
 
 ### 4c: Place in output structure
 
@@ -441,12 +453,29 @@ The `.sknpack` file is imported manually:
 3. Upload the `.sknpack` file
 4. Test entries against specific NPCs using the Test button
 
-## Step 6: Verify
+## Post-Generation Verification
 
-1. Check the `.esp` exists and is non-zero size
-2. Verify the `.prompt` file has all 10 blocks filled
-3. Confirm the prompt filename matches the `_{formId & 0xFFF}` convention
-4. The plugin should be ESL-flagged (check in xEdit if possible)
+After assembling the output, run the verification script:
+
+```powershell
+& .\tools\verify_prompt.ps1 -OutputDir "output\{PluginName}"
+```
+
+It checks:
+1. **Prompt filename** matches the REFR FormID suffix (read from cell placement YAML, not guessed)
+2. **Prompt format** has `{% block %}` tags (rejects plain text)
+3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
+
+If something's wrong, run with `-Fix` to auto-copy a misnamed prompt:
+
+```powershell
+& .\tools\verify_prompt.ps1 -OutputDir "output\{PluginName}" -Fix
+```
+
+Then manually verify:
+1. The `.esp` exists and is non-zero size
+2. The plugin should be ESL-flagged (check in xEdit if possible)
+3. In-game: the NPC appears at the expected location with correct outfit and behavior
 
 ## Key Rules
 
@@ -460,9 +489,11 @@ Always reference vanilla voice type FormIDs directly. SkyrimNet's TTS system map
 - ESL-flagged ESPs don't count against the 255 plugin limit
 
 ### Prompt Filename Convention
-The suffix is **`formId & 0xFFF`** — the last 3 hex digits of the NPC's FormID. For ESL plugins, this is deterministic (the object ID portion).
+The suffix is **`formId & 0xFFF`** where `formId` is the PlacedNpc REFR FormID
+(`RE::Actor::GetFormID()` in SkyrimNet source). With REFR always at `0x801`,
+the `.prompt` suffix is always `801`.
 
-The SkyrimNet engine auto-generates bio template names as `{sanitized_name}_{formId & 0xFFF:03X}` on first NPC encounter. The prompt file in `characters/` must match this exactly.
+Generate as `{name}_{suffix}.prompt` — e.g. `shank_801.prompt`.
 
 Reference: `UUIDResolver::GenerateBioTemplateName()` in SkyrimNet source.
 

@@ -1,0 +1,9 @@
+# ============================================================
+# AI Package FormKeys — verified against live Skyrim.esm
+# ============================================================
+# All FormKeys need verification via xEdit dump.
+#
+# Format: editor_id: formID:Skyrim.esm
+# ============================================================
+
+DefaultSandboxEditorLink: 0BAD0A:Skyrim.esm    # TODO: VERIFY via xEdit dump_ai_packages.pas

@@ -3,7 +3,8 @@
 # ============================================================
 # A hostile NPC that attacks on sight. Uses aggression flags
 # instead of AI packages. Respawns on cell reset.
-# No personality prompt needed — hostile NPCs don't talk.
+# Hostile NPCs DO get personality prompts — SkyrimNet handles
+# combat dialogue with a combat-variant prompt (GameMaster.cpp:491).
 # ============================================================
 
 # === IDENTITY ===
@@ -51,17 +52,24 @@ ai:
   radius: 0
 
 # === SOUL ===
-# Hostile NPCs typically don't need SkyrimNet personality prompts.
-# If you DO want a talking bandit (e.g., taunting before combat), 
-# uncomment and fill in the personality section.
-# personality:
-#   summary: "A cruel bandit who taunts his prey..."
-#   interject_summary: "..."
-#   background: "..."
-#   personality: "..."
-#   appearance: "..."
-#   aspirations: []
-#   relationships: []
-#   occupation: "Bandit"
-#   skills: ["Ambush tactics", "Knife fighting"]
-#   speech_style: "Guttural threats and mocking laughter..."
+# Hostile NPCs get full personality prompts for combat-variant dialogue.
+# Generate using templates/prompt/character.prompt — MUST use {% block %} format.
+personality:
+  summary: "A loud, dumb Nord bandit with a pronounced lisp who robs travelers east of Whiterun."
+  interject_summary: "Interjects when: someone laughs at his lisp, his shiv is mentioned, anyone threatens his crew."
+  background: "A simple thug who takes what he wants. Follows whoever hits hardest. Keeps getting reanimated by a cave necromancer."
+  personality: "Gruff, aggressive, easily confused by big words. Complete coward underneath the bluster — talks biggest when safest, begs when cornered. Always refers to himself in third person as 'Thank'."
+  appearance: "Scarred Nord in his late twenties, scraggly beard, missing front tooth, battered hide armor."
+  aspirations:
+    - "Be taken seriously as a bandit"
+    - "Find the wizard who keeps reanimating him"
+  relationships:
+    - "Bandit crew at White River Watch — his only family"
+    - "The necromancer — owes him but it creeps him out"
+  occupation: "Bandit"
+  skills:
+    - "Intimidation (when the lisp cooperates)"
+    - "War axe fighting"
+    - "Ambush tactics"
+    - "Taking hits (lots of practice being killed and revived)"
+  speech_style: "Speaks with a thick lisp (S → TH). Third person as 'Thank.' Obsessed with his shiv ('thiv'). Loud, panicked, easily distracted."

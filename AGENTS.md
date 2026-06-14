@@ -96,9 +96,29 @@ Config rotation is in **degrees**; Spriggit REFR records use **radians**.
 
 ### Prompt Filename Convention
 The `.prompt` suffix is **`formId & 0xFFF`** formatted as 3-digit uppercase hex,
-appended to the sanitized name. Example: "Grok" + `0x800` → `grok_800.prompt`.
+appended to the sanitized name. Example: "Shank" + REFR `0x801` → `shank_801.prompt`.
 Must match exactly what SkyrimNet's `UUIDResolver::GenerateBioTemplateName()`
 auto-generates on first encounter, or the prompt is never loaded.
+
+**The filename suffix is the REFR FormID from the cell placement (`0x801`).**
+SkyrimNet's `RE::Actor::GetFormID()` returns the PlacedNpc reference FormID, not
+the NPC base record. With the MVP allocation (REFR always at `0x801`), the
+`.prompt` suffix is always `801`.
+
+### FormID Allocation (ESL MVP)
+
+| FormID | Record |
+|--------|--------|
+| `0x800` | NPC base record |
+| `0x801` | PlacedNpc REFR (ALWAYS — fixed so prompt suffix is deterministic) |
+| `0x802` | Custom OTFT outfit (if `outfit_items` used) |
+| `0x803+` | Additional records |
+
+**Prompt filename uses the REFR FormID suffix** — SkyrimNet's
+`GenerateBioTemplateName` receives the PlacedNpc REFR from
+`RE::Actor::GetFormID()`, verified in `Entity.h:GetFormID()` and
+`UUIDResolver.h:AddMapping()`. The `.prompt` suffix is always
+`0x801 & 0xFFF = 0x801` = `801` for the MVP allocation.
 
 ### Combat Attitude → Field Mapping
 
@@ -106,10 +126,31 @@ auto-generates on first encounter, or the prompt is never loaded.
 |----------|-----------|------------|-------------|----------|
 | friendly | Unaggressive | Average | DefaultSandboxEditorLink (`0BAD0A:Skyrim.esm`) | none/Town |
 | neutral | Aggressive | Brave | sandbox or none | none |
-| hostile | Frenzied | Foolhardy | none | BanditFaction (`0x00033A35`) |
+| hostile | Frenzied | Foolhardy | none | BanditFaction (`0x0001BCC0`) |
 
-Hostile NPCs generally skip the personality prompt entirely — see
-`examples/shank_the_bandit_hostile.yaml`.
+**Hostile NPCs DO receive personality prompts.** SkyrimNet has no hostility
+gate — hostile NPCs get a combat-variant dialogue prompt and load bios
+normally (verified against SkyrimNet source, `GameMaster.cpp:491`).
+`.prompt` files MUST use `{% block %}` Jinja2 format (see
+`templates/prompt/character.prompt`) — plain text is discarded by Inja's
+template inheritance when SkyrimNet wraps it with
+`{% extends "dynamic_character_bio.prompt" %}`.
+
+### Post-Generation Verification
+
+Run `tools\verify_prompt.ps1` after every generation:
+
+```powershell
+.\tools\verify_prompt.ps1 -OutputDir .\output\{PluginName}
+```
+
+It catches the three common bugs:
+1. Prompt filename doesn't match REFR FormID suffix
+2. Prompt is plain text instead of `{% block %}` format
+3. External FormKeys not present in verified lookup tables for locations, races,
+   voices, outfits, factions, and AI packages
+
+Use `-Fix` to auto-copy a misnamed prompt file.
 
 ## Directory Map
 
@@ -125,6 +166,7 @@ Hostile NPCs generally skip the personality prompt entirely — see
 | `templates/prompt/character.prompt` | 10-block personality Jinja template |
 | `templates/knowledge/world_knowledge.sknpack` | World knowledge pack template |
 | `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
+| `tools/verify_prompt.ps1` | Post-generation checker: REFR suffix, block format, faction FormIDs |
 | `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
 | `examples/grok_the_smith.yaml` | Full friendly-NPC worked example |
 | `examples/shank_the_bandit_hostile.yaml` | Minimal hostile-NPC example |

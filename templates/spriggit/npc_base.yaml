@@ -43,7 +43,7 @@ Configuration:
 
 # === Factions (SNAM in CK) ===
 # Optional — from npc.config.yaml factions list
-# Hostile NPCs should include: BanditFaction (0x00033A35)
+# Hostile NPCs should include: BanditFaction (0x0001BCC0)
 Factions:
 - Faction: 028E42:Skyrim.esm       # TownWhiterunFaction
   Rank: 0

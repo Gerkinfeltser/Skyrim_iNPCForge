@@ -5,14 +5,15 @@
 #   1. Spriggit YAML → serialized to .esp (record layer)
 #   2. SkyrimNet .prompt file (personality layer)
 #
-# The prompt filename is auto-derived: {name}_{recordID & 0xFFF:03X}.prompt
-# e.g. name "Grok" + record_id "0x800" → grok_800.prompt
+# The prompt filename uses the REFR FormID (PlacedNpc), not the NPC base.
+# REFR is always record_id + 1. With record_id 0x800 → prompt suffix 801.
+# e.g. name "Grok" + REFR at 0x801 → grok_801.prompt
 # ============================================================
 
 # === IDENTITY ===
 name: "Grok"                          # Display name shown in-game
 editor_id: "CustomNPC_Grok"           # Unique EditorID (no spaces, use mod prefix)
-record_id: "0x800"                    # ESL object ID (0x800 for MVP). Determines prompt suffix.
+record_id: "0x800"                    # ESL object ID (0x800 for MVP). REFR at 0x801 → prompt suffix 801.
 plugin_name: "GrokTheSmith"           # Name of the output .esp file (no extension)
 
 # === BODY (Record Layer) ===

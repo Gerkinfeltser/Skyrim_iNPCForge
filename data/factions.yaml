@@ -1,0 +1,11 @@
+# ============================================================
+# Faction FormKeys — verified against live Skyrim.esm
+# ============================================================
+# All FormKeys verified via in-game SkyLinkAI query on a
+# vanilla NPC belonging to the faction, or via xEdit dump.
+#
+# Format: editor_id: formID:Skyrim.esm
+# ============================================================
+
+BanditFaction: 01BCC0:Skyrim.esm          # Verified: vanilla bandit NPC at refId 00081329
+TownWhiterunFaction: 028E42:Skyrim.esm    # Verified: Grok NPC works in-game with this

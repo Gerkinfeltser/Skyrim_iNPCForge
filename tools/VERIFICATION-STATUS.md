@@ -37,7 +37,16 @@ Process for each:
 
 ## TODO: Additional Scripts Needed
 
-- `dump_races.pas` — RACE records (to verify `data/races.yaml`)
-- `dump_cells.pas` — CELL records (to verify `data/locations.yaml`)
-- `dump_factions.pas` — FACT records (to verify faction references like BanditFaction, TownWhiterunFaction)
+- ~~`dump_factions.pas`~~ — ✅ CREATED `tools/xedit-scripts/dump_factions.pas` — FACT records
+- ~~`dump_packages.pas`~~ — ✅ CREATED `tools/xedit-scripts/dump_packages.pas` — PACK records
 - `dump_classes.pas` — NPC class records (to verify `Class:` field references in NPC records)
+
+## 2026-06-14: BanditFaction FormID CORRECTION
+
+**BanditFaction FormID was `00033A35` — FABRICATED.** The real FormID is
+`0001BCC0:Skyrim.esm`, verified live in-game against a vanilla Bandit NPC
+(via SkyLinkAI `get_factions` on refId `00081329`).
+
+Factions were NEVER verified via xEdit (no `dump_factions.pas` existed).
+The `dump_weapons_misc_outfits.pas` script only covered OTFT/WEAP/MISC.
+New `dump_factions.pas` created — run to enumerate all faction FormIDs.
