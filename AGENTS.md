@@ -85,8 +85,8 @@ that will silently break the output.
 
 ### ESL Constraints
 - Record IDs MUST be in the `0x000–0xFFF` range (4096 max).
-- MVP allocation: `0x800` = NPC, `0x801` = custom outfit (if `outfit_items`),
-  `0x802` = REFR placement, `0x803+` = additional records.
+- MVP allocation: `0x800` = NPC base, `0x801` = PlacedNpc REFR (ALWAYS),
+  `0x802` = custom OTFT (if `outfit_items`), `0x803+` = additional records.
 - Interior cells ONLY. No WRLD records, no exterior placement.
 - ESL-flagged ESPs do not count against the 255-plugin limit.
 
@@ -152,6 +152,16 @@ It catches the three common bugs:
 
 Use `-Fix` to auto-copy a misnamed prompt file.
 
+## SkyLink-Assisted Workflow
+
+For new NPCs, use the numbered interview form in the skill, then resolve FormKeys with this priority:
+
+```text
+skylink-live > xedit-dump > verified-table > user-provided
+```
+
+SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, cells, factions, voices, and headparts. If Skyrim/SkyLinkAI is unavailable and a record is not in verified tables, stop and ask the user to start Skyrim, choose a known option, or provide a FormKey. Do not invent IDs.
+
 ## Directory Map
 
 | Path | Purpose |
@@ -187,6 +197,9 @@ Use `-Fix` to auto-copy a misnamed prompt file.
   (requires placed bed furniture references — CK territory).
 - **Generated outputs** are disposable; the YAML source in `_spriggit/` is the
   editable artifact. Re-serialize after edits.
+- **Appearance MVP** supports Tier 1 body basics and Tier 2 selectable headparts
+  when FormKeys can be verified. Captured face morphs and FaceGen mesh/texture
+  assets are backlog.
 
 ## Out of Scope (MVP)
 
