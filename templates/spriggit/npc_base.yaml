@@ -186,10 +186,24 @@ PlayerSkills:
   Stamina: 50
   GearedUpWeapons: 1
 
-# === Appearance (optional — usually left default for MVP) ===
-Height: 1
-Weight: 100
+# === Appearance (Tier 1: body basics from npc.config.yaml) ===
+Height: 1       # From npc.config.yaml height (1.0 = normal scale, float)
+Weight: 100      # From npc.config.yaml weight (0-100 body build slider)
 SoundLevel: Normal
+
+# === Sex (DEFERRED — Spriggit mapping not yet verified) ===
+# Mutagen/Spriggit models sex as Configuration.Flags bit: add "- Female" for female NPCs.
+# This has NOT been verified by serializing a known-female vanilla NPC through Spriggit.
+# Until verified, sex remains config-only (npc.config.yaml sex field). To add sex support:
+#   1. Serialize a vanilla female NPC (e.g. Adrianne Avenicci) with Spriggit
+#   2. Confirm the Flags field contains "- Female" in the output YAML
+#   3. Then add: Configuration.Flags: [..., Female] when sex == "female"
+
+# === Tier 2: Headparts (DEFERRED — no verified Spriggit structure) ===
+# npc.config.yaml supports hair/eyes/brows/scar/warpaint placeholders but these
+# require resolvable HDPT FormKeys from Skyrim.esm or mods. The Spriggit HeadParts
+# and Tints record structure has not been verified against real serializations.
+# Tier 2 will be templated once a headpart structure is confirmed via xEdit/Spriggit.
 
 MajorFlags:
 - 0x40000

@@ -295,7 +295,10 @@ Items:
     Count: {count}
 
 # Full PlayerSkills block with all 18 skills (see template)
-# Height, Weight, SoundLevel, MajorFlags
+# Appearance: Height and Weight from config (see template)
+# Sex: DEFERRED — add "- Female" to Configuration.Flags when verified
+# Headparts: DEFERRED — Tier 2, no verified Spriggit structure yet
+# SoundLevel, MajorFlags
 ```
 
 ### 3d: Custom Outfit (if using outfit_items)
@@ -600,8 +603,9 @@ Reference: `UUIDResolver::GenerateBioTemplateName()` in SkyrimNet source.
 ### Appearance Scope
 
 In scope now:
-- **Tier 1**: race, sex, height, weight/build, outfit, visible armor/clothing, carried equipment.
-- **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts when resolvable to real FormKeys.
+- **Tier 1**: race, height, weight/build, outfit, visible armor/clothing, carried equipment.
+  - **Sex**: config field exists (`sex: male|female` in `npc.config.yaml`) but Spriggit mapping is **deferred** until verified. The Mutagen field is `Configuration.Flags: Female` but this has not been confirmed by serializing a known-female NPC. Until verified, sex remains config-only and the agent does NOT set the Female flag.
+- **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts when resolvable to real FormKeys. **Template fields not yet wired** — no verified Spriggit HeadParts/Tints structure exists. Config placeholders exist; generation awaits field verification.
 
 Backlog:
 - **Tier 3**: captured face morph values from SkyLinkAI `get_appearance`.
