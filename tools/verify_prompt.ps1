@@ -132,6 +132,21 @@ Write-Host "Expected path: $promptPath" -ForegroundColor Cyan
 Write-Host ""
 
 $issues = @()
+
+# Required SkyrimNet prompt blocks — must match templates/prompt/character.prompt
+$requiredPromptBlocks = @(
+    "summary",
+    "personality",
+    "appearance",
+    "background",
+    "occupation",
+    "skills",
+    "relationships",
+    "aspirations",
+    "speech_style",
+    "interject_summary"
+)
+
 $verifiedRaces = Load-VerifiedFormKeys (Join-Path $repoRoot "data\races.yaml")
 $verifiedVoices = Load-VerifiedFormKeys (Join-Path $repoRoot "data\voices.yaml")
 $verifiedOutfits = Load-VerifiedFormKeys (Join-Path $repoRoot "data\outfits.yaml")
@@ -171,6 +186,33 @@ if (Test-Path $promptPath) {
         Write-Host "[FAIL] Prompt is plain text - no {% block %} tags" -ForegroundColor Red
         Write-Host "  SkyrimNet wraps prompts with {% extends %} so plain text is discarded" -ForegroundColor DarkRed
         $issues += "NO_BLOCK_FORMAT"
+    }
+
+    # 5b. Check all required prompt blocks are present
+    Write-Host ""
+    Write-Host "--- Prompt Block Completeness ---" -ForegroundColor Cyan
+    foreach ($blockName in $requiredPromptBlocks) {
+        $pattern = "{%\s*block\s+$([regex]::Escape($blockName))\s*%}"
+        if ($content -match $pattern) {
+            Write-Host "[PASS] Prompt block '$blockName' exists" -ForegroundColor Green
+        }
+        else {
+            Write-Host "[FAIL] Prompt block '$blockName' missing" -ForegroundColor Red
+            $issues += "MISSING_PROMPT_BLOCK"
+        }
+    }
+
+    # 5c. Check for unresolved placeholder patterns
+    Write-Host ""
+    Write-Host "--- Placeholder Scan ---" -ForegroundColor Cyan
+    # {{player.*}} are legitimate SkyrimNet runtime placeholders — they resolve at
+    # dialogue time, not build time, so they must be excluded from the placeholder check.
+    $placeholderPatterns = @("TODO", "TBD", "\{\{\s*npc\.", "\{\{\s*(?!player\.)[^}]+\s*\}\}")
+    foreach ($placeholderPattern in $placeholderPatterns) {
+        if ($content -match $placeholderPattern) {
+            Write-Host "[FAIL] Prompt contains unresolved placeholder pattern: $placeholderPattern" -ForegroundColor Red
+            $issues += "PROMPT_PLACEHOLDER"
+        }
     }
 }
 
