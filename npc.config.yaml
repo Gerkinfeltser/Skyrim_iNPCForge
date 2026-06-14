@@ -23,6 +23,19 @@ combat_attitude: "friendly"           # friendly | neutral | hostile
 level: 25                             # NPC level (fixed)
 respawn: false                        # true = respawns on cell reset, false = stays dead
 
+# --- Appearance (Tier 1: body basics) ---
+sex: "male"                           # male | female
+height: 1.0                            # Vanilla scale. 1.0 = normal height.
+weight: 100                            # 0-100 body weight/build slider.
+
+# --- Appearance (Tier 2: selectable headparts; OPTIONAL) ---
+# Resolve these through SkyLinkAI/xEdit/verified tables before generation.
+# hair: ""
+# eyes: ""
+# brows: ""
+# scar: ""
+# warpaint: ""
+
 # --- Outfit (pick ONE approach) ---
 # Option A: Reference a vanilla outfit record
 outfit: "OrcishArmor"                 # → data/outfits.yaml

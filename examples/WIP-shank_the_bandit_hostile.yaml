@@ -20,6 +20,15 @@ combat_attitude: "hostile"
 level: 15
 respawn: true                      # Named mook — respawns on cell reset
 
+sex: "male"
+height: 1.0
+weight: 75
+# hair: ""
+# eyes: ""
+# brows: ""
+# scar: ""
+# warpaint: ""
+
 # Vanilla bandit outfit (hide armor set)
 outfit: "ArmorHideAllOutfit"       # 0001B3A8:Skyrim.esm
 

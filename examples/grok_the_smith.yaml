@@ -18,6 +18,15 @@ combat_attitude: "friendly"
 level: 25
 respawn: false
 
+sex: "male"
+height: 1.0
+weight: 100
+# hair: ""
+# eyes: ""
+# brows: ""
+# scar: ""
+# warpaint: ""
+
 # Custom outfit (generates OTFT record in plugin)
 outfit_items:
   - "ArmorOrcishCuirass"
