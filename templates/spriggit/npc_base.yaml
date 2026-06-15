@@ -85,7 +85,7 @@ Name:
 # Option A: vanilla reference → use FormKey from data/outfits.yaml
 DefaultOutfit: 03BE07:Skyrim.esm    # OrcishArmor
 # Option B: custom OTFT in plugin → reference the custom outfit's FormKey
-# DefaultOutfit: 000801:GrokTheSmith.esp
+# DefaultOutfit: 000802:GrokTheSmith.esp
 
 # === AI Packages (PKFC) ===
 # Sandbox only for friendly NPCs. Reference DefaultSandboxEditorLink.

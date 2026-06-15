@@ -33,7 +33,7 @@ AIData:
 Name:
   TargetLanguage: English
   Value: Grok
-DefaultOutfit: 000801:GrokTheSmith.esp
+DefaultOutfit: 000802:GrokTheSmith.esp
 Packages:
 - 0BAD0A:Skyrim.esm
 Items:

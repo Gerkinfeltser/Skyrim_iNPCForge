@@ -19,7 +19,7 @@ WaterHeight: -2.1474836E+09
 Persistent: []
 Temporary:
 - MutagenObjectType: PlacedNpc
-  FormKey: 000802:GrokTheSmith.esp
+  FormKey: 000801:GrokTheSmith.esp
   MajorRecordFlagsRaw: 1024
   SkyrimMajorRecordFlags:
   - 0x400

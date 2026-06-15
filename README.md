@@ -11,7 +11,7 @@ Fill in one config file → get a ready-to-install mod folder with:
 ```
 npc.config.yaml ──► {PluginName}.esp (ESL, compiled)
                 ──► {PluginName}_spriggit/ (YAML source, editable)
-                ──► characters/grok_800.prompt (SkyrimNet AI)
+                ──► characters/grok_801.prompt (SkyrimNet AI)
                 ──► {PluginName}.sknpack (world knowledge — NPCs know about Grok)
 ```
 

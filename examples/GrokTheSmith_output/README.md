@@ -13,22 +13,22 @@ Output: this folder (complete MO2-ready mod)
 
 | File / Directory | Purpose |
 |------|---------|
-| `GrokTheSmith.esp` | Compiled plugin — ESL-flagged, 4 records (header + NPC + outfit + placement). Install in MO2. |
+| `GrokTheSmith.esp` | Compiled plugin — ESL-flagged, 4 records (header + NPC + outfit + placement). **Note:** the `.esp` binary was built from the previous FormID allocation and should be regenerated from the updated Spriggit YAML to reflect 0x800=NPC, 0x801=REFR, 0x802=OTFT. |
 | `GrokTheSmith_spriggit/` | Spriggit YAML source — the editable artifact. Re-serialize after edits without Creation Kit. |
 | `GrokTheSmith_spriggit/RecordData.yaml` | Mod header with ESL flag (`ModHeader.Flags: [0x200]`). |
 | `GrokTheSmith_spriggit/Npcs/` | NPC record: stats, race (OrcRace `013747`), voice (MaleOrc `013AEA`), AI packages, inventory. |
 | `GrokTheSmith_spriggit/Outfits/` | Custom OTFT record: Orcish cuirass, boots, gauntlets + blacksmith apron. |
 | `GrokTheSmith_spriggit/Cells/0/1/` | Cell override for WhiterunWarmaidens (`01DB4E`) — places Grok at the forge. |
-| `SKSE/Plugins/SkyrimNet/prompts/characters/grok_800.prompt` | Personality layer — 10 blocks: background, traits, appearance, speech style, skills. |
+| `SKSE/Plugins/SkyrimNet/prompts/characters/grok_801.prompt` | Personality layer — 10 blocks: background, traits, appearance, speech style, skills. Suffix `801` matches the PlacedNpc REFR FormID (`0x801`). |
 | `WorldKnowledge-ManuallyImport/GrokTheSmith.sknpack` | World knowledge — makes other NPCs aware of Grok (Adrianne, Ulfberth, Orc strongholds). |
 
 ## Verification (2026-06-13)
 
-- `.esp` loads in Skyrim SE with ESL flag (FormIDs in 0x800–0x802 range)
+- `.esp` loads in Skyrim SE with ESL flag (FormIDs: 0x800=NPC, 0x801=REFR placement, 0x802=OTFT outfit)
 - Grok appears at Warmaiden's forge, Orc model, Orcish armor, war axe equipped
 - Sandbox AI working (sits, wanders, uses forge)
 - MaleOrc voice type maps to correct TTS via SkyrimNet
-- `grok_800.prompt` loaded — personality present in dialogue
+- `grok_801.prompt` loaded — personality present in dialogue (suffix matches REFR `0x801`)
 - World knowledge imported — Adrianne Avenicci mentions Grok in conversation
 - ESL prefix confirmed: `FE018` in load order
 
