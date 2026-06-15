@@ -275,7 +275,117 @@ if (Test-Path $promptPath) {
     }
 }
 
-# 6. Check known external FormIDs against verified lookup tables
+# 6. Check SkyrimNet world knowledge packs (.sknpack)
+# .sknpack files are JSON documents rendered from the Handlebars template in
+# templates/knowledge/world_knowledge.sknpack.  They are optional — a plugin
+# with no world_knowledge block in its config won't produce one.
+Write-Host ""
+Write-Host "--- World Knowledge Pack Checks ---" -ForegroundColor Cyan
+
+# Required fields that every entry in the "entries" array MUST contain.
+# These match the SkyrimNet skyrimnet_knowledge_pack schema (format_version 2).
+$sknpackRequiredEntryFields = @(
+    "display_name",
+    "content",
+    "importance",
+    "condition_expr",
+    "always_inject"
+)
+
+$sknpackFiles = Get-ChildItem -Path $OutputDir -Recurse -Filter "*.sknpack" -ErrorAction SilentlyContinue
+if ($sknpackFiles.Count -eq 0) {
+    Write-Host "[INFO] No .sknpack files found under $OutputDir — world knowledge is optional" -ForegroundColor Yellow
+} else {
+    foreach ($sknpack in $sknpackFiles) {
+        Write-Host "  Checking: $($sknpack.Name)" -ForegroundColor Cyan
+        $sknpackRaw = Get-Content $sknpack.FullName -Raw
+
+        # --- Parse as JSON ---
+        # The rendered .sknpack must be valid JSON.  Unresolved Handlebars
+        # markers like {{author}} will break JSON parsing.
+        $sknpackObj = $null
+        try {
+            $sknpackObj = $sknpackRaw | ConvertFrom-Json -ErrorAction Stop
+        } catch {
+            Write-Host "[FAIL] .sknpack is not valid JSON: $($_.Exception.Message)" -ForegroundColor Red
+            Write-Host "  File: $($sknpack.FullName)" -ForegroundColor DarkRed
+            $issues += "BAD_SKNPACK_STRUCTURE"
+            continue
+        }
+
+        # --- Navigate to entries array ---
+        # Top-level key is "skyrimnet_knowledge_pack", which holds the "entries" array.
+        $pack = $sknpackObj.skyrimnet_knowledge_pack
+        if (-not $pack) {
+            Write-Host "[FAIL] .sknpack missing top-level key 'skyrimnet_knowledge_pack'" -ForegroundColor Red
+            $issues += "BAD_SKNPACK_STRUCTURE"
+            continue
+        }
+
+        $entries = $pack.entries
+        if (-not $entries) {
+            Write-Host "[FAIL] .sknpack missing 'entries' array inside skyrimnet_knowledge_pack" -ForegroundColor Red
+            $issues += "BAD_SKNPACK_STRUCTURE"
+            continue
+        }
+
+        # --- Validate each entry has required fields ---
+        $entryIndex = 0
+        foreach ($entry in $entries) {
+            $entryIndex++
+            foreach ($field in $sknpackRequiredEntryFields) {
+                # PowerShell ConvertFrom-Json returns PSCustomObject;
+                # check property existence via .psobject.properties
+                if (-not ($entry.psobject.Properties.Name -contains $field)) {
+                    Write-Host "[FAIL] Entry #$entryIndex missing required field: $field" -ForegroundColor Red
+                    $issues += "BAD_SKNPACK_STRUCTURE"
+                } else {
+                    # Field exists — check it's not empty/null.
+                    # condition_expr is allowed to be "" (means "all NPCs" in SkyrimNet).
+                    $val = $entry.$field
+                    if ($null -eq $val) {
+                        Write-Host "[FAIL] Entry #$entryIndex has null required field: $field" -ForegroundColor Red
+                        $issues += "BAD_SKNPACK_STRUCTURE"
+                    } elseif ($val -is [string] -and $val.Trim() -eq "" -and $field -ne "condition_expr") {
+                        Write-Host "[FAIL] Entry #$entryIndex has empty required field: $field" -ForegroundColor Red
+                        $issues += "BAD_SKNPACK_STRUCTURE"
+                    }
+                }
+            }
+        }
+        Write-Host "[PASS] .sknpack structure valid ($entryIndex entries)" -ForegroundColor Green
+
+        # --- Placeholder scan ---
+        # The rendered output must not contain TODO/TBD markers or Handlebars
+        # {{...}} template syntax.  These indicate the template was not rendered.
+        # {{player.*}} is NOT exempt here because .sknpack files are rendered
+        # JSON output, not prompt templates — all Handlebars should be resolved.
+        $placeholderPatterns = @("TODO", "TBD", "\{\{[^}]+\}\}")
+        foreach ($placeholderPattern in $placeholderPatterns) {
+            if ($sknpackRaw -match $placeholderPattern) {
+                Write-Host "[FAIL] .sknpack contains unresolved placeholder pattern: $placeholderPattern" -ForegroundColor Red
+                $issues += "PROMPT_PLACEHOLDER"
+            }
+        }
+
+        # --- Importance range check ---
+        # importance should be 0.0–1.0 per SkyrimNet spec
+        $entryIndex = 0
+        foreach ($entry in $entries) {
+            $entryIndex++
+            if ($entry.psobject.Properties.Name -contains "importance") {
+                $imp = $entry.importance
+                if ($imp -is [double] -or $imp -is [int]) {
+                    if ($imp -lt 0.0 -or $imp -gt 1.0) {
+                        Write-Host "[WARN] Entry #$entryIndex importance=$imp is outside recommended 0.0-1.0 range" -ForegroundColor Yellow
+                    }
+                }
+            }
+        }
+    }
+}
+
+# 7. Check known external FormIDs against verified lookup tables
 Write-Host ""
 Write-Host "--- FormKey Checks ---" -ForegroundColor Cyan
 
