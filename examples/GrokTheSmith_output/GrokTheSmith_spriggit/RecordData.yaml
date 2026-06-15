@@ -5,7 +5,7 @@ ModKey: GrokTheSmith.esp
 GameRelease: SkyrimSE
 ModHeader:
   Flags:
-  - 0x200         # ESL flag — light plugin
+  - 0x200
   Author: Generated via iNPCForge
   MasterReferences:
   - Master: Skyrim.esm

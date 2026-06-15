@@ -1,11 +1,7 @@
 FormKey: 000802:GrokTheSmith.esp
-IsCompressed: True
-MajorRecordFlagsRaw: 262144
 EditorID: CustomNPC_Grok_Outfit
-SkyrimMajorRecordFlags:
-- Compressed
 Items:
-- 013957:Skyrim.esm    # ArmorOrcishCuirass
-- 013956:Skyrim.esm    # ArmorOrcishBoots
-- 013958:Skyrim.esm    # ArmorOrcishGauntlets
-- 05B69F:Skyrim.esm    # ClothesBlackSmith (Blacksmith's Apron)
+- 013957:Skyrim.esm
+- 013956:Skyrim.esm
+- 013958:Skyrim.esm
+- 05B69F:Skyrim.esm

@@ -1,7 +1,7 @@
 {
   "skyrimnet_knowledge_pack": {
     "author": "iNPCForge",
-    "description": "Manual import knowledge for Grok the Smith",
+    "description": "World knowledge pack for Grok the Smith",
     "entries": [
       {
         "always_inject": false,
