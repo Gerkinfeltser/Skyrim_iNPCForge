@@ -10,6 +10,19 @@ $pluginName = Split-Path $OutputDir -Leaf
 $spriggitDir = Join-Path $OutputDir "${pluginName}_spriggit"
 $repoRoot = Split-Path $PSScriptRoot -Parent
 
+if (-not (Test-Path $spriggitDir)) {
+    $candidateSpriggitDirs = @(Get-ChildItem -Path $OutputDir -Directory -Filter "*_spriggit" -ErrorAction SilentlyContinue)
+    if ($candidateSpriggitDirs.Count -eq 1) {
+        $spriggitDir = $candidateSpriggitDirs[0].FullName
+    }
+}
+
+$pluginLocalName = $pluginName
+$spriggitLeaf = Split-Path $spriggitDir -Leaf
+if ($spriggitLeaf -match '^(.+)_spriggit$') {
+    $pluginLocalName = $Matches[1]
+}
+
 function Normalize-FormKey {
     param([string]$FormKey)
     $FormKey = $FormKey.Trim().Trim('"').Trim("'")
@@ -86,7 +99,7 @@ function Test-VerifiedFormKey {
         return
     }
 
-    if ($AllowPluginLocal -and $parts[1].ToLowerInvariant() -eq "${pluginName}.esp".ToLowerInvariant()) {
+    if ($AllowPluginLocal -and $parts[1].ToLowerInvariant() -eq "${pluginLocalName}.esp".ToLowerInvariant()) {
         Write-Host "[PASS] $Label $cleanFormKey (plugin-local)" -ForegroundColor Green
         return
     }
@@ -112,7 +125,7 @@ function Test-VerifiedFormKey {
             Write-Host "[WARN] $Label $cleanFormKey from user-provided source (use -Strict to fail)" -ForegroundColor Yellow
             return
         }
-        # Unknown provenance source — treat like user-provided
+        # Unknown provenance source: treat like user-provided
         if ($Strict) {
             Write-Host "[FAIL] $Label $cleanFormKey from unknown provenance source '$source' not allowed in Strict mode" -ForegroundColor Red
             $script:issues += "UNKNOWN_PROVENANCE_SOURCE"
@@ -192,7 +205,7 @@ Write-Host ""
 
 $issues = @()
 
-# Required SkyrimNet prompt blocks — must match templates/prompt/character.prompt
+# Required SkyrimNet prompt blocks; must match templates/prompt/character.prompt
 $requiredPromptBlocks = @(
     "summary",
     "personality",
@@ -264,7 +277,7 @@ if (Test-Path $promptPath) {
     # 5c. Check for unresolved placeholder patterns
     Write-Host ""
     Write-Host "--- Placeholder Scan ---" -ForegroundColor Cyan
-    # {{player.*}} are legitimate SkyrimNet runtime placeholders — they resolve at
+    # {{player.*}} are legitimate SkyrimNet runtime placeholders; they resolve at
     # dialogue time, not build time, so they must be excluded from the placeholder check.
     $placeholderPatterns = @("TODO", "TBD", "\{\{\s*npc\.", "\{\{\s*(?!player\.)[^}]+\s*\}\}")
     foreach ($placeholderPattern in $placeholderPatterns) {
@@ -277,7 +290,7 @@ if (Test-Path $promptPath) {
 
 # 6. Check SkyrimNet world knowledge packs (.sknpack)
 # .sknpack files are JSON documents rendered from the Handlebars template in
-# templates/knowledge/world_knowledge.sknpack.  They are optional — a plugin
+# templates/knowledge/world_knowledge.sknpack. They are optional; a plugin
 # with no world_knowledge block in its config won't produce one.
 Write-Host ""
 Write-Host "--- World Knowledge Pack Checks ---" -ForegroundColor Cyan
@@ -294,10 +307,10 @@ $sknpackRequiredEntryFields = @(
 
 $sknpackFiles = Get-ChildItem -Path $OutputDir -Recurse -Filter "*.sknpack" -ErrorAction SilentlyContinue
 if ($sknpackFiles.Count -eq 0) {
-    Write-Host "[INFO] No .sknpack files found under $OutputDir — world knowledge is optional" -ForegroundColor Yellow
+    Write-Host "[INFO] No .sknpack files found under $OutputDir; world knowledge is optional" -ForegroundColor Yellow
 } else {
     foreach ($sknpack in $sknpackFiles) {
-        Write-Host "  Checking: $($sknpack.Name)" -ForegroundColor Cyan
+        Write-Host ("  Checking: " + $sknpack.Name) -ForegroundColor Cyan
         $sknpackRaw = Get-Content $sknpack.FullName -Raw
 
         # --- Parse as JSON ---
@@ -307,8 +320,9 @@ if ($sknpackFiles.Count -eq 0) {
         try {
             $sknpackObj = $sknpackRaw | ConvertFrom-Json -ErrorAction Stop
         } catch {
-            Write-Host "[FAIL] .sknpack is not valid JSON: $($_.Exception.Message)" -ForegroundColor Red
-            Write-Host "  File: $($sknpack.FullName)" -ForegroundColor DarkRed
+            $parseMessage = $_.Exception.Message
+            Write-Host ("[FAIL] .sknpack is not valid JSON: " + $parseMessage) -ForegroundColor Red
+            Write-Host ("  File: " + $sknpack.FullName) -ForegroundColor DarkRed
             $issues += "BAD_SKNPACK_STRUCTURE"
             continue
         }
@@ -331,35 +345,41 @@ if ($sknpackFiles.Count -eq 0) {
 
         # --- Validate each entry has required fields ---
         $entryIndex = 0
+        $entryFailures = 0
         foreach ($entry in $entries) {
             $entryIndex++
             foreach ($field in $sknpackRequiredEntryFields) {
                 # PowerShell ConvertFrom-Json returns PSCustomObject;
                 # check property existence via .psobject.properties
                 if (-not ($entry.psobject.Properties.Name -contains $field)) {
-                    Write-Host "[FAIL] Entry #$entryIndex missing required field: $field" -ForegroundColor Red
+                    Write-Host "[FAIL] Entry #${entryIndex} missing required field: $field" -ForegroundColor Red
                     $issues += "BAD_SKNPACK_STRUCTURE"
+                    $entryFailures++
                 } else {
-                    # Field exists — check it's not empty/null.
+                    # Field exists; check it's not empty/null.
                     # condition_expr is allowed to be "" (means "all NPCs" in SkyrimNet).
                     $val = $entry.$field
                     if ($null -eq $val) {
-                        Write-Host "[FAIL] Entry #$entryIndex has null required field: $field" -ForegroundColor Red
+                        Write-Host "[FAIL] Entry #${entryIndex} has null required field: $field" -ForegroundColor Red
                         $issues += "BAD_SKNPACK_STRUCTURE"
+                        $entryFailures++
                     } elseif ($val -is [string] -and $val.Trim() -eq "" -and $field -ne "condition_expr") {
-                        Write-Host "[FAIL] Entry #$entryIndex has empty required field: $field" -ForegroundColor Red
+                        Write-Host "[FAIL] Entry #${entryIndex} has empty required field: $field" -ForegroundColor Red
                         $issues += "BAD_SKNPACK_STRUCTURE"
+                        $entryFailures++
                     }
                 }
             }
         }
-        Write-Host "[PASS] .sknpack structure valid ($entryIndex entries)" -ForegroundColor Green
+        if ($entryFailures -eq 0) {
+            Write-Host "[PASS] .sknpack structure valid ($entryIndex entries)" -ForegroundColor Green
+        }
 
         # --- Placeholder scan ---
         # The rendered output must not contain TODO/TBD markers or Handlebars
         # {{...}} template syntax.  These indicate the template was not rendered.
         # {{player.*}} is NOT exempt here because .sknpack files are rendered
-        # JSON output, not prompt templates — all Handlebars should be resolved.
+        # JSON output, not prompt templates; all Handlebars should be resolved.
         $placeholderPatterns = @("TODO", "TBD", "\{\{[^}]+\}\}")
         foreach ($placeholderPattern in $placeholderPatterns) {
             if ($sknpackRaw -match $placeholderPattern) {
@@ -369,7 +389,7 @@ if ($sknpackFiles.Count -eq 0) {
         }
 
         # --- Importance range check ---
-        # importance should be 0.0–1.0 per SkyrimNet spec
+        # importance should be 0.0-1.0 per SkyrimNet spec
         $entryIndex = 0
         foreach ($entry in $entries) {
             $entryIndex++
