@@ -28,13 +28,19 @@ sex: "male"                           # male | female. Maps to Configuration.Fla
 height: 1.0                            # Vanilla scale. 1.0 = normal height.
 weight: 100                            # 0-100 body weight/build slider.
 
-# --- Appearance (Tier 2: selectable headparts; OPTIONAL) ---
-# Resolve these through SkyLinkAI/xEdit/verified tables before generation.
-# hair: ""
-# eyes: ""
-# brows: ""
-# scar: ""
-# warpaint: ""
+# --- Appearance (Tier 2: headparts, face morph, tints; OPTIONAL) ---
+# Approach A: HeadParts list (specific HDPT record FormKeys)
+#   Resolve FormKeys via SkyLinkAI get_appearance on an existing NPC.
+#   See templates/spriggit/npc_base.yaml for field structure.
+# Approach B: FaceParts presets + FaceMorph sculpt + TintLayers
+#   FaceParts uses race preset indices (look up in CK).
+#   FaceMorph uses sculpt values (-1.0 to 1.0 per bone).
+#   TintLayers use Index/Color/InterpolationValue/Preset.
+# HairColor: ""                 # FormKey for hair tint color
+# FaceParts:                    # Preset indices (or leave unset for defaults)
+#   Eyes: 0
+#   Mouth: 0
+# TintLayers: []                # Tint overlay entries
 
 # --- Outfit (pick ONE approach) ---
 # Option A: Reference a vanilla outfit record

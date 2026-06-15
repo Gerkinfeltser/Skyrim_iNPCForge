@@ -197,11 +197,59 @@ SoundLevel: Normal
 # Male NPCs omit this flag (absence implies male in Skyrim).
 # Verified: Mutagen enum matches CK editor name, same pattern as Unique/Respawn/Essential.
 
-# === Tier 2: Headparts (DEFERRED — no verified Spriggit structure) ===
-# npc.config.yaml supports hair/eyes/brows/scar/warpaint placeholders but these
-# require resolvable HDPT FormKeys from Skyrim.esm or mods. The Spriggit HeadParts
-# and Tints record structure has not been verified against real serializations.
-# Tier 2 will be templated once a headpart structure is confirmed via xEdit/Spriggit.
+# === Tier 2: Headparts, FaceMorph, TintLayers ===
+# Two approaches (can combine):
+#   Approach A — HeadParts: list of specific HDPT FormKeys (hair, eyes, etc.)
+#   Approach B — FaceParts presets + FaceMorph sculpt + TintLayers
+# 
+# HeadParts (specific HDPT records):
+# HeadParts:
+# - 05162F:Skyrim.esm          # MaleHeadNord
+# - 051631:Skyrim.esm          # MaleMouthHumanoidDefault
+# - 051507:Skyrim.esm          # HairMaleNord01
+# - 024244:Skyrim.esm          # MaleEyesHumanIceBlue
+# - 051508:Skyrim.esm          # BrowsMaleHumanoid01
+
+# HairColor FormKey:
+# HairColor: 0A0436:Skyrim.esm
+
+# FaceParts presets (indices into race's pre-defined face parts):
+# FaceParts:
+#   Eyes: 3
+#   Mouth: 5
+
+# FaceMorph (sculpt values, range approx -1.0 to 1.0):
+# FaceMorph:
+#   NoseLongVsShort: -0.88
+#   NoseUpVsDown: 0.8
+#   JawUpVsDown: 0.72
+#   JawNarrowVsWide: 0.42
+#   JawForwardVsBack: 0.66
+#   CheeksUpVsDown: -0.8
+#   CheeksForwardVsBack: -0.64
+#   EyesUpVsDown: -0.14
+#   EyesInVsOut: -0.6
+#   BrowsUpVsDown: 0.62
+#   BrowsInVsOut: 0.02
+#   BrowsForwardVsBack: 0.02
+#   LipsUpVsDown: 0.72
+#   LipsInVsOut: -0.76
+#   ChinNarrowVsWide: -0.88
+#   ChinUpVsDown: -0.8
+#   ChinUnderbiteVsOverbite: -0.04
+#   EyesForwardVsBack: -0.52
+
+# TintLayers (tint overlays — complexion, warpaint, lip color, etc.):
+# Each entry: Index (tint slot), Color (RGBA hex), InterpolationValue (0.0-1.0), Preset (-1=color, N=race preset)
+# TintLayers:
+# - Index: 1
+#   Color: '#00D23500'
+#   InterpolationValue: 0.72
+#   Preset: -1
+# - Index: 7
+#   Color: '#00430401'
+#   InterpolationValue: 0.72
+#   Preset: 75
 
 MajorFlags:
 - 0x40000

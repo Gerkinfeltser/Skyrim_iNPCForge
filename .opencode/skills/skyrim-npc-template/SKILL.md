@@ -614,7 +614,11 @@ Reference: `UUIDResolver::GenerateBioTemplateName()` in SkyrimNet source.
 In scope now:
 - **Tier 1**: race, height, weight/build, outfit, visible armor/clothing, carried equipment.
   - **Sex**: config field maps to `Configuration.Flags: Female`. When `sex: "female"`, add `- Female` to the flags list. Male NPCs omit the flag (absence implies male in Skyrim). Same Mutagen enum pattern as `Unique`, `Respawn`, `Essential`.
-- **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts when resolvable to real FormKeys. **Template fields not yet wired** — no verified Spriggit HeadParts/Tints structure exists. Config placeholders exist; generation awaits field verification.
+- **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts. Two approaches:
+  - **HeadParts**: list of specific HDPT FormKeys (verified via Spriggit roundtrip).
+  - **FaceParts** presets + **FaceMorph** sculpt values + **TintLayers** tint overlays. All three verified against a real working plugin (GravviFollower).
+  - **HairColor** FormKey for hair tint. Also verified.
+  - Tier 2 includes `TintLayers` entries with `Index`, `Color` (RGBA hex), `InterpolationValue`, and `Preset` fields.
 
 Backlog:
 - **Tier 3**: captured face morph values from SkyLinkAI `get_appearance`.
