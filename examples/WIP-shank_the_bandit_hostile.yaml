@@ -18,7 +18,7 @@ race: "NordRace"
 voice_type: "MaleBandit"
 combat_attitude: "hostile"
 level: 15
-respawn: true                      # Named mook — respawns on cell reset
+respawn: false                     # Unique NPC — does not respawn
 
 sex: "male"
 height: 1.0
