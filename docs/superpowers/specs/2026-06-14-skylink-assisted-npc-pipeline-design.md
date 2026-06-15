@@ -289,6 +289,29 @@ SkyrimNet skill preflight:
 - Keep `data/*.yaml` as verified fallback/cache tables, not as a license to invent records.
 - Keep xEdit scripts for bulk verification and lookup-table promotion.
 
+## Future Automation Backlog
+
+These items are intentionally out of scope for the first SkyLink-assisted pipeline implementation, but should stay tracked in repo documentation rather than only in agent memory.
+
+### xEdit Automation Backend
+
+Evaluate `mxpf` as an optional helper layer for future xEdit automation:
+
+- GitHub: <https://github.com/matortheeternal/mxpf>
+- Purpose: xEdit Pascal scripting library for generating patches, finding records, creating patch files, and copying records.
+- Possible use in iNPCForge: richer bulk dump scripts for FormKeys, record metadata, armor/outfit/headpart/cell/faction lookups, and future xEdit-backed patch or verification workflows.
+- Important limitation: `mxpf` still runs inside xEdit. It can reduce custom Pascal boilerplate, but it does not by itself remove the need to launch xEdit, run scripts, capture output, or update `data/*.yaml`.
+- Bigger automation target: a PowerShell wrapper that invokes xEdit in script mode, writes dump output to a known file, parses it, and proposes or applies lookup-table updates.
+
+### NPC Render Preview Capture
+
+Investigate `SeverActions-3.0.7-FOMOD` to understand how it obtains or renders character previews:
+
+- Local path: `D:\Modlists\ADT\mods\SeverActions-3.0.7-FOMOD`
+- Question: can a similar optional render/capture step be added for generated iNPCForge NPCs?
+- Possible value: show a generated NPC preview before or after runtime placement, especially once Tier 2 headpart and future FaceGen work exists.
+- Important limitation: this should remain optional. The core pipeline must not depend on render capture or external modlist assets.
+
 ## Design Decisions
 
 - `user-provided` FormKeys warn by default and fail only in strict mode. This keeps the workflow usable when the user has reliable external information, while still making unverified data visible.
