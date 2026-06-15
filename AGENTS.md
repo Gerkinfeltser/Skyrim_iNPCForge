@@ -79,6 +79,9 @@ the `{name}_{formId & 0xFFF:03X}` convention, ESL flag is set.
 
 ## Critical Rules
 
+### Named NPCs MUST be Unique
+Named NPCs MUST use the Unique flag in Configuration.Flags. Non-Unique NPCs get their names overwritten by mods like Real Names Extended, which breaks SkyrimNet bio matching. Unique and Respawn are mutually exclusive in Skyrim.
+
 ### Voice Types — NEVER Dupe
 Always reference **vanilla** voice type FormIDs directly from `data/voices.yaml`.
 SkyrimNet's TTS maps voices by voice type FormID. A duped VTYP record gets a new
