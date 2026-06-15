@@ -491,7 +491,7 @@ output/{PluginName}/
 
 ## Step 5b: Generate World Knowledge Pack (Optional)
 
-If `world_knowledge.entries` is non-empty, generate a `.sknpack` file:
+If `world_knowledge.entries` is non-empty, generate a `.sknpack` file at `output/{PluginName}/WorldKnowledge-ManuallyImport/{PluginName}.sknpack`:
 
 ### Format
 

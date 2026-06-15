@@ -21,7 +21,7 @@ step-by-step.
 ```
 npc.config.yaml ──► Spriggit YAML ──► {PluginName}.esp   (record layer)
                 ──► character.prompt ──► {name}_{id}.prompt (personality layer)
-                ──► world_knowledge ──► {PluginName}.sknpack (awareness layer)
+                ──► world_knowledge ──► WorldKnowledge-ManuallyImport/{PluginName}.sknpack (awareness layer)
 ```
 
 1. Fill `npc.config.yaml` (single source of truth).
