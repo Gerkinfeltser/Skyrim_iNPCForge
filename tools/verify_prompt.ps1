@@ -305,7 +305,11 @@ $sknpackRequiredEntryFields = @(
     "always_inject"
 )
 
-$sknpackFiles = Get-ChildItem -Path $OutputDir -Recurse -Filter "*.sknpack" -ErrorAction SilentlyContinue
+$sknpackDir = Join-Path $OutputDir "WorldKnowledge-ManuallyImport"
+$sknpackFiles = @()
+if (Test-Path $sknpackDir) {
+    $sknpackFiles = Get-ChildItem -Path $sknpackDir -Filter "*.sknpack" -ErrorAction SilentlyContinue
+}
 if ($sknpackFiles.Count -eq 0) {
     Write-Host "[INFO] No .sknpack files found under $OutputDir; world knowledge is optional" -ForegroundColor Yellow
 } else {
