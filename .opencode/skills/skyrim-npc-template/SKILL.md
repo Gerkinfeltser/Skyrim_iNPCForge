@@ -579,7 +579,7 @@ Then manually verify:
 ## Key Rules
 
 ### Named NPCs MUST be Unique
-NPCs with display names (`name` field in config) MUST use the `Unique` flag in Spriggit Configuration.Flags. Non-Unique NPCs have their names overridden by mods like Real Names Extended, which prevents SkyrimNet from matching the `.prompt` bio to the actor. Unique and Respawn flags are mutually exclusive in Skyrim — Unique NPCs do not respawn.
+NPCs with display names (`name` field in config) MUST use the `Unique` flag in Spriggit Configuration.Flags. Non-Unique NPCs have their names overridden by mods like Real Names Extended, which prevents SkyrimNet from matching the `.prompt` bio to the actor. Unique and Respawn flags can coexist — the CK UI prevents both being set, but xEdit/Spriggit accepts the combination and the engine honors both.
 
 ### Voice Types — NEVER Dupe
 Always reference vanilla voice type FormIDs directly. SkyrimNet's TTS system maps voices by voice type FormID. A duped VTYP record gets a new FormID that SkyrimNet can't map — resulting in silent NPCs or fallback TTS.

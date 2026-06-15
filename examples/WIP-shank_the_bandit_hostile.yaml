@@ -18,7 +18,7 @@ race: "NordRace"
 voice_type: "MaleBandit"
 combat_attitude: "hostile"
 level: 15
-respawn: false                     # Unique NPC — does not respawn
+respawn: true                      # Named mook — Unique + Respawn OK (CK UI restricts, engine doesn't)
 
 sex: "male"
 height: 1.0
