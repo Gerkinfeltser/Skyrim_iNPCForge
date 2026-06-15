@@ -45,7 +45,7 @@ Configuration:
 # Optional — from npc.config.yaml factions list
 # Hostile NPCs should include: BanditFaction (0x0001BCC0)
 Factions:
-- Faction: 028E42:Skyrim.esm       # TownWhiterunFaction
+- Faction: 028172:Skyrim.esm       # TownWhiterunFaction (verified: Ulfberth refId 000D15B0)
   Rank: 0
   Fluff: 0x000000
 

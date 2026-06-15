@@ -8,4 +8,6 @@
 # ============================================================
 
 BanditFaction: 01BCC0:Skyrim.esm          # Verified: vanilla bandit NPC at refId 00081329
-TownWhiterunFaction: 028E42:Skyrim.esm    # Verified: Grok NPC works in-game with this
+TownWhiterunFaction: 028172:Skyrim.esm    # Verified: Ulfberth War-Bear refId 000D15B0
+CrimeFactionWhiterun: 0267EA:Skyrim.esm   # Verified: Ulfberth War-Bear refId 000D15B0
+WhiterunWarmaidensFaction: 093B22:Skyrim.esm # Verified: Ulfberth War-Bear refId 000D15B0
