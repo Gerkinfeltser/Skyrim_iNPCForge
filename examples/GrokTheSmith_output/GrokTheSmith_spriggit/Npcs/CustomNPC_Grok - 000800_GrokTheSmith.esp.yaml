@@ -37,6 +37,9 @@ Name:
   TargetLanguage: English
   Value: Grok
 DefaultOutfit: 000802:GrokTheSmith.esp
+Height: 1
+Weight: 100
+SoundLevel: Normal
 Packages:
 - 0BAD0A:Skyrim.esm
 Items:
