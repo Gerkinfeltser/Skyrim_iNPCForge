@@ -24,7 +24,7 @@ level: 25                             # NPC level (fixed)
 respawn: false                        # true = respawns on cell reset, false = stays dead
 
 # --- Appearance (Tier 1: body basics) ---
-sex: "male"                           # male | female
+sex: "male"                           # male | female. Maps to Configuration.Flags: Female when female.
 height: 1.0                            # Vanilla scale. 1.0 = normal height.
 weight: 100                            # 0-100 body weight/build slider.
 

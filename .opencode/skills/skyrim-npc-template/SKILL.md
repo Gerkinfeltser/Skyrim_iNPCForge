@@ -613,7 +613,7 @@ Reference: `UUIDResolver::GenerateBioTemplateName()` in SkyrimNet source.
 
 In scope now:
 - **Tier 1**: race, height, weight/build, outfit, visible armor/clothing, carried equipment.
-  - **Sex**: config field exists (`sex: male|female` in `npc.config.yaml`) but Spriggit mapping is **deferred** until verified. The Mutagen field is `Configuration.Flags: Female` but this has not been confirmed by serializing a known-female NPC. Until verified, sex remains config-only and the agent does NOT set the Female flag.
+  - **Sex**: config field maps to `Configuration.Flags: Female`. When `sex: "female"`, add `- Female` to the flags list. Male NPCs omit the flag (absence implies male in Skyrim). Same Mutagen enum pattern as `Unique`, `Respawn`, `Essential`.
 - **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts when resolvable to real FormKeys. **Template fields not yet wired** — no verified Spriggit HeadParts/Tints structure exists. Config placeholders exist; generation awaits field verification.
 
 Backlog:
