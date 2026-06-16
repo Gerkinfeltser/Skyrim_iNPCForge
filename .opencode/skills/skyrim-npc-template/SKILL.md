@@ -388,6 +388,44 @@ ESL constraint.
 }
 ```
 
+### 3h2: External Master References (Dawnguard, ESL Mods)
+
+If the NPC references records from Dawnguard.esm (vampire headparts, eyes) or
+an ESL-flagged mod (e.g. Mage's Daily Outfit.esp), add them to `.spriggit`:
+
+```json
+{
+  "PackageName": "Spriggit.Yaml.Skyrim",
+  "Release": "SkyrimSE",
+  "Version": "0.40.0",
+  "KnownMasters": [
+    { "ModKey": "Skyrim.esm", "Style": "Full" },
+    { "ModKey": "Dawnguard.esm", "Style": "Full" },
+    { "ModKey": "Mage's Daily Outfit.esp", "Style": "Small" }
+  ]
+}
+```
+
+- `Style: "Full"` for regular master plugins (Skyrim.esm, Dawnguard.esm, etc.)
+- `Style: "Small"` for ESL-flagged light masters
+
+Also add the mod to `MasterReferences` in `RecordData.yaml`:
+
+```yaml
+  MasterReferences:
+  - Master: Skyrim.esm
+    FileSize: 0
+  - Master: Dawnguard.esm
+    FileSize: 0
+  - Master: Mage's Daily Outfit.esp
+    FileSize: 0
+```
+
+**FormKey format** for records from external masters:
+- Skyrim.esm (always mod index 00): `XXXXXX:Skyrim.esm`
+- Dawnguard.esm (mod index 02): `00XXXX:Dawnguard.esm` — use the **last 6 hex digits** of the 8-digit FormID, stripping the mod index prefix
+- ESL mods: `XXXXXX:ModName.esp` — use the **last 6 hex digits** after the `FE` prefix
+
 ### 3i: Pre-Build Gate
 
 Skyrim should be closed before Spriggit deserialization. Before building, run:
