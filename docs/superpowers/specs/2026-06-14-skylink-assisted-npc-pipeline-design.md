@@ -25,7 +25,7 @@ This design replaces ad hoc NPC generation with a gated workflow that prefers li
 ## Pipeline Overview
 
 1. Interview the user with a numbered question form.
-2. Draft `npc.config.yaml` from intent-level answers.
+2. Draft `npc-yaml/{Name}_iNPC.yaml` from intent-level answers.
 3. Resolve FormKeys with SkyLinkAI first when available.
 4. Fall back to xEdit dumps or verified `data/*.yaml` tables when live lookup is unavailable.
 5. Stop and ask the user when a record cannot be verified.
@@ -44,7 +44,7 @@ Initial required form:
 
 ```text
 1. NPC name:
-2. Plugin name:
+2. Plugin name (default `{Name}_iNPC`):
 3. Race/species:
 4. Voice style or vanilla voice type:
 5. Combat attitude: friendly / neutral / hostile

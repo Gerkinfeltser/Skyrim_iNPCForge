@@ -19,12 +19,12 @@ step-by-step.
 ## Pipeline
 
 ```
-npc.config.yaml ──► Spriggit YAML ──► {PluginName}.esp   (record layer)
-                ──► character.prompt ──► {name}_{id}.prompt (personality layer)
-                ──► world_knowledge ──► WorldKnowledge-ManuallyImport/{PluginName}.sknpack (awareness layer)
+npc-yaml/{Name}_iNPC.yaml ──► Spriggit YAML ──► {Name}_iNPC.esp   (record layer)
+                          ──► character.prompt ──► {name}_{id}.prompt (personality layer)
+                          ──► world_knowledge ──► WorldKnowledge-ManuallyImport/{Name}_iNPC.sknpack (awareness layer)
 ```
 
-1. Fill `npc.config.yaml` (single source of truth).
+1. Fill `npc-yaml/{Name}_iNPC.yaml` (single source of truth for working NPC configs).
 2. Resolve FormKeys via SkyLinkAI > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
 3. Generate Spriggit YAML into `output/{PluginName}_spriggit/` from `templates/spriggit/`.
 4. Serialize to `.esp` with the Spriggit CLI.
@@ -171,7 +171,8 @@ SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, c
 
 | Path | Purpose |
 |------|---------|
-| `npc.config.yaml` | **Fill this in** — single source of truth |
+| `npc-yaml/` | **Fill this in** — local-only working NPC YAML base. Use `{Name}_iNPC.yaml` naming. Contents are ignored by git unless explicitly promoted. |
+| `npc.config.yaml` | Mad-libs config template/reference; copy to `npc-yaml/{Name}_iNPC.yaml` for active NPCs. |
 | `.opencode/skills/skyrim-npc-template/SKILL.md` | Authoritative recipe (read first) |
 | `data/races.yaml` | Race EditorID → FormKey |
 | `data/voices.yaml` | Voice type → FormKey (vanilla only) |
@@ -185,17 +186,20 @@ SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, c
 | `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
 | `tools/verify_prompt.ps1` | Post-generation checker: REFR suffix, block format, faction FormIDs |
 | `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
-| `examples/grok_the_smith.yaml` | Full friendly-NPC worked example |
-| `examples/shank_the_bandit_hostile.yaml` | Minimal hostile-NPC example |
+| `examples/grok_the_smith.yaml` | Full friendly-NPC worked example; keep as reference material |
+| `examples/shank_the_bandit_hostile.yaml` | Minimal hostile-NPC example; keep as reference material |
 | `output/` | Generated plugins land here (gitkept) |
 | `_tmp/` | Scratch space (gitignored) |
 
 ## Conventions
 
-- **YAML** for all config and Spriggit source. Keep `npc.config.yaml` commented
-  — inline comments are the field reference for humans.
-- **EditorIDs** MUST use a mod prefix and no spaces (`CustomNPC_Grok`,
-  `Bandit_Shard_Shank`).
+- **YAML** for all config and Spriggit source. Put active NPC base YAML in
+  `npc-yaml/`; keep `examples/` for specific worked examples like Grok and
+  Shank, not local experiments.
+- **Generated naming**: use `_iNPC` for new generated plugin/config/output names,
+  e.g. `Brenaen_iNPC.yaml`, `Brenaen_iNPC.esp`, `output/Brenaen_iNPC/`.
+- **EditorIDs** MUST be unique and have no spaces. Prefer the same suffix style
+  for generated NPCs, e.g. `Brenaen_iNPC`.
 - **Outfits**: either reference a vanilla record (`outfit: "OrcishArmor"`) OR
   generate a custom OTFT via `outfit_items: [...]`. Never both.
 - **Placement**: interior cells only via `data/locations.yaml`. Exterior or

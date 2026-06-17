@@ -1,6 +1,6 @@
 # Common Interior Cell Locations
 # Map of friendly name → cell EditorID + FormKey (Skyrim.esm)
-# Use the location key (left side) in npc.config.yaml
+# Use the location key (left side) in npc-yaml/{Name}_iNPC.yaml
 #
 # SCOPE: Vanilla Skyrim.esm ONLY.
 #   DLC cells (e.g. Castle Volkihar, Raven Rock) are NOT included.

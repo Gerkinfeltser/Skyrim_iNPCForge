@@ -1,7 +1,8 @@
 # ============================================================
-# NPC Configuration — Single Source of Truth
+# NPC Configuration Template - Mad-Libs Reference
 # ============================================================
-# Fill this in, then the agent generates:
+# Template/reference only. For active work, copy this file to
+# npc-yaml/{Name}_iNPC.yaml, fill it in, then the agent generates:
 #   1. Spriggit YAML → serialized to .esp (record layer)
 #   2. SkyrimNet .prompt file (personality layer)
 #
@@ -12,9 +13,9 @@
 
 # === IDENTITY ===
 name: "Grok"                          # Display name shown in-game
-editor_id: "CustomNPC_Grok"           # Unique EditorID (no spaces, use mod prefix)
+editor_id: "Grok_iNPC"                # Unique EditorID (no spaces; default suffix is _iNPC)
 record_id: "0x800"                    # ESL object ID (0x800 for MVP). REFR at 0x801 → prompt suffix 801.
-plugin_name: "GrokTheSmith"           # Name of the output .esp file (no extension)
+plugin_name: "Grok_iNPC"              # Name of the output .esp file (no extension); default suffix is _iNPC
 
 # === BODY (Record Layer) ===
 race: "OrcRace"                       # → data/races.yaml for options

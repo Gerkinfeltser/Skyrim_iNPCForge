@@ -58,7 +58,7 @@ Start every new NPC with this numbered form. The user may answer with numbers on
 
 ```text
 1. NPC name:
-2. Plugin name:
+2. Plugin name (default `{Name}_iNPC`):
 3. Race/species:
 4. Voice style or vanilla voice type:
 5. Combat attitude: friendly / neutral / hostile
@@ -707,7 +707,7 @@ Expected: determine whether `.sknpack` is JSON, YAML, or another importable text
 
 - [ ] **Step 2: Add world-knowledge expected detection**
 
-If `npc.config.yaml` for the output is accessible, detect whether `world_knowledge.entries` is non-empty. If not accessible per-output, check for any `.sknpack` and validate if present.
+If `npc-yaml/{Name}_iNPC.yaml` for the output is accessible, detect whether `world_knowledge.entries` is non-empty. If not accessible per-output, check for any `.sknpack` and validate if present.
 
 Expected: verifier does not require `.sknpack` when no world knowledge exists.
 

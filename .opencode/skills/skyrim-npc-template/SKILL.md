@@ -8,7 +8,7 @@ author: PhospheneOverdrive
 
 # Skyrim NPC Template — Agent Recipe
 
-Generate fully functional, self-contained Skyrim SE NPC plugins with SkyrimNet AI dialogue support. Config-driven: one YAML config → two outputs (Spriggit `.esp` + SkyrimNet `.prompt` file).
+Generate fully functional, self-contained Skyrim SE NPC plugins with SkyrimNet AI dialogue support. Config-driven: one YAML config in `npc-yaml/` → two outputs (Spriggit `.esp` + SkyrimNet `.prompt` file).
 
 ## When To Use
 
@@ -27,7 +27,7 @@ Use this skill when asked to:
 ## Pipeline Overview
 
 ```
-npc.config.yaml (single source of truth)
+npc-yaml/{Name}_iNPC.yaml (single source of truth)
          │
     ┌────┴────┐
     ▼         ▼
@@ -80,7 +80,7 @@ Start every new NPC with this numbered form. The user may answer with numbers on
 
 ```text
 1. NPC name:
-2. Plugin name:
+2. Plugin name (default `{Name}_iNPC`):
 3. Race/species:
 4. Voice style or vanilla voice type:
 5. Combat attitude: friendly / neutral / hostile
@@ -162,11 +162,13 @@ records:
 
 Generate this file from `templates/provenance/formkey-provenance.yaml` after FormKey resolution. Every external FormKey used by generated Spriggit YAML must have a provenance entry unless it is plugin-local.
 
-**Transition:** Once all FormKeys are resolved and provenance is written, proceed to fill `npc.config.yaml` (Step 2), then generate Spriggit YAML (Step 3). Before ESP serialization, Skyrim must be closed — see the Pre-Build Gate (Step 3i).
+**Transition:** Once all FormKeys are resolved and provenance is written, proceed to fill `npc-yaml/{Name}_iNPC.yaml` (Step 2), then generate Spriggit YAML (Step 3). Before ESP serialization, Skyrim must be closed — see the Pre-Build Gate (Step 3i).
 
-## Step 2: Fill npc.config.yaml
+## Step 2: Fill npc-yaml/{Name}_iNPC.yaml
 
-Create or edit `npc.config.yaml` in the repo root. Use `data/*.yaml` lookup tables to resolve FormIDs:
+Create or edit `npc-yaml/{Name}_iNPC.yaml`. This directory is the working NPC YAML base: active, local-only configs live here. Use `npc.config.yaml` as the mad-libs template to copy from when starting a new NPC. Keep `examples/` for durable worked examples such as Grok and Shank, not temporary local NPCs. Use `data/*.yaml` lookup tables to resolve FormIDs:
+
+Default generated naming uses the `_iNPC` suffix for plugin/config/output names. Keep the display name natural (`name: "Brenaen"`), but use `plugin_name: "Brenaen_iNPC"`, `editor_id: "Brenaen_iNPC"`, `npc-yaml/Brenaen_iNPC.yaml`, and `output/Brenaen_iNPC/` unless the user asks otherwise.
 
 - **data/races.yaml** → race EditorID to FormKey
 - **data/voices.yaml** → voice type to FormKey (vanilla only — NEVER dupe VTYP)
@@ -178,9 +180,9 @@ Create or edit `npc.config.yaml` in the repo root. Use `data/*.yaml` lookup tabl
 ```yaml
 # === IDENTITY ===
 name: "Grok"
-editor_id: "CustomNPC_Grok"
+editor_id: "Grok_iNPC"
 record_id: "0x800"              # ESL object ID (REFR at 0x801 → prompt suffix 801)
-plugin_name: "GrokTheSmith"
+plugin_name: "Grok_iNPC"
 
 # === BODY ===
 race: "OrcRace"                 # → data/races.yaml
@@ -228,7 +230,7 @@ personality:
   speech_style: "..."
 ```
 
-With `npc.config.yaml` complete, proceed to generate the Spriggit YAML.
+With `npc-yaml/{Name}_iNPC.yaml` complete, proceed to generate the Spriggit YAML.
 
 ## Step 3: Generate Spriggit YAML → .esp
 

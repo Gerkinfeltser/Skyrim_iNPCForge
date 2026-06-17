@@ -9,10 +9,10 @@ Fill in one config file → get a ready-to-install mod folder with:
 2. **SkyrimNet prompt file** — personality, background, speech style, relationships
 
 ```
-npc.config.yaml ──► {PluginName}.esp (ESL, compiled)
-                ──► {PluginName}_spriggit/ (YAML source, editable)
-                ──► characters/grok_801.prompt (SkyrimNet AI)
-                ──► {PluginName}.sknpack (world knowledge — NPCs know about Grok)
+npc-yaml/{Name}_iNPC.yaml ──► {Name}_iNPC.esp (ESL, compiled)
+                         ──► {Name}_iNPC_spriggit/ (YAML source, editable)
+                           ──► characters/{name}_801.prompt (SkyrimNet AI)
+                         ──► {Name}_iNPC.sknpack (world knowledge)
 ```
 
 ## Quick Start
@@ -25,7 +25,7 @@ npc.config.yaml ──► {PluginName}.esp (ESL, compiled)
 
 Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recipe.
 
-1. Fill in `npc.config.yaml`
+1. Fill in `npc-yaml/{Name}_iNPC.yaml`
 2. Generate Spriggit YAML from `templates/spriggit/`
 3. Serialize with `spriggit deserialize`
 4. Generate prompt file from `templates/prompt/character.prompt`
@@ -33,8 +33,8 @@ Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recip
 
 ### For Humans
 
-1. Copy `npc.config.yaml` and edit the fields
-2. Use `examples/grok_the_smith.yaml` as reference
+1. Copy an existing local config in `npc-yaml/` or start a new `npc-yaml/{Name}_iNPC.yaml`
+2. Use `examples/grok_the_smith.yaml` and `examples/shank_the_bandit_hostile.yaml` as reference-only examples
 3. Generate the plugin (run the agent, or use Spriggit CLI directly)
 4. Drop the `output/{PluginName}/` folder into MO2
 
@@ -42,7 +42,8 @@ Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recip
 
 ```
 Skyrim_NPCTemplate/
-├── npc.config.yaml               # Fill this in — single source of truth
+├── npc-yaml/                     # Local-only working NPC YAML base
+├── npc.config.yaml               # Mad-libs template; copy into npc-yaml/
 ├── .opencode/
 │   └── skills/
 │       └── skyrim-npc-template/
@@ -63,7 +64,7 @@ Skyrim_NPCTemplate/
 │   └── knowledge/
 │       └── world_knowledge.sknpack # World knowledge pack template
 ├── examples/
-│   ├── grok_the_smith.yaml       # Friendly NPC config (input)
+│   ├── grok_the_smith.yaml       # Friendly NPC config example
 │   ├── GrokTheSmith_output/      # Complete verified output (ESL .esp + YAML + prompt + sknpack)
 │   └── shank_the_bandit_hostile.yaml # Hostile NPC (minimal example)
 └── output/                       # Generated plugins land here
@@ -71,7 +72,11 @@ Skyrim_NPCTemplate/
 
 ## Config Reference
 
-See `npc.config.yaml` for inline comments on every field.
+Use `npc-yaml/{Name}_iNPC.yaml` for active NPC configs. Copy `npc.config.yaml`
+as the mad-libs starting template, and use `examples/*.yaml` for worked examples.
+
+Default generated naming uses the `_iNPC` suffix for plugin/config/output names,
+for example `Brenaen_iNPC.yaml`, `Brenaen_iNPC.esp`, and `output/Brenaen_iNPC/`.
 
 ### Combat Attitudes
 

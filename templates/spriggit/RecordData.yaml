@@ -13,7 +13,7 @@
 SpriggitSource:
   PackageName: Spriggit.Yaml.Skyrim
   Version: 0.40.0
-ModKey: GrokTheSmith.esp
+ModKey: Grok_iNPC.esp
 GameRelease: SkyrimSE
 ModHeader:
   Flags:

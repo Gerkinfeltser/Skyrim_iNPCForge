@@ -1,6 +1,6 @@
 # Vanilla Skyrim Outfits (OTFT Records)
 # Map of friendly name → FormKey (Skyrim.esm)
-# Use the outfit key (left side) in npc.config.yaml
+# Use the outfit key (left side) in npc-yaml/{Name}_iNPC.yaml
 #
 # SCOPE: Vanilla Skyrim.esm ONLY.
 #   Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm outfits are NOT

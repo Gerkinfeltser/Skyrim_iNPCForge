@@ -1,6 +1,6 @@
 # Vanilla Skyrim Voice Types
 # Map of EditorID -> FormKey (Skyrim.esm)
-# Use the EditorID (left side) in npc.config.yaml
+# Use the EditorID (left side) in npc-yaml/{Name}_iNPC.yaml
 #
 # SCOPE: Vanilla Skyrim.esm ONLY.
 #   Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm voice types are NOT

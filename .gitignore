@@ -11,5 +11,5 @@ output/
 # Local implementation worktrees
 .worktrees/
 
-# Local npc yamls
+# Local working NPC YAML configs. Promote durable examples into examples/ instead.
 npc-yaml/*

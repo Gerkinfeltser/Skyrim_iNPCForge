@@ -1,6 +1,6 @@
 # Vanilla Skyrim Races
 # Map of EditorID → FormKey (Skyrim.esm)
-# Use the EditorID (left side) in npc.config.yaml
+# Use the EditorID (left side) in npc-yaml/{Name}_iNPC.yaml
 #
 # SCOPE: Vanilla Skyrim.esm ONLY.
 #   DLC races (e.g. werebear from Dawnguard, rieklings from Dragonborn) are

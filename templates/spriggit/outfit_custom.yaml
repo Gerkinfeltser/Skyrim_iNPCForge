@@ -1,12 +1,12 @@
 # ============================================================
 # Spriggit Outfit Record (OTFT) — Reference Template
 # ============================================================
-# Used when npc.config.yaml has outfit_items instead of outfit.
+# Used when npc-yaml/{Name}_iNPC.yaml has outfit_items instead of outfit.
 # The agent generates one of these records in the plugin, then
 # references it from the NPC's DefaultOutfit field.
 #
 # File location in generated plugin:
-#   {PluginName}_spriggit/Outfits/{editor_id}_Outfit - {formID}_{plugin}.esp.yaml
+#   {Name}_iNPC_spriggit/Outfits/{editor_id}_Outfit - {formID}_{plugin}.esp.yaml
 #
 # FormKey: uses a new FormID in this plugin (e.g. 0x802 for OTFT)
 # The NPC's DefaultOutfit field references this FormKey.
@@ -20,8 +20,8 @@
 # EditorID is "ArmorOrcishCuirass".
 # ============================================================
 
-FormKey: 000802:GrokTheSmith.esp
-EditorID: CustomNPC_Grok_Outfit
+FormKey: 000802:Grok_iNPC.esp
+EditorID: Grok_iNPC_Outfit
 
 # Items: list of armor/clothing FormKeys from Skyrim.esm
 # Resolve item EditorIDs to FormKeys using the reference below.

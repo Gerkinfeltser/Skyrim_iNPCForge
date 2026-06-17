@@ -7,15 +7,15 @@
 # verified against real plugin serializations.
 #
 # File location in generated plugin:
-#   {PluginName}_spriggit/Npcs/{editor_id} - {formID}_{plugin}.esp.yaml
+#   {Name}_iNPC_spriggit/Npcs/{editor_id} - {formID}_{plugin}.esp.yaml
 # ============================================================
 
 # FormKey: {record_id}:{plugin_name}.esp
 # For ESL MVP: record_id is 0x800
-FormKey: 000800:GrokTheSmith.esp
+FormKey: 000800:Grok_iNPC.esp
 IsCompressed: True
 MajorRecordFlagsRaw: 262144
-EditorID: CustomNPC_Grok
+EditorID: Grok_iNPC
 SkyrimMajorRecordFlags:
 - Compressed
 ObjectBounds:
@@ -24,10 +24,10 @@ ObjectBounds:
 
 # === Configuration (ACBS in CK) ===
 Configuration:
-  # Add - Female to flags when npc.config.yaml sex == "female"
+  # Add - Female to flags when npc-yaml/{Name}_iNPC.yaml sex == "female"
   Flags:
   - AutoCalcStats
-  # Add conditionally based on npc.config.yaml:
+  # Add conditionally based on npc-yaml/{Name}_iNPC.yaml:
   # - Unique          → for named NPCs (set when combat_attitude != hostile or respawn: false)
   # - Respawn         → for respawning mooks (set when respawn: true)
   # - Essential       → for plot-critical NPCs (rare in MVP)
@@ -43,7 +43,7 @@ Configuration:
   DispositionBase: 35
 
 # === Factions (SNAM in CK) ===
-# Optional — from npc.config.yaml factions list
+# Optional — from npc-yaml/{Name}_iNPC.yaml factions list
 # Hostile NPCs should include: BanditFaction (0x0001BCC0)
 Factions:
 - Faction: 028172:Skyrim.esm       # TownWhiterunFaction (verified: Ulfberth refId 000D15B0)
@@ -86,7 +86,7 @@ Name:
 # Option A: vanilla reference → use FormKey from data/outfits.yaml
 DefaultOutfit: 03BE07:Skyrim.esm    # OrcishArmor
 # Option B: custom OTFT in plugin → reference the custom outfit's FormKey
-# DefaultOutfit: 000802:GrokTheSmith.esp
+# DefaultOutfit: 000802:Grok_iNPC.esp
 
 # === AI Packages (PKFC) ===
 # Sandbox only for friendly NPCs. Reference DefaultSandboxEditorLink.
@@ -187,13 +187,13 @@ PlayerSkills:
   Stamina: 50
   GearedUpWeapons: 1
 
-# === Appearance (Tier 1: body basics from npc.config.yaml) ===
-Height: 1       # From npc.config.yaml height (1.0 = normal scale, float)
-Weight: 100      # From npc.config.yaml weight (0-100 body build slider)
+# === Appearance (Tier 1: body basics from npc-yaml/{Name}_iNPC.yaml) ===
+Height: 1       # From npc-yaml/{Name}_iNPC.yaml height (1.0 = normal scale, float)
+Weight: 100      # From npc-yaml/{Name}_iNPC.yaml weight (0-100 body build slider)
 SoundLevel: Normal
 
 # === Sex (Configuration.Flags: Female) ===
-# When npc.config.yaml sex == "female", add "- Female" to the Configuration.Flags list.
+# When npc-yaml/{Name}_iNPC.yaml sex == "female", add "- Female" to the Configuration.Flags list.
 # Male NPCs omit this flag (absence implies male in Skyrim).
 # Verified: Mutagen enum matches CK editor name, same pattern as Unique/Respawn/Essential.
 

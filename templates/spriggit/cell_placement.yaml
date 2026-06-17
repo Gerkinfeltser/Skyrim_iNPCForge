@@ -17,7 +17,7 @@
 # minimal cell override that adds the PlacedNpc.
 #
 # File location in generated plugin:
-#   {PluginName}_spriggit/Cells/{group}/{cell_name}/RecordData.yaml
+#   {Name}_iNPC_spriggit/Cells/{group}/{cell_name}/RecordData.yaml
 #
 # The agent must determine the Spriggit cell group path from
 # the cell's FormID (first 2 digits = group folder).
@@ -55,14 +55,14 @@ Persistent: []                        # Don't duplicate existing persistent refs
 # The NPC placement goes in Temporary (non-persistent refs added by this mod)
 Temporary:
 - MutagenObjectType: PlacedNpc
-  FormKey: 000801:GrokTheSmith.esp   # This plugin's REFR FormKey (0x801 = next after NPC at 0x800)
+FormKey: 000801:Grok_iNPC.esp      # This plugin's REFR FormKey (0x801 = next after NPC at 0x800)
   MajorRecordFlagsRaw: 1024
   SkyrimMajorRecordFlags:
   - 0x400
-  Base: 000800:GrokTheSmith.esp      # References the NPC record (FormKey from npc_base.yaml)
-  Placement:
-    Position: 50.0, -30.0, 0.0       # X, Y, Z from npc.config.yaml position
-    Rotation: 0, -0, 1.5708          # X, Y, Z radians from npc.config.yaml rotation (degrees → radians)
+Base: 000800:Grok_iNPC.esp         # References the NPC record (FormKey from npc_base.yaml)
+Placement:
+Position: 50.0, -30.0, 0.0       # X, Y, Z from npc-yaml/{Name}_iNPC.yaml position
+Rotation: 0, -0, 1.5708          # X, Y, Z radians from npc-yaml/{Name}_iNPC.yaml rotation (degrees → radians)
   MajorFlags:
   - Persistent
 MajorFlags:
@@ -77,7 +77,7 @@ MajorFlags:
 # 2. The Base field references the NPC record's FormKey.
 #
 # 3. Position is in game units (1 unit ≈ 1.4 cm).
-#    The agent should use the values from npc.config.yaml directly.
+#    The agent should use the values from npc-yaml/{Name}_iNPC.yaml directly.
 #
 # 4. Rotation is in RADIANS, not degrees.
 #    Convert: radians = degrees × (π / 180)
