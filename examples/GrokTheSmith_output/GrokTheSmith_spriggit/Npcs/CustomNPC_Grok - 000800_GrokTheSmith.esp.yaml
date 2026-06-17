@@ -17,7 +17,10 @@ Configuration:
   SpeedMultiplier: 100
   DispositionBase: 35
 Factions:
-- Faction: 028E42:Skyrim.esm
+- Faction: 028172:Skyrim.esm
+  Rank: 0
+  Fluff: 0x000000
+- Faction: 093B22:Skyrim.esm
   Rank: 0
   Fluff: 0x000000
 Race: 013747:Skyrim.esm
@@ -33,7 +36,10 @@ AIData:
 Name:
   TargetLanguage: English
   Value: Grok
-DefaultOutfit: 000801:GrokTheSmith.esp
+DefaultOutfit: 000802:GrokTheSmith.esp
+Height: 1
+Weight: 100
+SoundLevel: Normal
 Packages:
 - 0BAD0A:Skyrim.esm
 Items:

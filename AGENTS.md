@@ -21,11 +21,11 @@ step-by-step.
 ```
 npc.config.yaml ──► Spriggit YAML ──► {PluginName}.esp   (record layer)
                 ──► character.prompt ──► {name}_{id}.prompt (personality layer)
-                ──► world_knowledge ──► {PluginName}.sknpack (awareness layer)
+                ──► world_knowledge ──► WorldKnowledge-ManuallyImport/{PluginName}.sknpack (awareness layer)
 ```
 
 1. Fill `npc.config.yaml` (single source of truth).
-2. Resolve FormKeys via `data/*.yaml` lookup tables.
+2. Resolve FormKeys via SkyLinkAI > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
 3. Generate Spriggit YAML into `output/{PluginName}_spriggit/` from `templates/spriggit/`.
 4. Serialize to `.esp` with the Spriggit CLI.
 5. Generate the `.prompt` file from `templates/prompt/character.prompt`.
@@ -44,6 +44,8 @@ $env:SKYRIM_DATA = "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 ```
 
 Spriggit installs to `$env:USERPROFILE\.dotnet\tools\` (portable — resolves to any user).
+
+**Pre-Build Gate:** Skyrim SHOULD be closed before deserializing. If `SkyrimSE` is running, stop and close it first.
 
 **Serialize Spriggit YAML → .esp:**
 
@@ -77,6 +79,9 @@ the `{name}_{formId & 0xFFF:03X}` convention, ESL flag is set.
 
 ## Critical Rules
 
+### Named NPCs MUST be Unique
+Named NPCs MUST use the Unique flag in Configuration.Flags. Non-Unique NPCs get their names overwritten by mods like Real Names Extended, which breaks SkyrimNet bio matching. Unique and Respawn flags can coexist — the CK UI prevents both being set, but xEdit/Spriggit accepts the combination and the engine honors both.
+
 ### Voice Types — NEVER Dupe
 Always reference **vanilla** voice type FormIDs directly from `data/voices.yaml`.
 SkyrimNet's TTS maps voices by voice type FormID. A duped VTYP record gets a new
@@ -85,8 +90,8 @@ that will silently break the output.
 
 ### ESL Constraints
 - Record IDs MUST be in the `0x000–0xFFF` range (4096 max).
-- MVP allocation: `0x800` = NPC, `0x801` = custom outfit (if `outfit_items`),
-  `0x802` = REFR placement, `0x803+` = additional records.
+- MVP allocation: `0x800` = NPC base, `0x801` = PlacedNpc REFR (ALWAYS),
+  `0x802` = custom OTFT (if `outfit_items`), `0x803+` = additional records.
 - Interior cells ONLY. No WRLD records, no exterior placement.
 - ESL-flagged ESPs do not count against the 255-plugin limit.
 
@@ -152,6 +157,16 @@ It catches the three common bugs:
 
 Use `-Fix` to auto-copy a misnamed prompt file.
 
+## SkyLink-Assisted Workflow
+
+For new NPCs, use the numbered interview form in the skill, then resolve FormKeys with this priority:
+
+```text
+skylink-live > xedit-dump > verified-table > user-provided
+```
+
+SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, cells, factions, voices, and headparts. If Skyrim/SkyLinkAI is unavailable and a record is not in verified tables, stop and ask the user to start Skyrim, choose a known option, or provide a FormKey. Do not invent IDs.
+
 ## Directory Map
 
 | Path | Purpose |
@@ -165,6 +180,8 @@ Use `-Fix` to auto-copy a misnamed prompt file.
 | `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml` |
 | `templates/prompt/character.prompt` | 10-block personality Jinja template |
 | `templates/knowledge/world_knowledge.sknpack` | World knowledge pack template |
+| `templates/provenance/` | FormKey provenance file template |
+| `output/{PluginName}/formkey-provenance.yaml` | Generated per-output FormKey provenance |
 | `tools/xedit-scripts/` | Pascal scripts for FormID verification via xEdit |
 | `tools/verify_prompt.ps1` | Post-generation checker: REFR suffix, block format, faction FormIDs |
 | `tools/VERIFICATION-STATUS.md` | Tracks which lookup tables are verified vs pending |
@@ -187,6 +204,12 @@ Use `-Fix` to auto-copy a misnamed prompt file.
   (requires placed bed furniture references — CK territory).
 - **Generated outputs** are disposable; the YAML source in `_spriggit/` is the
   editable artifact. Re-serialize after edits.
+- **Appearance MVP**: Tier 1 body basics wire race, height, weight, outfit, and equipment
+  into the Spriggit record. `sex` is collected in config but Spriggit mapping is deferred
+  until the Female flag structure (`Configuration.Flags: Female`) is verified by serializing
+  a known-female NPC. Tier 2 headparts have config placeholders (`hair`, `eyes`, `brows`,
+  `scar`, `warpaint`) but Spriggit generation is deferred until the HeadParts/Tints record
+  structure is verified. Captured face morphs and FaceGen mesh/texture assets are backlog.
 
 ## Out of Scope (MVP)
 

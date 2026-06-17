@@ -1,48 +1,50 @@
 {
   "skyrimnet_knowledge_pack": {
-    "format_version": 2,
-    "name": "Grok the Smith World Knowledge",
-    "author": "Generated via iNPCForge",
-    "description": "World knowledge for Grok, Orc blacksmith at Warmaiden's forge",
-    "version": "1.0.0",
-    "npc_groups": [],
+    "author": "iNPCForge",
+    "description": "Manual import knowledge for Grok the Smith",
     "entries": [
       {
-        "display_name": "Grok - Whiterun General Awareness",
-        "content": "There's an Orc blacksmith named Grok working at Warmaiden's forge now. Came from a stronghold somewhere in the mountains. Does good work — better than most, some say.",
+        "always_inject": false,
         "condition_expr": "is_in_faction(actorUUID, \"CrimeFactionWhiterun\")",
-        "always_inject": false,
+        "content": "There's an Orc blacksmith named Grok working at Warmaiden's forge now. Came from a stronghold somewhere in the mountains. Does good work — better than most, some say.",
+        "display_name": "Grok - General Awareness",
+        "emotion": "",
         "importance": 0.5,
-        "type": "KNOWLEDGE",
+        "knowledge_key": "grok_general_awareness",
+        "location": "Whiterun",
         "tags": ["Grok", "Warmaiden", "blacksmith", "Orc", "Whiterun"],
-        "location": "Whiterun",
-        "emotion": "",
-        "knowledge_key": "grok.whiterun_awareness"
+        "type": "KNOWLEDGE"
       },
       {
-        "display_name": "Grok - Adrianne and Ulfberth Know Him",
-        "content": "Adrianne Avenicci brought in Grok, an Orc smith, to handle the heavy Orcish steel work at Warmaiden's forge. She handles the fine Nord craftsmanship, he handles what needs a heavier hammer. Ulfberth manages the shop floor and keeps them both supplied.",
+        "always_inject": false,
         "condition_expr": "decnpc(actorUUID).name == \"Adrianne Avenicci\" or decnpc(actorUUID).name == \"Ulfberth War-Bear\"",
-        "always_inject": false,
-        "importance": 0.7,
-        "type": "RELATIONSHIP",
-        "tags": ["Grok", "Adrianne", "Ulfberth", "Warmaiden", "blacksmith", "partnership"],
-        "location": "Whiterun",
+        "content": "Adrianne Avenicci brought in Grok, an Orc smith, to handle the heavy Orcish steel work at Warmaiden's forge. She handles the fine Nord craftsmanship, he handles what needs a heavier hammer. Ulfberth manages the shop floor and keeps them both supplied.",
+        "display_name": "Grok - Adrianne's Forge Partner",
         "emotion": "",
-        "knowledge_key": "grok.warmaiden_partnership"
+        "importance": 0.7,
+        "knowledge_key": "grok_adrianne_partnership",
+        "location": "Whiterun",
+        "tags": ["Grok", "Adrianne", "Warmaiden", "blacksmith", "partnership"],
+        "type": "RELATIONSHIP"
       },
       {
-        "display_name": "Grok - Orc Stronghold Rumors",
-        "content": "Word among the Orc strongholds is that Grok left his stronghold after a dispute with the chief over trading with outsiders. Some say he disgraced himself. Others say the chief was a fool to let a forge-master go.",
-        "condition_expr": "decnpc(actorUUID).race == \"Orc\"",
         "always_inject": false,
-        "importance": 0.6,
-        "type": "KNOWLEDGE",
-        "tags": ["Grok", "Orc", "stronghold", "blacksmith"],
-        "location": "",
+        "condition_expr": "decnpc(actorUUID).race == \"Orc\"",
+        "content": "Word among the Orc strongholds is that Grok left his stronghold after a dispute with the chief over trading with outsiders. Some say he disgraced himself. Others say the chief was a fool to let a forge-master go.",
+        "display_name": "Grok - Orc Community Awareness",
         "emotion": "",
-        "knowledge_key": "grok.stronghold_rumors"
+        "importance": 0.6,
+        "knowledge_key": "grok_orc_community",
+        "location": "",
+        "tags": ["Grok", "Orc", "stronghold", "blacksmith"],
+        "type": "KNOWLEDGE"
       }
-    ]
+    ],
+    "entry_count": 3,
+    "exported_at": "2026-06-14T00:00:00Z",
+    "format_version": 2,
+    "name": "GrokTheSmith_Knowledge",
+    "npc_groups": [],
+    "version": "1.0.0"
   }
 }

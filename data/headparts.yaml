@@ -1,0 +1,138 @@
+# HeadPart lookup table (HDPT records from Skyrim.esm).
+# Dumped via SSEEdit64 script: tools\xedit-scripts\dump_headparts.pas
+# Last dump: 2026-06-15 via user-run xEdit
+#
+# Usage: Look up EditorID to find 6-digit FormKey for Spriggit YAML.
+#   HeadParts field expects list of "XXXXXX:Skyrim.esm" FormKeys.
+#
+# To regenerate the full dump:
+#   1. Open SSEEdit64, right-click Skyrim.esm -> Apply Script...
+#   2. Select tools\xedit-scripts\dump_headparts.pas
+#   3. Output appears in Messages panel
+
+# --- Heads ---
+FemaleHeadNord: 051623:Skyrim.esm
+MaleHeadNord: 05162F:Skyrim.esm
+FemaleHeadDarkElf: 05161C:Skyrim.esm
+MaleHeadDarkElf: 05162C:Skyrim.esm
+FemaleHeadBreton: 051621:Skyrim.esm
+MaleHeadBreton: 051633:Skyrim.esm
+FemaleHeadImperial: 05161D:Skyrim.esm
+MaleHeadImperial: 051630:Skyrim.esm
+FemaleHeadHighElf: 05161E:Skyrim.esm
+MaleHeadHighElf: 05162D:Skyrim.esm
+FemaleHeadWoodElf: 05161F:Skyrim.esm
+MaleHeadWoodElf: 05162B:Skyrim.esm
+FemaleHeadRedguard: 051622:Skyrim.esm
+MaleHeadRedguard: 05162E:Skyrim.esm
+FemaleHeadOrc: 05161B:Skyrim.esm
+MaleHeadOrc: 05162A:Skyrim.esm
+FemaleHeadKhajiit: 051612:Skyrim.esm
+MaleHeadKhajiit: 051616:Skyrim.esm
+FemaleHeadArgonian: 051613:Skyrim.esm
+MaleHeadArgonian: 051614:Skyrim.esm
+FemaleHeadElder: 051620:Skyrim.esm
+MaleHeadElder: 051629:Skyrim.esm
+
+# --- Vampire Heads (Dawnguard.esm) ---
+FemaleHeadDarkElfVampire: 02006F92:Dawnguard.esm
+MaleHeadDarkElfVampire: 02006F84:Dawnguard.esm
+FemaleHeadNordVampire: 02006F97:Dawnguard.esm
+MaleHeadNordVampire: 02006F8A:Dawnguard.esm
+FemaleHeadBretonVampire: 02006F93:Dawnguard.esm
+MaleHeadBretonVampire: 02006F8D:Dawnguard.esm
+FemaleHeadImperialVampire: 02006F96:Dawnguard.esm
+MaleHeadImperialVampire: 02006F8B:Dawnguard.esm
+FemaleHeadHighElfVampire: 02006F95:Dawnguard.esm
+MaleHeadHighElfVampire: 02006F8C:Dawnguard.esm
+FemaleHeadRedguardVampire: 02006F98:Dawnguard.esm
+MaleHeadRedguardVampire: 02006F8E:Dawnguard.esm
+FemaleHeadWoodElfVampire: 02006F99:Dawnguard.esm
+MaleHeadWoodElfVampire: 02006F8F:Dawnguard.esm
+FemaleHeadOrcVampire: 02006F9B:Dawnguard.esm
+MaleHeadOrcVampire: 02006F9A:Dawnguard.esm
+
+# --- Mouths ---
+FemaleMouthHumanoidDefault: 05150F:Skyrim.esm
+MaleMouthHumanoidDefault: 051631:Skyrim.esm
+MaleMouthDremora: 05150E:Skyrim.esm
+
+# --- Eyes (female) ---
+FemaleEyesDarkElfRed: 051540:Skyrim.esm
+FemaleEyesDarkElfDeepRed: 05392A:Skyrim.esm
+FemaleEyesDarkElfDeepRed2: 05392B:Skyrim.esm
+FemaleEyesHumanBrown: 072917:Skyrim.esm
+FemaleEyesHumanHazelBrown: 051548:Skyrim.esm
+FemaleEyesHumanAmber: 07291B:Skyrim.esm
+FemaleEyesHumanBrightGreen: 07291A:Skyrim.esm
+FemaleEyesHumanLightBlue: 07291C:Skyrim.esm
+FemaleEyesHumanIceBlue: 040228:Skyrim.esm
+FemaleEyesHumanGrey: 040211:Skyrim.esm
+FemaleEyesHumanDarkBlue: 040208:Skyrim.esm
+FemaleEyesHumanVampire: 07291E:Skyrim.esm
+FemaleEyesHighElfOrange: 05153F:Skyrim.esm
+FemaleEyesHighElfYellow: 040209:Skyrim.esm
+FemaleEyesWoodElfBrown: 051510:Skyrim.esm
+
+# --- Eyes (male) ---
+MaleEyesDarkElfRed: 051625:Skyrim.esm
+MaleEyesHumanBrown: 051632:Skyrim.esm
+MaleEyesHumanIceBlue: 024244:Skyrim.esm
+MaleEyesHumanVampire: 0E7AEB:Skyrim.esm
+
+# --- Hair: Female Dark Elf ---
+HairFemaleDarkElf01: 08CA6F:Skyrim.esm
+HairFemaleDarkElf02: 08CA83:Skyrim.esm
+HairFemaleDarkElf03: 08CA84:Skyrim.esm
+HairFemaleDarkElf04: 08CA85:Skyrim.esm
+HairFemaleDarkElf05: 08CA86:Skyrim.esm
+HairFemaleDarkElf06: 0EF317:Skyrim.esm
+HairFemaleDarkElf07: 0EF319:Skyrim.esm
+HairFemaleDarkElf08: 0EF31B:Skyrim.esm
+HairLineFemaleDarkElf01: 08CA87:Skyrim.esm
+HairLineFemaleDarkElf02: 08CA89:Skyrim.esm
+
+# --- Hair: Male Dark Elf ---
+HairMaleDarkElf01: 05107E:Skyrim.esm
+HairMaleDarkElf02: 05107D:Skyrim.esm
+HairMaleDarkElf03: 05107C:Skyrim.esm
+HairMaleDarkElf04: 05107B:Skyrim.esm
+HairMaleDarkElf05: 051054:Skyrim.esm
+HairLineMaleDarkElf01: 051040:Skyrim.esm
+HairLineMaleDarkElf02: 05103A:Skyrim.esm
+
+# --- Hair: Female Nord for reference ---
+HairFemaleNord01: 0511A7:Skyrim.esm
+HairFemaleNord02: 051193:Skyrim.esm
+
+# --- Brows (female humanoid) ---
+FemaleBrowsHuman01: 0E4D7C:Skyrim.esm
+FemaleBrowsHuman02: 0E4D88:Skyrim.esm
+FemaleBrowsHuman03: 0E4D91:Skyrim.esm
+FemaleBrowsHuman04: 0E4D92:Skyrim.esm
+FemaleBrowsHuman05: 0E4D9F:Skyrim.esm
+FemaleBrowsHuman06: 0E4DA0:Skyrim.esm
+FemaleBrowsHuman07: 0E4DA1:Skyrim.esm
+FemaleBrowsHuman08: 0E4DA2:Skyrim.esm
+FemaleBrowsHuman09: 0E4DA4:Skyrim.esm
+FemaleBrowsHuman10: 0E4DA5:Skyrim.esm
+FemaleBrowsHuman11: 0E4DA8:Skyrim.esm
+
+# --- Brows (male humanoid) ---
+BrowsMaleHumanoid01: 051508:Skyrim.esm
+BrowsMaleHumanoid02: 051080:Skyrim.esm
+
+# --- No scar / no gash marks ---
+MarksFemaleHumanoid00NoGash: 0EC1B2:Skyrim.esm
+MarksMaleHumanoid00NoScar: 08555F:Skyrim.esm
+
+# --- Scars (female humanoid) ---
+MarksFemaleHumanoid01LeftGash: 0E4E2D:Skyrim.esm
+MarksFemaleHumanoid02LeftGash: 0E4E30:Skyrim.esm
+MarksFemaleHumanoid03LeftGash: 0E4E38:Skyrim.esm
+MarksFemaleHumanoid04LeftGash: 0E4E3C:Skyrim.esm
+
+# --- Scars (male humanoid) ---
+MarksMaleHumanoid01LeftGash: 09F0A1:Skyrim.esm
+MarksMaleHumanoid02LeftGash: 09F0A2:Skyrim.esm
+MarksMaleHumanoid03LeftGash: 0E4DAA:Skyrim.esm

@@ -1,0 +1,64 @@
+# CLFM color record lookup table (Skyrim.esm, Dawnguard.esm).
+# Dumped via SSEEdit64 script: tools\xedit-scripts\dump_clfm.pas
+# Last dump: 2026-06-15
+#
+# Usage: Set HairColor field in Spriggit NPC record YAML.
+#   Format: "XXXXXX:Skyrim.esm" (6-digit hex, no leading zeros)
+
+# --- Hair Colors ---
+HairColor01PlatinumBlond: 0A0439:Skyrim.esm
+HairColor02LightBlond: 0A042D:Skyrim.esm
+HairColor03BrightBlond: 0A042F:Skyrim.esm
+HairColor04HoneyBlond: 0A042E:Skyrim.esm
+HairColor05DarkBlond: 0A042C:Skyrim.esm
+HairColor06Auburn: 0A0431:Skyrim.esm
+HairColor07Chestnut: 0A0430:Skyrim.esm
+HairColor08MediumBrown: 0A0432:Skyrim.esm
+HairColor09DarkBrown: 0A0433:Skyrim.esm
+HairColor10BlueBlack: 0A0435:Skyrim.esm
+HairColor11Black: 0A0434:Skyrim.esm
+HairColor12BlackTrue: 0F7565:Skyrim.esm
+HairColor13BrightGrey: 0A0438:Skyrim.esm
+HairColor14Grey: 0A0437:Skyrim.esm
+HairColor15SteelGrey: 0A0436:Skyrim.esm
+HairColor16AlbinoWhite: 0200378E:Dawnguard.esm
+
+# --- Dunmer Skin Colors ---
+DarkElfSkin01: 0B9946:Skyrim.esm
+DarkElfSkin02: 0B9949:Skyrim.esm
+DarkElfSkin03: 0B994B:Skyrim.esm
+DarkElfSkin04: 0B994C:Skyrim.esm
+DarkElfSkin05: 0B994F:Skyrim.esm
+DarkElfSkinFemale01: 0F203E:Skyrim.esm
+DarkElfSkinFemale02: 0F2043:Skyrim.esm
+DarkElfSkinFemale03: 0F2044:Skyrim.esm
+DarkElfSkinFemale04: 0F2045:Skyrim.esm
+DarkElfSkinFemale05: 0F2046:Skyrim.esm
+
+# --- Human Skin Base Whites (pale tones) ---
+HumanSkinBaseWhite01: 0E6E17:Skyrim.esm
+HumanSkinBaseWhite02: 0E6E0A:Skyrim.esm
+HumanSkinBaseWhite03: 0E6E08:Skyrim.esm
+HumanSkinBaseWhite04: 026956:Skyrim.esm
+HumanSkinBaseWhite05: 026A5B:Skyrim.esm
+HumanSkinBaseWhite06: 053999:Skyrim.esm
+HumanSkinBaseWhite07: 099D12:Skyrim.esm
+HumanSkinBaseWhite08: 099D13:Skyrim.esm
+HumanSkinBaseWhite09: 099D16:Skyrim.esm
+HumanSkinBaseWhite10: 099D1F:Skyrim.esm
+HumanSkinBasePale01: 026A9B:Skyrim.esm
+HumanSkinBaseTan: 0E6E10:Skyrim.esm
+White: 099D86:Skyrim.esm
+GreyTint: 0EE852:Skyrim.esm
+Black: 0E6E16:Skyrim.esm
+
+# --- Warpaint Colors ---
+WarpaintRed01: 099D61:Skyrim.esm
+WarpaintBlue01: 099D6B:Skyrim.esm
+WarpaintGreen01: 099D74:Skyrim.esm
+WarpaintOrange01: 099D77:Skyrim.esm
+WarpaintYellow01: 099D79:Skyrim.esm
+
+# --- Vampire Skin ---
+SkinVampireArgonian01: 09D5AA:Skyrim.esm
+SkinVampireArgonian02: 09D5AC:Skyrim.esm

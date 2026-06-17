@@ -10,3 +10,6 @@ output/
 
 # Local implementation worktrees
 .worktrees/
+
+# Local npc yamls
+npc-yaml/*

@@ -56,6 +56,7 @@ npc.config.yaml (single source of truth)
 │       └── {group_path}/                   # e.g. 0/1/ for cell FormID 01DB4E
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml         # Cell override with PlacedNpc in Temporary
+├── formkey-provenance.yaml                 # Per-record FormKey source tracking
 ├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # SkyrimNet knowledge pack (import via Web UI)
 └── SKSE/
@@ -71,21 +72,97 @@ or copy its contents into your MO2 mods folder. The `_spriggit/` subfolder is
 inert to the game (MO2 only cares about the .esp, SKSE/, and Data-rooted paths)
 but keeps the mod self-contained — edit YAML + re-serialize without the repo.
 
-## Step 1: Gather Requirements
+## Step 1: Interview, Resolution, and Provenance
 
-Ask the user (or infer from the request):
+### Interview Gate
 
-| Field | Example | Required? |
-|-------|---------|-----------|
-| Name | "Grok" | Yes |
-| Race | "Orc" | Yes |
-| Personality | "Gruff blacksmith, loyal" | Yes |
-| Combat attitude | friendly / neutral / hostile | Yes (default: friendly) |
-| Location | "Whiterun" | Yes |
-| Voice type | "Deep, Orcish" | Optional (agent picks from voices.yaml) |
-| Outfit | "Orcish armor" | Optional (agent picks from outfits.yaml) |
-| Level | 25 | Optional (default: scales with context) |
-| Skills | "Smithing, two-handed" | Optional |
+Start every new NPC with this numbered form. The user may answer with numbers only. Ask follow-up questions only for missing required answers, contradictions, or unresolved FormKey needs.
+
+```text
+1. NPC name:
+2. Plugin name:
+3. Race/species:
+4. Voice style or vanilla voice type:
+5. Combat attitude: friendly / neutral / hostile
+6. Placement location:
+7. Outfit/clothing/armor:
+8. Weapons/inventory:
+9. Personality summary:
+10. Backstory/origin:
+11. Speech style:
+12. Relationships/factions:
+13. World knowledge: yes/no, and who should know about them?
+14. Any mod-added gear, location, faction, or voice? If yes, is Skyrim + SkyLinkAI available for lookup?
+15. Appearance basics: sex, height, weight/build, hair, eyes, scars/warpaint, or other visible head details?
+```
+
+Required answers: NPC name, race, combat attitude, and placement location. Everything else can be inferred or defaulted, but unresolved mod-added records (question 14) must be resolved before generation proceeds.
+
+### FormKey Resolution Gate
+
+SkyLinkAI is the preferred source of truth when available.
+
+Resolution priority:
+
+```text
+skylink-live > xedit-dump > verified-table > user-provided
+```
+
+Before live lookup, check Skyrim:
+
+```powershell
+Get-Process SkyrimSE -ErrorAction SilentlyContinue
+```
+
+If Skyrim is not running and unresolved records require live lookup, stop and say: "Start Skyrim with SkyLinkAI loaded, then tell me when it's ready."
+
+If Skyrim is running, use SkyLinkAI `check_connection` before other SkyLinkAI commands. Use `search_forms`, `get_cell_info`, `get_load_order`, and `get_mod_form_id_prefix` for live resolution. Never invent FormKeys.
+
+When SkyLinkAI cannot resolve a record, fall back to xEdit dump scripts for bulk or authoritative checks. When xEdit is unavailable, fall back to verified `data/*.yaml` tables. When no source can verify the record, stop and ask the user to start Skyrim/SkyLinkAI, choose a known table option, provide a FormKey, or defer the detail.
+
+`data/*.yaml` tables are verified fallback/cache, not a license to invent records. Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
+
+### FormKey Provenance
+
+Every generated output must include a provenance file tracking where each external FormKey came from:
+
+```text
+output/{PluginName}/formkey-provenance.yaml
+```
+
+Required fields per record: `label`, `form_key`, `source`, `evidence`.
+`evidence` is REQUIRED. For `verified-table` sources, evidence SHOULD name the table path (e.g. `data/voices.yaml`).
+
+Accepted sources: `skylink-live`, `xedit-dump`, `verified-table`.
+`user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
+Any source value outside the defined set is treated as `user-provided`-equivalent: warn by default, fail in strict mode.
+Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
+
+Example schema:
+
+```yaml
+plugin: GrokTheSmith
+records:
+  race:
+    label: OrcRace
+    form_key: 013747:Skyrim.esm
+    source: skylink-live
+    evidence: "SkyLinkAI search_forms race OrcRace"
+  voice:
+    label: MaleOrc
+    form_key: 013AEA:Skyrim.esm
+    source: verified-table
+    evidence: data/voices.yaml
+  outfit_item:
+    label: "Wayfarer's Skirt"
+    form_key: 000ABC:WayfarerMod.esp
+    source: skylink-live
+    evidence: "SkyLinkAI search_forms armor Wayfarer's Skirt"
+```
+
+Generate this file from `templates/provenance/formkey-provenance.yaml` after FormKey resolution. Every external FormKey used by generated Spriggit YAML must have a provenance entry unless it is plugin-local.
+
+**Transition:** Once all FormKeys are resolved and provenance is written, proceed to fill `npc.config.yaml` (Step 2), then generate Spriggit YAML (Step 3). Before ESP serialization, Skyrim must be closed — see the Pre-Build Gate (Step 3i).
 
 ## Step 2: Fill npc.config.yaml
 
@@ -111,6 +188,10 @@ voice_type: "MaleOrc"           # → data/voices.yaml
 combat_attitude: "friendly"     # friendly | neutral | hostile
 level: 25
 respawn: false
+
+sex: "male"              # male | female (config-only until Spriggit Female flag mapping is verified)
+height: 1.0              # Vanilla scale. 1.0 = normal height.
+weight: 100              # 0-100 body weight/build slider.
 
 outfit: "OrcishArmor"           # vanilla ref (data/outfits.yaml)
 # OR
@@ -146,6 +227,8 @@ personality:
   skills: ["..."]
   speech_style: "..."
 ```
+
+With `npc.config.yaml` complete, proceed to generate the Spriggit YAML.
 
 ## Step 3: Generate Spriggit YAML → .esp
 
@@ -218,7 +301,10 @@ Items:
     Count: {count}
 
 # Full PlayerSkills block with all 18 skills (see template)
-# Height, Weight, SoundLevel, MajorFlags
+# Appearance: Height and Weight from config (see template)
+# Sex: DEFERRED — add "- Female" to Configuration.Flags when verified
+# Headparts: DEFERRED — Tier 2, no verified Spriggit structure yet
+# SoundLevel, MajorFlags
 ```
 
 ### 3d: Custom Outfit (if using outfit_items)
@@ -238,7 +324,7 @@ Then reference `000802:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
 
 ### 3e: Cell Placement (REFR) — CRITICAL
 
-The NPC must be placed in a cell via a PlacedNoc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
+The NPC must be placed in a cell via a PlacedNpc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
 
 The PlacedNpc goes INSIDE a cell override record. See `templates/spriggit/cell_placement.yaml`.
 
@@ -302,7 +388,55 @@ ESL constraint.
 }
 ```
 
-### 3i: Serialize to .esp
+### 3h2: External Master References (Dawnguard, ESL Mods)
+
+If the NPC references records from Dawnguard.esm (vampire headparts, eyes) or
+an ESL-flagged mod (e.g. Mage's Daily Outfit.esp), add them to `.spriggit`:
+
+```json
+{
+  "PackageName": "Spriggit.Yaml.Skyrim",
+  "Release": "SkyrimSE",
+  "Version": "0.40.0",
+  "KnownMasters": [
+    { "ModKey": "Skyrim.esm", "Style": "Full" },
+    { "ModKey": "Dawnguard.esm", "Style": "Full" },
+    { "ModKey": "Mage's Daily Outfit.esp", "Style": "Small" }
+  ]
+}
+```
+
+- `Style: "Full"` for regular master plugins (Skyrim.esm, Dawnguard.esm, etc.)
+- `Style: "Small"` for ESL-flagged light masters
+
+Also add the mod to `MasterReferences` in `RecordData.yaml`:
+
+```yaml
+  MasterReferences:
+  - Master: Skyrim.esm
+    FileSize: 0
+  - Master: Dawnguard.esm
+    FileSize: 0
+  - Master: Mage's Daily Outfit.esp
+    FileSize: 0
+```
+
+**FormKey format** for records from external masters:
+- Skyrim.esm (always mod index 00): `XXXXXX:Skyrim.esm`
+- Dawnguard.esm (mod index 02): `00XXXX:Dawnguard.esm` — use the **last 6 hex digits** of the 8-digit FormID, stripping the mod index prefix
+- ESL mods: `XXXXXX:ModName.esp` — use the **last 6 hex digits** after the `FE` prefix
+
+### 3i: Pre-Build Gate
+
+Skyrim should be closed before Spriggit deserialization. Before building, run:
+
+```powershell
+Get-Process SkyrimSE -ErrorAction SilentlyContinue
+```
+
+If Skyrim is running, stop and say: "Close Skyrim before I rebuild the ESP, then tell me when it's closed."
+
+### 3j: Serialize to .esp
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
@@ -311,7 +445,7 @@ ESL constraint.
   --DataFolder "$env:SKYRIM_DATA"
 ```
 
-### 3j: ESL Flagging (Automatic)
+### 3k: ESL Flagging (Automatic)
 
 The ESL flag is set automatically via `ModHeader.Flags: [0x200]` in
 RecordData.yaml. When Spriggit deserializes the YAML to `.esp`, the TES4
@@ -360,12 +494,13 @@ output/{PluginName}/SKSE/Plugins/SkyrimNet/prompts/characters/{filename}.prompt
 
 ## Step 5: Assemble Output
 
-Create the final MO2-ready folder with four components:
+Create the final MO2-ready folder with five components:
 
 1. **Compiled plugin** (`.esp`) — from Spriggit serialization
 2. **Spriggit YAML source** (`_spriggit/` directory) — editable text source for re-serialization
 3. **SkyrimNet prompt** (`.prompt` file) — personality layer
 4. **World knowledge pack** (`.sknpack` file) — optional, makes existing NPCs aware of your new NPC
+5. **FormKey provenance** (`formkey-provenance.yaml`) — tracks where every external FormKey came from
 
 ```
 output/{PluginName}/
@@ -381,6 +516,7 @@ output/{PluginName}/
 │       └── {group_path}/
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml
+├── formkey-provenance.yaml                 # FormKey source tracking (required)
 ├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # Optional — skip if no world_knowledge entries
 └── SKSE/
@@ -393,7 +529,7 @@ output/{PluginName}/
 
 ## Step 5b: Generate World Knowledge Pack (Optional)
 
-If `world_knowledge.entries` is non-empty, generate a `.sknpack` file:
+If `world_knowledge.entries` is non-empty, generate a `.sknpack` file at `output/{PluginName}/WorldKnowledge-ManuallyImport/{PluginName}.sknpack`:
 
 ### Format
 
@@ -465,6 +601,7 @@ It checks:
 1. **Prompt filename** matches the REFR FormID suffix (read from cell placement YAML, not guessed)
 2. **Prompt format** has `{% block %}` tags (rejects plain text)
 3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
+4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
 
 If something's wrong, run with `-Fix` to auto-copy a misnamed prompt:
 
@@ -478,6 +615,9 @@ Then manually verify:
 3. In-game: the NPC appears at the expected location with correct outfit and behavior
 
 ## Key Rules
+
+### Named NPCs MUST be Unique
+NPCs with display names (`name` field in config) MUST use the `Unique` flag in Spriggit Configuration.Flags. Non-Unique NPCs have their names overridden by mods like Real Names Extended, which prevents SkyrimNet from matching the `.prompt` bio to the actor. Unique and Respawn flags can coexist — the CK UI prevents both being set, but xEdit/Spriggit accepts the combination and the engine honors both.
 
 ### Voice Types — NEVER Dupe
 Always reference vanilla voice type FormIDs directly. SkyrimNet's TTS system maps voices by voice type FormID. A duped VTYP record gets a new FormID that SkyrimNet can't map — resulting in silent NPCs or fallback TTS.
@@ -506,6 +646,23 @@ Reference: `UUIDResolver::GenerateBioTemplateName()` in SkyrimNet source.
 - Friendly NPCs: reference `DefaultSandboxEditorLink` (FormKey `0BAD0A:Skyrim.esm`)
 - Hostile NPCs: no packages needed (aggression flags handle combat behavior)
 - NO sleep packages (requires placed bed furniture references — CK territory)
+
+### Appearance Scope
+
+In scope now:
+- **Tier 1**: race, height, weight/build, outfit, visible armor/clothing, carried equipment.
+  - **Sex**: config field maps to `Configuration.Flags: Female`. When `sex: "female"`, add `- Female` to the flags list. Male NPCs omit the flag (absence implies male in Skyrim). Same Mutagen enum pattern as `Unique`, `Respawn`, `Essential`.
+- **Tier 2**: hair, eyes, brows, scars, warpaint/tints, and other selectable headparts. Two approaches:
+  - **HeadParts**: list of specific HDPT FormKeys (verified via Spriggit roundtrip).
+  - **FaceParts** presets + **FaceMorph** sculpt values + **TintLayers** tint overlays. All three verified against a real working plugin (GravviFollower).
+  - **HairColor** FormKey for hair tint. Also verified.
+  - Tier 2 includes `TintLayers` entries with `Index`, `Color` (RGBA hex), `InterpolationValue`, and `Preset` fields.
+
+Backlog:
+- **Tier 3**: captured face morph values from SkyLinkAI `get_appearance`.
+- **Tier 4**: FaceGen mesh/texture generation or import.
+
+The interview asks for Tier 1 and Tier 2 appearance details up front. If the user asks for a sculpted/captured face, record it as backlog unless the dedicated appearance pipeline has been implemented.
 
 ## NPC Flags Matrix
 

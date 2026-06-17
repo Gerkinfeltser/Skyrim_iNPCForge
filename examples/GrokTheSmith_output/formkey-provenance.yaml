@@ -1,0 +1,80 @@
+plugin: GrokTheSmith
+records:
+  race:
+    label: OrcRace
+    form_key: 013747:Skyrim.esm
+    source: verified-table
+    evidence: "data/races.yaml: OrcRace"
+    record_type: RACE
+  voice:
+    label: MaleOrc
+    form_key: 013AEA:Skyrim.esm
+    source: verified-table
+    evidence: "data/voices.yaml: MaleOrc"
+    record_type: VTYP
+  town_faction:
+    label: TownWhiterunFaction
+    form_key: 028172:Skyrim.esm
+    source: skylink-live
+    evidence: "Ulfberth refId 000D15B0 factions query via SkyLinkAI"
+    record_type: FACT
+  warmaidens_faction:
+    label: WhiterunWarmaidensFaction
+    form_key: 093B22:Skyrim.esm
+    source: skylink-live
+    evidence: "Ulfberth refId 000D15B0 factions query via SkyLinkAI"
+    record_type: FACT
+  ai_package:
+    label: DefaultSandboxEditorLink
+    form_key: 0BAD0A:Skyrim.esm
+    source: verified-table
+    evidence: "data/ai_packages.yaml: DefaultSandboxEditorLink (marked TODO - verify via xEdit)"
+    record_type: PKCU
+  class:
+    label: Warrior
+    form_key: 017008:Skyrim.esm
+    source: verified-table
+    evidence: "Template default for melee NPCs"
+    record_type: CLASS
+  location:
+    label: WhiterunWarmaidens
+    form_key: 01DB4E:Skyrim.esm
+    source: verified-table
+    evidence: "data/locations.yaml: whiterun_warmaidens"
+    record_type: CELL
+  orcish_cuirass:
+    label: ArmorOrcishCuirass
+    form_key: 013957:Skyrim.esm
+    source: verified-table
+    evidence: "templates/spriggit/outfit_custom.yaml: Orcish set"
+    record_type: ARMO
+  orcish_boots:
+    label: ArmorOrcishBoots
+    form_key: 013956:Skyrim.esm
+    source: verified-table
+    evidence: "templates/spriggit/outfit_custom.yaml: Orcish set"
+    record_type: ARMO
+  orcish_gauntlets:
+    label: ArmorOrcishGauntlets
+    form_key: 013958:Skyrim.esm
+    source: verified-table
+    evidence: "templates/spriggit/outfit_custom.yaml: Orcish set"
+    record_type: ARMO
+  blacksmith_apron:
+    label: ClothesBlackSmith
+    form_key: 05B69F:Skyrim.esm
+    source: verified-table
+    evidence: "templates/spriggit/outfit_custom.yaml: Blacksmith set"
+    record_type: ARMO
+  orcish_war_axe:
+    label: OrcishWarAxe
+    form_key: 01398B:Skyrim.esm
+    source: verified-table
+    evidence: "Project memory: OrcishWarAxe FormID"
+    record_type: WEAP
+  gold:
+    label: Gold001
+    form_key: 00000F:Skyrim.esm
+    source: verified-table
+    evidence: "Project memory: Gold001 FormID"
+    record_type: MISC
