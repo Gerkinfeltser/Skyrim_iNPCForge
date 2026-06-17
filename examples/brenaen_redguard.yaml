@@ -1,0 +1,52 @@
+name: "Brenaen"
+plugin_name: "Brenaen"
+editor_id: "NPC_Brenaen"
+race: "RedguardRace"
+sex: "male"
+height: 1.03
+weight: 75
+voice: "MaleDrunk"
+outfit: "custom"
+outfit_items:
+  - "013956:Skyrim.esm"
+  - "013957:Skyrim.esm"
+  - "013958:Skyrim.esm"
+  - "013959:Skyrim.esm"
+  - "01398B:Skyrim.esm"
+combat_attitude: "friendly"
+cell: "whiterun_bannermare"
+placement:
+  position: [220.0, -80.0, 0.0]
+  rotation_deg: 90
+is_unique: true
+appearance:
+  headparts:
+    - "05162E:Skyrim.esm"
+    - "051631:Skyrim.esm"
+    - "08555F:Skyrim.esm"
+    - "051507:Skyrim.esm"
+    - "051505:Skyrim.esm"
+    - "0510B4:Skyrim.esm"
+    - "051632:Skyrim.esm"
+    - "051508:Skyrim.esm"
+  hair_color: "Dark Brown"
+  face_morphs:
+    source: "Brenuin (RefID 00013BA7 via get_appearance)"
+    nose_long_vs_short: 0.06
+    nose_up_vs_down: 0.1
+    jaw_up_vs_down: 0.08
+    jaw_narrow_vs_wide: -1.0
+    jaw_forward_vs_back: 0.04
+    cheeks_up_vs_down: 0.02
+    cheeks_forward_vs_back: 0.5
+    eyes_up_vs_down: 0.5
+    eyes_in_vs_out: -0.06
+    brows_up_vs_down: -1.0
+    brows_in_vs_out: 0.0
+    brows_forward_vs_back: -0.24
+    lips_up_vs_down: 0.66
+    lips_in_vs_out: 0.16
+    chin_narrow_vs_wide: -0.34
+    chin_up_vs_down: -0.4
+    chin_underbite_vs_overbite: 0.18
+    eyes_forward_vs_back: -0.64
