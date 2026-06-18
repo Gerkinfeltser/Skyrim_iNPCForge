@@ -1,0 +1,40 @@
+plugin: Euri_iNPC.esp
+editor_id: Euri_iNPC
+name: Euri
+source_actor: Auri
+source_plugin: 018Auri.esp
+source_mod: Song Of The Green (Auri Follower)
+clone_mode: external-master-with-copied-facegen-and-assets
+
+placement:
+  cell: whiterun_drunkenhuntsman
+  position: { x: 140.0, y: 120.0, z: 0.0 }
+  rotation_degrees: 180
+
+identity:
+  race: WoodElfRace
+  sex: female
+  voice: FemaleElfHaughty
+  attitude: friendly
+  unique: true
+  essential: true
+
+appearance:
+  source: 018Auri.esp NPC_ 000D63
+  height: 0.89
+  weight: 72
+  note: Uses Auri's source headparts, hair color, face morphs, tint layers, FaceGen mesh/tint, and 018Auri custom assets.
+
+equipment:
+  worn_armor: 5B52C7:018Auri.esp
+  default_outfit: 037C4F:Skyrim.esm
+  items:
+    - 0ECAE7:018Auri.esp
+    - 299E99:018Auri.esp
+    - 34133F:018Auri.esp
+    - 01397E:Skyrim.esm
+    - 1016B3:Skyrim.esm
+
+prompt:
+  filename: euri_801.prompt
+  style: warm Bosmer hunter clone inspired by Auri, not literally Auri
