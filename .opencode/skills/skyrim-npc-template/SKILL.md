@@ -173,7 +173,7 @@ Create or edit `npc-yaml/{Name}_iNPC.yaml`. This directory is the working NPC YA
 Default generated naming uses the `_iNPC` suffix for plugin/config/output names. Keep the display name natural (`name: "Brenaen"`), but use `plugin_name: "Brenaen_iNPC"`, `editor_id: "Brenaen_iNPC"`, `npc-yaml/Brenaen_iNPC.yaml`, and `output/Brenaen_iNPC/` unless the user asks otherwise.
 
 - **data/races.yaml** → race EditorID to FormKey
-- **data/voices.yaml** → voice type to FormKey (vanilla only — NEVER dupe VTYP)
+- **data/voices.yaml** → vanilla voice type to FormKey cache (NEVER dupe VTYP)
 - **data/outfits.yaml** → outfit to FormKey, OR use `outfit_items` for custom OTFT
 - **data/locations.yaml** → location key to CELL FormKey
 
@@ -699,7 +699,12 @@ Then manually verify:
 NPCs with display names (`name` field in config) MUST use the `Unique` flag in Spriggit Configuration.Flags. Non-Unique NPCs have their names overridden by mods like Real Names Extended, which prevents SkyrimNet from matching the `.prompt` bio to the actor. Unique and Respawn flags can coexist — the CK UI prevents both being set, but xEdit/Spriggit accepts the combination and the engine honors both.
 
 ### Voice Types — NEVER Dupe
-Always reference vanilla voice type FormIDs directly. SkyrimNet's TTS system maps voices by voice type FormID. A duped VTYP record gets a new FormID that SkyrimNet can't map — resulting in silent NPCs or fallback TTS.
+Reference existing voice type FormIDs directly. For normal generated NPCs, prefer
+vanilla VTYP records from `data/voices.yaml`. For full clones that already depend
+on a source plugin, keep the source actor's VTYP (for example
+`00183F:018Auri.esp`) and add provenance. SkyrimNet can clone/map those
+source-master voices, but a duplicated VTYP record gets a new FormID and can
+break TTS mapping.
 
 ### ESL Constraints
 - Record ID must be in `0x000-0xFFF` range (4096 max)
@@ -772,7 +777,7 @@ issues or the exact rendered face in a running game.
 - Papyrus follower scripts (use follower framework mods)
 - Sleep packages (requires bed furniture references)
 - Exterior world placement
-- Custom voice types / TTS voice samples
+- New custom voice types / TTS voice samples
 - Quest-driven behavior or dialogue trees
 - Leveled character spawns
 - Full day/night AI schedules

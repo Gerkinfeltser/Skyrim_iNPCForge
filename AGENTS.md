@@ -99,10 +99,12 @@ or sculpted face has matching FaceGen mesh/tint assets in the generated output.
 Named NPCs MUST use the Unique flag in Configuration.Flags. Non-Unique NPCs get their names overwritten by mods like Real Names Extended, which breaks SkyrimNet bio matching. Unique and Respawn flags can coexist — the CK UI prevents both being set, but xEdit/Spriggit accepts the combination and the engine honors both.
 
 ### Voice Types — NEVER Dupe
-Always reference **vanilla** voice type FormIDs directly from `data/voices.yaml`.
-SkyrimNet's TTS maps voices by voice type FormID. A duped VTYP record gets a new
-FormID SkyrimNet cannot map → silent NPC or fallback TTS. This is the one rule
-that will silently break the output.
+Reference existing voice type FormIDs directly. For normal generated NPCs, prefer
+vanilla voice types from `data/voices.yaml`. For full clones that already require
+the source plugin as a master, keep the source actor's VTYP (for example
+`00183F:018Auri.esp`) and record it in provenance. SkyrimNet can clone/map those
+source-master voices, but a duplicated VTYP record gets a new FormID and can
+break TTS mapping.
 
 ### ESL Constraints
 - Record IDs MUST be in the `0x000–0xFFF` range (4096 max).
@@ -226,7 +228,7 @@ generated output must include the referenced asset paths unchanged.
 | `npc.config.yaml` | Mad-libs config template/reference; copy to `npc-yaml/{Name}_iNPC.yaml` for active NPCs. |
 | `.opencode/skills/skyrim-npc-template/SKILL.md` | Authoritative recipe (read first) |
 | `data/races.yaml` | Race EditorID → FormKey |
-| `data/voices.yaml` | Voice type → FormKey (vanilla only) |
+| `data/voices.yaml` | Vanilla voice type → FormKey cache |
 | `data/outfits.yaml` | Vanilla outfit → FormKey |
 | `data/locations.yaml` | Interior cell key → CELL FormKey + group path |
 | `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml` |
@@ -270,7 +272,7 @@ generated output must include the referenced asset paths unchanged.
 ## Out of Scope (MVP)
 
 Multiple NPCs per plugin · Papyrus follower scripts · Sleep AI packages ·
-Exterior world placement · Custom voice types / TTS samples · Quest-driven
+Exterior world placement · New custom voice types / TTS samples · Quest-driven
 behavior · Leveled spawns · Full day/night schedules.
 
 ## After Generation

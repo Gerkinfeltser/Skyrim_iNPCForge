@@ -89,7 +89,11 @@ for example `Brenaen_iNPC.yaml`, `Brenaen_iNPC.esp`, and `output/Brenaen_iNPC/`.
 
 ### Voice Types
 
-**Always use vanilla voice type references.** Do not create new voice type records. SkyrimNet's TTS system maps voices by FormID — a duped record breaks TTS.
+**Never duplicate voice type records.** For normal generated NPCs, use vanilla
+voice type references from `data/voices.yaml`. For full clones that require the
+source plugin as a master, reference the source actor's existing VTYP directly
+and record provenance. SkyrimNet can clone/map source-master voice types, but a
+duped VTYP gets a new FormID and can break TTS mapping.
 
 See `data/voices.yaml` for the full list.
 
@@ -170,5 +174,5 @@ folders into the generated output with the same relative paths.
 - Papyrus follower scripts
 - Sleep AI packages
 - Exterior world placement
-- Custom voice types
+- New custom voice types / TTS samples
 - Quest-driven behavior
