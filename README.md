@@ -178,3 +178,32 @@ folders into the generated output with the same relative paths.
 - Exterior world placement
 - New custom voice types / TTS samples
 - Quest-driven behavior
+
+## Credits
+
+This project builds on the work of many others in the Skyrim modding community:
+
+### Required — Core Pipeline
+
+- **[Spriggit](https://github.com/Mutagen-Modding/Spriggit)** / **[Mutagen](https://github.com/Mutagen-Modding/Mutagen)** by Noggog — YAML ↔ ESP serialization; the entire record layer depends on this.
+- **[SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin)** by MinLL — AI dialogue runtime that powers generated prompt files and world knowledge packs.
+- **[SkyLink AI](https://www.nexusmods.com/skyrimspecialedition/mods/175682)** by JarvannDarr — SKSE MCP server for real-time FormKey resolution and runtime verification during development.
+- **[xEdit](https://tes5edit.github.io/)** by ElminsterAU, zilav, Sharlikran, and contributors — Plugin record inspection and load-order FormID verification.
+
+### Required — Indirect
+
+- **[SKSE](https://skse.silverlock.org/)** by ianpatt, behippo, and plb — The Skyrim Script Extender; required by SkyrimNet, SkyLink AI, and any Papyrus-based follower framework.
+- **[CommonLibSSE-NG](https://github.com/CharmedBaryon/CommonLibSSE-NG)** by CharmedBaryon — Native API library underpinning the SKSE plugin ecosystem used by this pipeline.
+
+### Templates & Resources
+
+- **[Custom Follower Baseline](https://www.nexusmods.com/skyrimspecialedition/mods/161451)** by Aflin — AA01 Papyrus follower framework used as reference for Spriggit follower templates (see `docs/feature-requests/follower-pipeline.md`).
+
+### Recommended
+
+- **[Mod Organizer 2](https://www.nexusmods.com/skyrimspecialedition/mods/6194)** — Mod manager used for installing and testing generated output.
+- **Creation Kit** by Bethesda — Plugin authoring and advanced record editing.
+
+### Testing & Development
+
+- **[Styyx's Tooling for Dev (STD)](https://github.com/Styyx1/ADT)** by Styyx1 and Althro — Wabbajack mod author toolkit used as a development and testing environment for generated plugins.
