@@ -126,10 +126,12 @@ If Skyrim is running, do not overwrite the active `.esp`. Build to a staged path
 such as `_tmp/staged-esp/{PluginName}.esp` for validation, then replace the
 MO2-ready plugin only after Skyrim is closed.
 
-For ADT static NPC appearance data, see
-`D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md`. That external runbook
-dumps winning `NPC_` records through MO2/xEdit without launching Skyrim; it does
-not replace runtime checks for save-state, placement, or the final rendered face.
+For static NPC appearance data from a modlist load order, use the companion
+SkyrimNet_iPrompts xEdit runbook when available. Set
+`$SKYRIMNET_IPROMPTS_DIR` to that repo root, then read
+`$SKYRIMNET_IPROMPTS_DIR\misc\xedit\README.md`. That external runbook dumps
+winning `NPC_` records through MO2/xEdit without launching Skyrim; it does not
+replace runtime checks for save-state, placement, or the final rendered face.
 
 ### Cloned FaceGen Assets
 

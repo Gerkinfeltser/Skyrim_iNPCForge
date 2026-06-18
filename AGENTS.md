@@ -183,9 +183,11 @@ skylink-live > xedit-dump > verified-table > user-provided
 
 SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, cells, factions, voices, and headparts. If Skyrim/SkyLinkAI is unavailable and a record is not in verified tables, stop and ask the user to start Skyrim, choose a known option, or provide a FormKey. Do not invent IDs.
 
-For static NPC appearance in the ADT load order, prefer the offline xEdit dump
-workflow in `D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md` when available.
-That dump reads winning `NPC_` records through MO2/xEdit and can provide
+For static NPC appearance in a modlist load order, prefer the offline xEdit dump
+workflow from the companion SkyrimNet_iPrompts repo when available. Set
+`$SKYRIMNET_IPROMPTS_DIR` to that repo root, then read
+`$SKYRIMNET_IPROMPTS_DIR\misc\xedit\README.md`. That dump reads winning `NPC_`
+records through MO2/xEdit and can provide
 headparts, face morphs, tint layers, race, weight, hair color, outfit, voice,
 and class without launching Skyrim. It does not replace runtime checks for
 save-state, dead/disabled refs, placement, or the final rendered face.

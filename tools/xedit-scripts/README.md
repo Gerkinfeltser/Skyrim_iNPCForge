@@ -90,8 +90,9 @@ xEdit only sees scripts in its own `Edit Scripts\` directory. To use these:
 
 ```powershell
 # Copy to your MO2's xEdit scripts folder (path varies by modlist)
-Copy-Item "D:\gerkgit\Skyrim_iNPCForge\tools\xedit-scripts\*.pas" `
-  "D:\Modlists\ADT\tools\xEdit\Edit Scripts\"
+$XEDIT_SCRIPTS_DIR = "<path-to-this-repo>\tools\xedit-scripts"
+$MO2_XEDIT_SCRIPTS_DIR = "<path-to-modlist>\tools\xEdit\Edit Scripts"
+Copy-Item "$XEDIT_SCRIPTS_DIR\*.pas" $MO2_XEDIT_SCRIPTS_DIR
 ```
 
 Adjust the destination path for your MO2 instance.

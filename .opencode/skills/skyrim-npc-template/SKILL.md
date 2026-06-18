@@ -739,13 +739,14 @@ Backlog:
 
 The interview asks for Tier 1 and Tier 2 appearance details up front. If the user asks to clone a sculpted face from an existing actor, use the static xEdit/Spriggit record data plus the source actor's baked FaceGen mesh/tint assets. If the user asks to generate a brand-new sculpt from scratch, record that as backlog unless a dedicated FaceGen generation pipeline has been implemented.
 
-For static NPC appearance in the ADT load order, use the repo-local xEdit dump
-workflow documented in `D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md`
-when available. It dumps winning `NPC_` records via MO2/xEdit to JSON, including
-race, sex, height, weight, hair color, headparts, face morphs, tint layers,
-default outfit, voice, and class. Treat it as authoritative for static
-load-order record data, but not for runtime/save-state issues or the exact
-rendered face in a running game.
+For static NPC appearance in a modlist load order, use the companion
+SkyrimNet_iPrompts xEdit dump workflow when available. Set
+`$SKYRIMNET_IPROMPTS_DIR` to that repo root, then read
+`$SKYRIMNET_IPROMPTS_DIR\misc\xedit\README.md`. It dumps winning `NPC_` records
+via MO2/xEdit to JSON, including race, sex, height, weight, hair color,
+headparts, face morphs, tint layers, default outfit, voice, and class. Treat it
+as authoritative for static load-order record data, but not for runtime/save-state
+issues or the exact rendered face in a running game.
 
 ## NPC Flags Matrix
 
