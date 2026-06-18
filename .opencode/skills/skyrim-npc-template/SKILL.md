@@ -57,6 +57,8 @@ npc-yaml/{Name}_iNPC.yaml (single source of truth)
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml         # Cell override with PlacedNpc in Temporary
 ├── formkey-provenance.yaml                 # Per-record FormKey source tracking
+├── meshes/actors/character/FaceGenData/    # Present when cloning/importing baked face sculpt
+├── textures/actors/character/FaceGenData/  # Present when cloning/importing baked face tint
 ├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # SkyrimNet knowledge pack (import via Web UI)
 └── SKSE/
@@ -303,9 +305,8 @@ Items:
     Count: {count}
 
 # Full PlayerSkills block with all 18 skills (see template)
-# Appearance: Height and Weight from config (see template)
-# Sex: DEFERRED — add "- Female" to Configuration.Flags when verified
-# Headparts: DEFERRED — Tier 2, no verified Spriggit structure yet
+# Appearance: Height, Weight, HairColor, HeadParts, FaceParts, FaceMorph,
+# TintLayers, and Female flag from config/source records as needed
 # SoundLevel, MajorFlags
 ```
 
@@ -428,15 +429,73 @@ Also add the mod to `MasterReferences` in `RecordData.yaml`:
 - Dawnguard.esm (mod index 02): `00XXXX:Dawnguard.esm` — use the **last 6 hex digits** of the 8-digit FormID, stripping the mod index prefix
 - ESL mods: `XXXXXX:ModName.esp` — use the **last 6 hex digits** after the `FE` prefix
 
+### 3h3: Cloned/Sculpted Faces Need FaceGen Assets
+
+When cloning an existing NPC's face from a load-order override, copying the
+Spriggit `NPC_` record values is not enough. `HeadParts`, `FaceMorph`,
+`FaceParts`, `TintLayers`, and `HairColor` define the record, but Skyrim renders
+the final head from baked FaceGen files.
+
+If the user asks to recreate a specific NPC face:
+
+1. Identify the source NPC's winning `NPC_` override for the active modlist.
+   Prefer an xEdit/MO2 dump. If xEdit automation is awkward, serialize the
+   source override plugin with Spriggit and read the NPC YAML.
+2. Copy the source `NPC_` appearance fields into the generated NPC record:
+   `Race`, `HeadParts`, `HairColor`, `FaceParts`, `FaceMorph`, `TintLayers`,
+   `Height`, and `Weight`.
+3. Find the source FaceGen pair:
+
+```text
+meshes/actors/character/FaceGenData/FaceGeom/{SourcePlugin}/{SourceFormID}.NIF
+textures/actors/character/FaceGenData/FaceTint/{SourcePlugin}/{SourceFormID}.dds
+```
+
+The `{SourcePlugin}` folder is often the actor's original master, not the
+winning override plugin. For example, an appearance override plugin may still
+ship Jenassa's baked FaceGen files under `Skyrim.esm\000B9982`.
+
+4. Copy them into the generated output using the generated plugin name and NPC
+   base FormID. With the MVP allocation (`0x800` NPC base):
+
+```text
+output/{PluginName}/meshes/actors/character/FaceGenData/FaceGeom/{PluginName}.esp/00000800.NIF
+output/{PluginName}/textures/actors/character/FaceGenData/FaceTint/{PluginName}.esp/00000800.dds
+```
+
+Use the NPC base FormID as 8-digit uppercase hex. For the default `0x800`, use
+`00000800`. The prompt suffix still uses the REFR FormID (`0x801`), so the
+prompt remains `{name}_801.prompt`.
+
+If these FaceGen files are missing or named for the wrong plugin/FormID, the NPC
+can have the correct record fields but render with the wrong sculpt, wrong face
+tint, or shiny/gold/dark-face artifacts.
+
 ### 3i: Pre-Build Gate
 
-Skyrim should be closed before Spriggit deserialization. Before building, run:
+Skyrim should be closed before Spriggit deserialization to the active output
+plugin path. Before building, run:
 
 ```powershell
 Get-Process SkyrimSE -ErrorAction SilentlyContinue
 ```
 
-If Skyrim is running, stop and say: "Close Skyrim before I rebuild the ESP, then tell me when it's closed."
+If Skyrim is running and the next command would overwrite
+`output\{PluginName}\{PluginName}.esp`, stop and say: "Close Skyrim before I
+rebuild the ESP, then tell me when it's closed."
+
+If the user only needs syntax/build validation while Skyrim is open, deserialize
+to a staged path instead:
+
+```powershell
+& "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
+  --InputPath "output\{PluginName}_spriggit" `
+  --OutputPath "_tmp\staged-esp\{PluginName}.esp" `
+  --DataFolder "$env:SKYRIM_DATA"
+```
+
+Do not copy the staged `.esp` over the MO2-ready plugin until Skyrim is closed.
+Staging proves the YAML can build; it does not hot-reload the active game.
 
 ### 3j: Serialize to .esp
 
@@ -519,6 +578,8 @@ output/{PluginName}/
 │           └── {cell_editor_id} - {formID}_Skyrim.esm/
 │               └── RecordData.yaml
 ├── formkey-provenance.yaml                 # FormKey source tracking (required)
+├── meshes/actors/character/FaceGenData/    # Optional; required for cloned sculpted faces
+├── textures/actors/character/FaceGenData/  # Optional; required for cloned sculpted faces
 ├── WorldKnowledge-ManuallyImport/
 │   └── {PluginName}.sknpack                # Optional — skip if no world_knowledge entries
 └── SKSE/
@@ -605,6 +666,14 @@ It checks:
 3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
 4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
 
+For cloned/sculpted faces, also manually verify the FaceGen files exist because
+`verify_prompt.ps1` does not currently validate FaceGen assets:
+
+```powershell
+Test-Path "output\{PluginName}\meshes\actors\character\FaceGenData\FaceGeom\{PluginName}.esp\00000800.NIF"
+Test-Path "output\{PluginName}\textures\actors\character\FaceGenData\FaceTint\{PluginName}.esp\00000800.dds"
+```
+
 If something's wrong, run with `-Fix` to auto-copy a misnamed prompt:
 
 ```powershell
@@ -659,12 +728,24 @@ In scope now:
   - **FaceParts** presets + **FaceMorph** sculpt values + **TintLayers** tint overlays. All three verified against a real working plugin (GravviFollower).
   - **HairColor** FormKey for hair tint. Also verified.
   - Tier 2 includes `TintLayers` entries with `Index`, `Color` (RGBA hex), `InterpolationValue`, and `Preset` fields.
+- **Cloned/sculpted faces**: copy the source actor's baked FaceGen mesh/tint
+  assets into the generated plugin's FaceGenData paths. This is required for
+  the final sculpt and face tint to match in-game.
 
 Backlog:
 - **Tier 3**: captured face morph values from SkyLinkAI `get_appearance`.
-- **Tier 4**: FaceGen mesh/texture generation or import.
+- **Tier 4**: generating new FaceGen mesh/texture assets from scratch. Importing
+  an existing actor's baked FaceGen pair is supported manually.
 
-The interview asks for Tier 1 and Tier 2 appearance details up front. If the user asks for a sculpted/captured face, record it as backlog unless the dedicated appearance pipeline has been implemented.
+The interview asks for Tier 1 and Tier 2 appearance details up front. If the user asks to clone a sculpted face from an existing actor, use the static xEdit/Spriggit record data plus the source actor's baked FaceGen mesh/tint assets. If the user asks to generate a brand-new sculpt from scratch, record that as backlog unless a dedicated FaceGen generation pipeline has been implemented.
+
+For static NPC appearance in the ADT load order, use the repo-local xEdit dump
+workflow documented in `D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md`
+when available. It dumps winning `NPC_` records via MO2/xEdit to JSON, including
+race, sex, height, weight, hair color, headparts, face morphs, tint layers,
+default outfit, voice, and class. Treat it as authoritative for static
+load-order record data, but not for runtime/save-state issues or the exact
+rendered face in a running game.
 
 ## NPC Flags Matrix
 

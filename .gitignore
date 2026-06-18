@@ -13,3 +13,4 @@ output/
 
 # Local working NPC YAML configs. Promote durable examples into examples/ instead.
 npc-yaml/*
+docs/superpowers

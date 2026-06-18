@@ -1,0 +1,78 @@
+plugin: JenassaRecreated_iNPC.esp
+generated: 2026-06-17
+formkey_provenance:
+  0x800:
+    label: Jeni NPC base
+    record_type: NPC_
+    source: generated
+  0x801:
+    label: Jeni PlacedNpc REFR
+    record_type: REFR
+    source: generated
+external_formkeys:
+  live_crosshair_ref:
+    label: Jenassa live actor
+    form_key: 000E1BA9:Skyrim.esm
+    source: skylink-live
+    evidence: "SkyLinkAI get_crosshair_ref returned refId 000E1BA9, baseId 000B9982, name Jenassa, race Dark Elf, level 21"
+    record_type: REFR
+  live_crosshair_base:
+    label: HirelingJenassa
+    form_key: 0B9982:Skyrim.esm
+    source: skylink-live
+    evidence: "SkyLinkAI get_crosshair_ref returned baseId 000B9982"
+    record_type: NPC_
+  assos_appearance_plugin:
+    label: GLAM Jenassa Irileth.esp
+    form_key: GLAM Jenassa Irileth.esp
+    source: xedit-dump
+    evidence: "Direct Spriggit serialization of D:\\Modlists\\ASSOS\\mods\\2. GLAM Jenassa and Irileth - non standalone-112715-1-1709408048\\GLAM Jenassa Irileth.esp"
+    record_type: MASTER
+  race:
+    label: DarkElfRace
+    form_key: 013742:Skyrim.esm
+    source: xedit-dump
+    evidence: "ASSOS GLAM Jenassa serialized NPC override: Race 013742:Skyrim.esm"
+    record_type: RACE
+  voice:
+    label: FemaleDarkElf
+    form_key: 013AF3:Skyrim.esm
+    source: xedit-dump
+    evidence: "ASSOS GLAM Jenassa serialized NPC override: Voice 013AF3:Skyrim.esm"
+    record_type: VTYP
+  location:
+    label: WhiterunDrunkenHuntsman
+    form_key: 0165B7:Skyrim.esm
+    source: verified-table
+    evidence: "data/locations.yaml: whiterun_drunkenhuntsman"
+    record_type: CELL
+  crime_faction:
+    label: CrimeFactionWhiterun
+    form_key: 0267EA:Skyrim.esm
+    source: verified-table
+    evidence: "data/factions.yaml: CrimeFactionWhiterun"
+    record_type: FACT
+  outfit:
+    label: ArmorLeatherNoHelmetOutfit
+    form_key: 057A2D:Skyrim.esm
+    source: xedit-dump
+    evidence: "ASSOS GLAM Jenassa serialized NPC override: DefaultOutfit 057A2D:Skyrim.esm"
+    record_type: OTFT
+  custom_hair:
+    label: 000JenassaHair
+    form_key: 000804:GLAM Jenassa Irileth.esp
+    source: xedit-dump
+    evidence: "ASSOS GLAM Jenassa serialized NPC override HeadParts"
+    record_type: HDPT
+  custom_head:
+    label: 000JenassaiHeahHP
+    form_key: 000D62:GLAM Jenassa Irileth.esp
+    source: xedit-dump
+    evidence: "ASSOS GLAM Jenassa serialized NPC override HeadParts"
+    record_type: HDPT
+  package:
+    label: DefaultSandboxEditorLink
+    form_key: 0BAD0A:Skyrim.esm
+    source: verified-table
+    evidence: "data/ai_packages.yaml: DefaultSandboxEditorLink"
+    record_type: PACK

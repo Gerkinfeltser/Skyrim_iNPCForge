@@ -45,7 +45,10 @@ $env:SKYRIM_DATA = "D:\Steam\steamapps\common\Skyrim Special Edition\Data"
 
 Spriggit installs to `$env:USERPROFILE\.dotnet\tools\` (portable — resolves to any user).
 
-**Pre-Build Gate:** Skyrim SHOULD be closed before deserializing. If `SkyrimSE` is running, stop and close it first.
+**Pre-Build Gate:** Skyrim SHOULD be closed before deserializing to the active
+MO2-ready `.esp` path. If `SkyrimSE` is running, do not overwrite the loaded
+plugin. Either stop and ask the user to close Skyrim first, or deserialize to a
+staged path under `_tmp/` for validation only.
 
 **Serialize Spriggit YAML → .esp:**
 
@@ -55,6 +58,18 @@ Spriggit installs to `$env:USERPROFILE\.dotnet\tools\` (portable — resolves to
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
+
+**Safe staged build while Skyrim is open:**
+
+```powershell
+& "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
+  --InputPath "output\{PluginName}_spriggit" `
+  --OutputPath "_tmp\staged-esp\{PluginName}.esp" `
+  --DataFolder "$env:SKYRIM_DATA"
+```
+
+Staged builds prove the YAML deserializes and produce a reviewable `.esp`, but
+only after Skyrim is closed and the file lock is released.
 
 **Reverse (CK edit → YAML, to keep source in sync):**
 
@@ -75,7 +90,8 @@ satisfies this. No xEdit post-processing required.
 
 **No lint/test/typecheck commands exist.** Verification is manual:
 `.esp` is non-zero, `.prompt` has all 10 blocks filled, prompt filename matches
-the `{name}_{formId & 0xFFF:03X}` convention, ESL flag is set.
+the `{name}_{formId & 0xFFF:03X}` convention, ESL flag is set, and any cloned
+or sculpted face has matching FaceGen mesh/tint assets in the generated output.
 
 ## Critical Rules
 
@@ -167,6 +183,32 @@ skylink-live > xedit-dump > verified-table > user-provided
 
 SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, cells, factions, voices, and headparts. If Skyrim/SkyLinkAI is unavailable and a record is not in verified tables, stop and ask the user to start Skyrim, choose a known option, or provide a FormKey. Do not invent IDs.
 
+For static NPC appearance in the ADT load order, prefer the offline xEdit dump
+workflow in `D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md` when available.
+That dump reads winning `NPC_` records through MO2/xEdit and can provide
+headparts, face morphs, tint layers, race, weight, hair color, outfit, voice,
+and class without launching Skyrim. It does not replace runtime checks for
+save-state, dead/disabled refs, placement, or the final rendered face.
+
+When cloning a specific NPC's appearance from a load-order override, copying the
+`NPC_` record fields is not enough. Skyrim uses baked FaceGen assets for the
+actual head sculpt and tint. Copy the source actor's FaceGeom/FaceTint pair into
+the generated output under the generated plugin name and NPC base FormID:
+
+```text
+output/{PluginName}/meshes/actors/character/FaceGenData/FaceGeom/{PluginName}.esp/00000800.NIF
+output/{PluginName}/textures/actors/character/FaceGenData/FaceTint/{PluginName}.esp/00000800.dds
+```
+
+For the MVP allocation, `0x800` is the NPC base, so the FaceGen filename is
+`00000800`. If the NPC base FormID changes, use that object ID as 8-digit hex.
+The source FaceGen files may be stored under the actor's original master/FormID
+folder (for example `Skyrim.esm\000B9982`) even when the winning appearance
+record comes from an override plugin.
+Without the matching FaceGen files, the actor may load with the wrong sculpt,
+wrong tint, or shiny/gold/dark-face style rendering artifacts even when the YAML
+record values look correct.
+
 ## Directory Map
 
 | Path | Purpose |
@@ -208,12 +250,12 @@ SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, c
   (requires placed bed furniture references — CK territory).
 - **Generated outputs** are disposable; the YAML source in `_spriggit/` is the
   editable artifact. Re-serialize after edits.
-- **Appearance MVP**: Tier 1 body basics wire race, height, weight, outfit, and equipment
-  into the Spriggit record. `sex` is collected in config but Spriggit mapping is deferred
-  until the Female flag structure (`Configuration.Flags: Female`) is verified by serializing
-  a known-female NPC. Tier 2 headparts have config placeholders (`hair`, `eyes`, `brows`,
-  `scar`, `warpaint`) but Spriggit generation is deferred until the HeadParts/Tints record
-  structure is verified. Captured face morphs and FaceGen mesh/texture assets are backlog.
+- **Appearance support**: Tier 1 body basics wire race, sex, height, weight,
+  outfit, and equipment into the Spriggit record. `sex: "female"` maps to
+  `Configuration.Flags: Female`; male is the absence of that flag. Tier 2
+  Spriggit fields are verified for `HeadParts`, `HairColor`, `FaceParts`,
+  `FaceMorph`, and `TintLayers`. For cloned/sculpted faces, also copy the baked
+  FaceGen mesh/tint assets into the generated plugin's FaceGenData paths.
 
 ## Out of Scope (MVP)
 

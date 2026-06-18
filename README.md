@@ -7,6 +7,7 @@ Config-driven pipeline for generating complete, self-contained, ESL-flagged Skyr
 Fill in one config file → get a ready-to-install mod folder with:
 1. **ESP plugin** (ESL-flagged, Spriggit-generated) — race, stats, voice, outfit, AI, placement
 2. **SkyrimNet prompt file** — personality, background, speech style, relationships
+3. **Optional FaceGen assets** — required when cloning a sculpted NPC face from another actor/plugin
 
 ```
 npc-yaml/{Name}_iNPC.yaml ──► {Name}_iNPC.esp (ESL, compiled)
@@ -117,9 +118,38 @@ The `output/{PluginName}/` folder is MO2-ready. Three steps:
 The generated plugin is an MVP — functional but basic. To customize further:
 
 - **Edit the Spriggit YAML** in `{PluginName}_spriggit/` and re-serialize — no CK needed
-- **Open the .esp in Creation Kit** for advanced edits (appearance, packages, face sculpting)
+- **Open the .esp in Creation Kit** for advanced edits (packages, placement, new face sculpting)
 - **Edit the .prompt file** — tweak personality, speech style, relationships
 - **Re-serialize with Spriggit** after CK edits to keep YAML source in sync
+
+If Skyrim is running, do not overwrite the active `.esp`. Build to a staged path
+such as `_tmp/staged-esp/{PluginName}.esp` for validation, then replace the
+MO2-ready plugin only after Skyrim is closed.
+
+For ADT static NPC appearance data, see
+`D:\gerkgit\SkyrimNet_iPrompts\misc\xedit\README.md`. That external runbook
+dumps winning `NPC_` records through MO2/xEdit without launching Skyrim; it does
+not replace runtime checks for save-state, placement, or the final rendered face.
+
+### Cloned FaceGen Assets
+
+If you recreate or clone an existing sculpted NPC, copying the Spriggit `NPC_`
+record fields is not enough. Skyrim also needs baked FaceGen assets named for
+the generated plugin and NPC base FormID.
+
+For the standard MVP allocation (`0x800` NPC base), place them here:
+
+```text
+output/{PluginName}/meshes/actors/character/FaceGenData/FaceGeom/{PluginName}.esp/00000800.NIF
+output/{PluginName}/textures/actors/character/FaceGenData/FaceTint/{PluginName}.esp/00000800.dds
+```
+
+Without those files, the NPC can have the right hair/headpart records but still
+show the wrong face sculpt, wrong skin tint, or shiny/gold/dark-face artifacts.
+For non-standard FormIDs, replace `00000800` with the NPC base object ID as
+8-digit uppercase hex. The source FaceGen files may live under the actor's
+original master/FormID folder, such as `Skyrim.esm\000B9982`, even when the
+winning appearance record comes from an override plugin.
 
 ## Requirements
 
