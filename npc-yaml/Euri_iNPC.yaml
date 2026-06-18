@@ -14,7 +14,7 @@ placement:
 identity:
   race: WoodElfRace
   sex: female
-  voice: FemaleElfHaughty
+  voice: 00183F:018Auri.esp
   attitude: friendly
   unique: true
   essential: true
