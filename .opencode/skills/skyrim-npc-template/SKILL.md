@@ -471,6 +471,14 @@ If these FaceGen files are missing or named for the wrong plugin/FormID, the NPC
 can have the correct record fields but render with the wrong sculpt, wrong face
 tint, or shiny/gold/dark-face artifacts.
 
+5. Inspect the copied `NPC_`, `HDPT`, outfit, armor, and FaceGen dependencies for
+   referenced source-mod assets. Copy required custom meshes, textures, `.tri`
+   files, body meshes, hair assets, and armor assets into the generated output
+   with the same relative paths, or keep the source mod installed as a hard
+   requirement. A folder such as `meshes/<ModNameOrAuthor>/...` is useful, but it
+   is not the whole character by itself; the full clone needs records, masters,
+   FaceGen, and referenced assets together.
+
 ### 3i: Pre-Build Gate
 
 Skyrim should be closed before Spriggit deserialization to the active output
@@ -730,7 +738,8 @@ In scope now:
   - Tier 2 includes `TintLayers` entries with `Index`, `Color` (RGBA hex), `InterpolationValue`, and `Preset` fields.
 - **Cloned/sculpted faces**: copy the source actor's baked FaceGen mesh/tint
   assets into the generated plugin's FaceGenData paths. This is required for
-  the final sculpt and face tint to match in-game.
+  the final sculpt and face tint to match in-game. Also copy or require any
+  source-mod asset folders referenced by those records/assets.
 
 Backlog:
 - **Tier 3**: captured face morph values from SkyLinkAI `get_appearance`.

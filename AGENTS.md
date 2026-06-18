@@ -211,6 +211,13 @@ Without the matching FaceGen files, the actor may load with the wrong sculpt,
 wrong tint, or shiny/gold/dark-face style rendering artifacts even when the YAML
 record values look correct.
 
+Also copy any source mod asset folders referenced by the copied records or baked
+FaceGen. A follower mod may store custom hair, head, body, armor, textures,
+tri files, or body meshes outside FaceGen paths (for example under a mod-specific
+`meshes/<AuthorOrModName>/` folder). If the generated NPC references the source
+plugin as a master, the game still needs those source assets installed, or the
+generated output must include the referenced asset paths unchanged.
+
 ## Directory Map
 
 | Path | Purpose |
@@ -257,7 +264,8 @@ record values look correct.
   `Configuration.Flags: Female`; male is the absence of that flag. Tier 2
   Spriggit fields are verified for `HeadParts`, `HairColor`, `FaceParts`,
   `FaceMorph`, and `TintLayers`. For cloned/sculpted faces, also copy the baked
-  FaceGen mesh/tint assets into the generated plugin's FaceGenData paths.
+  FaceGen mesh/tint assets into the generated plugin's FaceGenData paths, plus
+  any referenced custom asset folders from the source mod.
 
 ## Out of Scope (MVP)
 

@@ -153,6 +153,11 @@ For non-standard FormIDs, replace `00000800` with the NPC base object ID as
 original master/FormID folder, such as `Skyrim.esm\000B9982`, even when the
 winning appearance record comes from an override plugin.
 
+FaceGen is not always the only required asset. If the cloned NPC or its FaceGen
+references custom meshes, textures, body files, hair files, armor files, or `.tri`
+files under source-mod folders, keep those source assets installed or copy those
+folders into the generated output with the same relative paths.
+
 ## Requirements
 
 - [Spriggit](https://github.com/Mutagen-Modding/Spriggit) 0.40.0 (`dotnet tool install --global Spriggit.Yaml.Skyrim`)
