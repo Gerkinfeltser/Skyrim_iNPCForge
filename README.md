@@ -1,5 +1,7 @@
 # Skyrim NPC Template
 
+> **⚠ ALPHA — Work in Progress.** This pipeline works for small numbers of verified examples (see below), but this is a template/recipe project still being actively developed. Config formats change without notice, lookup tables are incomplete, and generating a new NPC from scratch involves manual steps (FormKey resolution, location mapping, asset copying). Do not expect plug-and-receive-an-NPC reliability yet. Contributions and issue reports welcome.
+
 Config-driven pipeline for generating complete, self-contained, ESL-flagged Skyrim SE NPC plugins with [SkyrimNet](https://github.com/art-from-the-machine/SkyrimNet) AI dialogue support.
 
 ## What It Does
