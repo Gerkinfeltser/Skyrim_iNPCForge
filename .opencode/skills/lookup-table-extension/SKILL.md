@@ -1,14 +1,14 @@
 ---
 name: lookup-table-extension
 description: |-
-  Use this when: extend lookup tables, add mod-added records, verify FormIDs, dump factions/voices/outfits/races/locations/headparts/colors/ai_packages/classes, Skyrim DLC coverage, Dawnguard Dragonborn Hearthfires records, modlist FormID verification, xEdit dump scripts, reconcile data yaml
-  Contains: xEdit dump workflow, official master scoping, provenance recording, VERIFICATION-STATUS tracking, data/*.yaml reconciliation
+  Use this when: extend lookup tables, add mod-added records, verify FormIDs, SkyrimPatcherMCP, dump factions/voices/outfits/races/locations/headparts/colors/ai_packages/classes, Skyrim DLC coverage, Dawnguard Dragonborn Hearthfires records, modlist FormID verification, xEdit dump scripts, reconcile data yaml
+  Contains: SkyrimPatcherMCP offline lookup workflow, xEdit dump workflow, official master scoping, provenance recording, VERIFICATION-STATUS tracking, data/*.yaml reconciliation
   For: extending iNPCForge lookup tables with official DLC or mod-added records so generated NPCs can reference them
 
   Examples:
   - user: "Add Dawnguard voices to the tables" -> run dump_voices.pas against Dawnguard.esm, reconcile into data/voices.yaml
-  - user: "I need a mod-added outfit from Auri.esp" -> run dump script against Auri.esp, add verified entry to the appropriate data table
-  - user: "Verify factions table" -> run dump_factions.pas against the source plugin, compare to data/factions.yaml, fix fabrications
+  - user: "I need a mod-added outfit from Auri.esp" -> try SkyrimPatcherMCP search_records for outfit, fall back to xEdit dump if needed
+  - user: "Verify factions table" -> use SkyrimPatcherMCP for spot checks or dump_factions.pas for full-table verification
   - user: "Get all DLC records" -> run applicable dump scripts against Dawnguard.esm, Dragonborn.esm, Hearthfires.esm in sequence
   - user: "My modlist adds custom headparts" -> run dump_headparts.pas against the mod plugin, append verified entries
 ---
@@ -29,20 +29,36 @@ Extend `data/*.yaml` lookup tables with verified FormIDs from official masters o
 - xEdit (SSEEdit) installed and accessible via MO2
 - The plugin containing the target records loaded in the MO2 instance
 - `tools/xedit-scripts/` from this repo deployed to xEdit's `Edit Scripts\` folder (see `tools/xedit-scripts/README.md`)
+- Optional: SkyrimPatcherMCP built and configured with `MO2_ROOT` pointing at the target MO2 root. Use it for supported offline, load-order-aware lookups before falling back to xEdit dumps.
 
-## Tables And Dump Scripts
+## Resolution Order
 
-| Table | Record Type | Dump Script |
-| --- | --- | --- |
-| `data/races.yaml` | RACE | `dump_races.pas` |
-| `data/voices.yaml` | VTYP | `dump_voices.pas` |
-| `data/outfits.yaml` | OTFT | `dump_weapons_misc_outfits.pas` |
-| `data/factions.yaml` | FACT | `dump_factions.pas` |
-| `data/locations.yaml` | CELL | `dump_cells_whiterun.pas` as a filtered pattern; clone/adapt for other regions |
-| `data/ai_packages.yaml` | PACK | `dump_packages.pas` |
-| `data/headparts.yaml` | HDPT | `dump_headparts.pas` |
-| `data/colors.yaml` | CLFM | `dump_clfm.pas` |
-| NPC class references | CLAS | `dump_classes.pas` TODO; no `data/classes.yaml` table yet |
+Use the most authoritative available source for the specific record type:
+
+```text
+SkyLink AI live lookup -> SkyrimPatcherMCP offline lookup -> xEdit dump -> verified table -> user-provided
+```
+
+- **SkyLink AI** is runtime truth: use it when Skyrim is running and save-state/current-world context matters.
+- **SkyrimPatcherMCP** is offline MO2/load-order truth: use it when the record type is supported and Skyrim is closed or unavailable.
+- **xEdit dumps** remain required for unsupported record types and bulk table generation.
+- **Verified tables** are the repo baseline and should be enough for common official records once DLC coverage is complete.
+
+## Tables, MCP Support, And Dump Scripts
+
+| Table | Record Type | SkyrimPatcherMCP | Dump Script |
+| --- | --- | --- | --- |
+| `data/races.yaml` | RACE | `search_records` type `race` | `dump_races.pas` |
+| `data/voices.yaml` | VTYP | Not supported | `dump_voices.pas` |
+| `data/outfits.yaml` | OTFT | `search_records` type `outfit` | `dump_weapons_misc_outfits.pas` |
+| `data/factions.yaml` | FACT | `search_records` type `faction` | `dump_factions.pas` |
+| `data/locations.yaml` | CELL | Not supported by generic record search | `dump_cells_whiterun.pas` as a filtered pattern; clone/adapt for other regions |
+| `data/ai_packages.yaml` | PACK | Not supported | `dump_packages.pas` |
+| `data/headparts.yaml` | HDPT | Not supported | `dump_headparts.pas` |
+| `data/colors.yaml` | CLFM | Not supported | `dump_clfm.pas` |
+| NPC class references | CLAS | Not supported | `dump_classes.pas` TODO; no `data/classes.yaml` table yet |
+
+SkyrimPatcherMCP also supports NPC lookup (`recordType: npc`), which is useful for cloned appearances and override-chain inspection even though NPC records are not a lookup table.
 
 ## Scoping
 
@@ -71,9 +87,19 @@ Right-clicking the top node can include records and overrides from the whole loa
 
 ### 1. Identify The Gap
 
-Check `data/*.yaml` for the record the NPC config references. If missing or marked `TODO`/`UNVERIFIED`, dump the source plugin.
+Check `data/*.yaml` for the record the NPC config references. If missing or marked `TODO`/`UNVERIFIED`, resolve it with SkyLink AI or SkyrimPatcherMCP if supported. Use xEdit dumps for unsupported record types or full-table coverage.
 
-### 2. Run The Dump Script
+### 2. Try SkyrimPatcherMCP For Supported Types
+
+If SkyrimPatcherMCP is available and the record type is supported, call `search_records` against the target MO2 root/profile. Prefer exact EditorID matches and inspect `definedIn`, `winner`, and `overrideCount` before adding entries.
+
+Example evidence:
+
+```text
+SkyrimPatcherMCP search_records faction BanditFaction in ADT profile -> 01BCC0:Skyrim.esm, winner Unofficial Skyrim Modders Patch.esp
+```
+
+### 3. Run The Dump Script When Needed
 
 ```text
 xEdit via MO2 -> load target plugin -> right-click plugin -> Apply Script -> select tools/xedit-scripts/<script>.pas -> OK
@@ -81,7 +107,7 @@ xEdit via MO2 -> load target plugin -> right-click plugin -> Apply Script -> sel
 
 Output appears in the Messages panel. Click in Messages, press Ctrl+A then Ctrl+C, and paste into `_tmp/dumps/<plugin>_<record_type>.tsv` if you need an audit trail.
 
-### 3. Reconcile Into `data/*.yaml`
+### 4. Reconcile Into `data/*.yaml`
 
 For each needed record from the dump:
 
@@ -103,9 +129,9 @@ FormKey format:
 
 Use the last six hex digits/object ID for the left side of the FormKey. Do not preserve the runtime load-order index.
 
-### 4. Record Provenance
+### 5. Record Provenance
 
-For NPCs that use the new entries, `formkey-provenance.yaml` must record `source: xedit-dump` with evidence naming the dump file or xEdit run:
+For NPCs that use the new entries, `formkey-provenance.yaml` must record the source with evidence naming the lookup or dump:
 
 ```yaml
 outfit_item:
@@ -115,7 +141,17 @@ outfit_item:
   evidence: "_tmp/dumps/Auri.esp_OTFT.tsv line 42"
 ```
 
-### 5. Update Verification Status
+For SkyrimPatcherMCP lookups, use:
+
+```yaml
+faction:
+  label: BanditFaction
+  form_key: 01BCC0:Skyrim.esm
+  source: skyrim-patcher-mcp
+  evidence: "search_records faction BanditFaction in ADT profile"
+```
+
+### 6. Update Verification Status
 
 After reconciling a table, update `tools/VERIFICATION-STATUS.md`:
 

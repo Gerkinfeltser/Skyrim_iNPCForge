@@ -102,12 +102,14 @@ Required answers: NPC name, race, combat attitude, and placement location. Every
 
 ### FormKey Resolution Gate
 
-SkyLinkAI is the preferred source of truth when available.
+SkyLinkAI is the preferred source of truth when live game state matters.
+SkyrimPatcherMCP is the preferred offline MO2/load-order resolver when the
+record type is supported and Skyrim is closed or unavailable.
 
 Resolution priority:
 
 ```text
-skylink-live > xedit-dump > verified-table > user-provided
+skylink-live > skyrim-patcher-mcp > xedit-dump > verified-table > user-provided
 ```
 
 Before live lookup, check Skyrim:
@@ -120,7 +122,13 @@ If Skyrim is not running and unresolved records require live lookup, stop and sa
 
 If Skyrim is running, use SkyLinkAI `check_connection` before other SkyLinkAI commands. Use `search_forms`, `get_cell_info`, `get_load_order`, and `get_mod_form_id_prefix` for live resolution. Never invent FormKeys.
 
-When SkyLinkAI cannot resolve a record, fall back to xEdit dump scripts for bulk or authoritative checks. When xEdit is unavailable, fall back to verified `data/*.yaml` tables. When no source can verify the record, stop and ask the user to start Skyrim/SkyLinkAI, choose a known table option, provide a FormKey, or defer the detail.
+When SkyLinkAI cannot resolve a record, try SkyrimPatcherMCP for offline
+MO2/load-order-aware lookup if the record type is supported. Use xEdit dump
+scripts for unsupported record types, bulk table generation, or authoritative
+table verification. When xEdit is unavailable, fall back to verified
+`data/*.yaml` tables. When no source can verify the record, stop and ask the
+user to start Skyrim/SkyLinkAI, choose a known table option, provide a FormKey,
+or defer the detail.
 
 `data/*.yaml` tables are verified fallback/cache, not a license to invent records. Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
 
@@ -135,7 +143,7 @@ output/{PluginName}/formkey-provenance.yaml
 Required fields per record: `label`, `form_key`, `source`, `evidence`.
 `evidence` is REQUIRED. For `verified-table` sources, evidence SHOULD name the table path (e.g. `data/voices.yaml`).
 
-Accepted sources: `skylink-live`, `xedit-dump`, `verified-table`.
+Accepted sources: `skylink-live`, `skyrim-patcher-mcp`, `xedit-dump`, `verified-table`.
 `user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
 Any source value outside the defined set is treated as `user-provided`-equivalent: warn by default, fail in strict mode.
 Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
@@ -160,6 +168,11 @@ records:
     form_key: 000ABC:WayfarerMod.esp
     source: skylink-live
     evidence: "SkyLinkAI search_forms armor Wayfarer's Skirt"
+  faction:
+    label: BanditFaction
+    form_key: 01BCC0:Skyrim.esm
+    source: skyrim-patcher-mcp
+    evidence: "SkyrimPatcherMCP search_records faction BanditFaction in ADT profile"
 ```
 
 Generate this file from `templates/provenance/formkey-provenance.yaml` after FormKey resolution. Every external FormKey used by generated Spriggit YAML must have a provenance entry unless it is plugin-local.
@@ -672,7 +685,7 @@ It checks:
 1. **Prompt filename** matches the REFR FormID suffix (read from cell placement YAML, not guessed)
 2. **Prompt format** has `{% block %}` tags (rejects plain text)
 3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
-4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
+4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `skyrim-patcher-mcp`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
 
 For cloned/sculpted faces, also manually verify the FaceGen files exist because
 `verify_prompt.ps1` does not currently validate FaceGen assets:
@@ -753,7 +766,9 @@ Backlog:
 
 The interview asks for Tier 1 and Tier 2 appearance details up front. If the user asks to clone a sculpted face from an existing actor, use the static xEdit/Spriggit record data plus the source actor's baked FaceGen mesh/tint assets. If the user asks to generate a brand-new sculpt from scratch, record that as backlog unless a dedicated FaceGen generation pipeline has been implemented.
 
-For static NPC appearance in a modlist load order, use the companion
+For static NPC appearance in a modlist load order, prefer SkyrimPatcherMCP for
+quick offline winning-record lookup (`search_records` then `read_record`) when
+the record type is supported. For full appearance extraction, use the companion
 SkyrimNet_iPrompts xEdit dump workflow when available. Set
 `$SKYRIMNET_IPROMPTS_DIR` to that repo root, then read
 `$SKYRIMNET_IPROMPTS_DIR\misc\xedit\README.md`. It dumps winning `NPC_` records

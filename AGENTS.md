@@ -25,7 +25,7 @@ npc-yaml/{Name}_iNPC.yaml ──► Spriggit YAML ──► {Name}_iNPC.esp   (r
 ```
 
 1. Fill `npc-yaml/{Name}_iNPC.yaml` (single source of truth for working NPC configs).
-2. Resolve FormKeys via SkyLinkAI > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
+2. Resolve FormKeys via SkyLinkAI > SkyrimPatcherMCP > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
 3. Generate Spriggit YAML into `output/{PluginName}_spriggit/` from `templates/spriggit/`.
 4. Serialize to `.esp` with the Spriggit CLI.
 5. Generate the `.prompt` file from `templates/prompt/character.prompt`.
@@ -180,10 +180,17 @@ Use `-Fix` to auto-copy a misnamed prompt file.
 For new NPCs, use the numbered interview form in the skill, then resolve FormKeys with this priority:
 
 ```text
-skylink-live > xedit-dump > verified-table > user-provided
+skylink-live > skyrim-patcher-mcp > xedit-dump > verified-table > user-provided
 ```
 
-SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear, cells, factions, voices, and headparts. If Skyrim/SkyLinkAI is unavailable and a record is not in verified tables, stop and ask the user to start Skyrim, choose a known option, or provide a FormKey. Do not invent IDs.
+SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear,
+cells, factions, voices, and headparts. SkyrimPatcherMCP is the preferred
+offline MO2/load-order resolver for supported record types (currently useful for
+NPC, race, outfit, and faction lookups, among others). If neither live nor
+offline lookup can resolve a required record and it is not in verified tables,
+fall back to xEdit dumps or stop and ask the user to start Skyrim/SkyLinkAI,
+choose a known table option, provide a FormKey, or defer the detail. Do not
+invent IDs.
 
 For static NPC appearance in a modlist load order, prefer the offline xEdit dump
 workflow from the companion SkyrimNet_iPrompts repo when available. Set

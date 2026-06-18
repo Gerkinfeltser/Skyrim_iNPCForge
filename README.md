@@ -34,6 +34,11 @@ Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recip
 4. Generate prompt file from `templates/prompt/character.prompt`
 5. Assemble into MO2-ready folder in `output/`
 
+For mod-added records or load-order-specific clones, use
+`.opencode/skills/lookup-table-extension/SKILL.md`. It documents the preferred
+resolution chain: SkyLink AI live lookup, SkyrimPatcherMCP offline MO2 lookup,
+xEdit dumps, then verified tables.
+
 ### For Humans
 
 1. Copy an existing local config in `npc-yaml/` or start a new `npc-yaml/{Name}_iNPC.yaml`
@@ -133,7 +138,9 @@ such as `_tmp/staged-esp/{PluginName}.esp` for validation, then replace the
 MO2-ready plugin only after Skyrim is closed.
 
 For static NPC appearance data from a modlist load order, use the companion
-SkyrimNet_iPrompts xEdit runbook when available. Set
+SkyrimPatcherMCP offline lookup first when available (`search_records` and
+`read_record` against the MO2 profile). For full appearance extraction, use the
+companion SkyrimNet_iPrompts xEdit runbook when available. Set
 `$SKYRIMNET_IPROMPTS_DIR` to that repo root, then read
 `$SKYRIMNET_IPROMPTS_DIR\misc\xedit\README.md`. That external runbook dumps
 winning `NPC_` records through MO2/xEdit without launching Skyrim; it does not
@@ -169,6 +176,7 @@ folders into the generated output with the same relative paths.
 - [Spriggit](https://github.com/Mutagen-Modding/Spriggit) 0.40.0 (`dotnet tool install --global Spriggit.Yaml.Skyrim`)
 - Skyrim SE with SkyrimNet installed
 - Mod Organizer 2 (recommended)
+- Optional: [SkyrimPatcherMCP](https://github.com/ViceReversa/SkyrimPatcherMCP) for offline MO2/load-order record lookup
 
 ## Out of Scope (MVP)
 
@@ -188,6 +196,7 @@ This project builds on the work of many others in the Skyrim modding community:
 - **[Spriggit](https://github.com/Mutagen-Modding/Spriggit)** / **[Mutagen](https://github.com/Mutagen-Modding/Mutagen)** by Noggog — YAML ↔ ESP serialization; the entire record layer depends on this.
 - **[SkyrimNet](https://github.com/MinLL/SkyrimNet-GamePlugin)** by MinLL — AI dialogue runtime that powers generated prompt files and world knowledge packs.
 - **[SkyLink AI](https://www.nexusmods.com/skyrimspecialedition/mods/175682)** by JarvannDarr — SKSE MCP server for real-time FormKey resolution and runtime verification during development.
+- **[SkyrimPatcherMCP](https://github.com/ViceReversa/SkyrimPatcherMCP)** by ViceReversa — Optional offline MO2/load-order record lookup and patching MCP used for supported FormKey resolution and conflict inspection.
 - **[xEdit](https://tes5edit.github.io/)** by ElminsterAU, zilav, Sharlikran, and contributors — Plugin record inspection and load-order FormID verification.
 
 ### Required — Indirect

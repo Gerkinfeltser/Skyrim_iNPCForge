@@ -21,9 +21,12 @@ MO2 instance. See that directory's README for usage.
 | `examples/grok_the_smith.yaml`   | (derived)           | ✅ FIXED    | ClothingApron → ClothesBlackSmith; outfit_items use Armor* prefix; inventory items verified (OrcishWarAxe 0001398B, Gold001 0000000F) |
 | `examples/shank_the_bandit_hostile.yaml`   | (derived)           | ✅ FIXED    | outfit: ArmorHideAllOutfit (0001B3A8); inventory items verified (SteelWarAxe 00013983, Gold001, Lockpick 0000000A) |
 
-## TODO: DLC Coverage
+## TODO: Full DLC Coverage
 
-None of the lookup tables include DLC records. To add:
+Most lookup tables are still Skyrim.esm-first. Some appearance tables already
+contain partial Dawnguard entries (for example `data/colors.yaml` and
+`data/headparts.yaml`), but full Dawnguard/Dragonborn/Hearthfires coverage is
+not complete. To add full official DLC coverage:
 
 1. **Dawnguard.esm** — Serana's voice, Castle Volkihar cell, Dawnguard armor sets, crossbows
 2. **Dragonborn.esm** — Miraak's voice, Raven Rock cells, Stalhrim/Chitin armor sets, Nordic Carved set
@@ -39,7 +42,18 @@ Process for each:
 
 - ~~`dump_factions.pas`~~ — ✅ CREATED `tools/xedit-scripts/dump_factions.pas` — FACT records
 - ~~`dump_packages.pas`~~ — ✅ CREATED `tools/xedit-scripts/dump_packages.pas` — PACK records
-- `dump_classes.pas` — NPC class records (to verify `Class:` field references in NPC records)
+- ~~`dump_classes.pas`~~ — ✅ CREATED `tools/xedit-scripts/dump_classes.pas` — CLAS records (table verification still pending)
+
+## TODO: Deferred Verification Work
+
+Left for a later focused pass:
+
+1. Verify/fix `data/factions.yaml`, `data/ai_packages.yaml`, `data/headparts.yaml`, and `data/colors.yaml` against xEdit dumps or SkyrimPatcherMCP where supported.
+2. Fill full official DLC coverage for Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm across relevant lookup tables.
+
+SkyrimPatcherMCP can help with supported offline lookups (race, outfit, faction,
+NPC winning records), but xEdit dumps remain required for unsupported types such
+as VTYP, PACK, HDPT, CLFM, CELL, and CLAS.
 
 ## 2026-06-14: BanditFaction FormID CORRECTION
 

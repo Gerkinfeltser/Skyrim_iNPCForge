@@ -21,6 +21,11 @@ FormID column — these scripts dump FormID **+ EditorID + Name** in one run.
 | `dump_weapons_misc_outfits.pas` | `WEAP`, `MISC`, `OTFT` | Iron/Steel/Orcish weapons, gold/lockpick, all outfits | Verify inventory items + `data/outfits.yaml` |
 | `dump_races.pas` | `RACE` | All races | Verify `data/races.yaml` |
 | `dump_cells_whiterun.pas` | `CELL` | Interior cells matching location keywords | Verify `data/locations.yaml` |
+| `dump_factions.pas` | `FACT` | All factions | Verify `data/factions.yaml` |
+| `dump_packages.pas` | `PACK` | All AI packages | Verify `data/ai_packages.yaml` |
+| `dump_headparts.pas` | `HDPT` | All headparts | Verify `data/headparts.yaml` |
+| `dump_clfm.pas` | `CLFM` | All color forms | Verify `data/colors.yaml` |
+| `dump_classes.pas` | `CLAS` | All classes | Verify NPC `Class:` references |
 
 ## Scope
 
