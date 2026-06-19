@@ -3,9 +3,16 @@ records:
   # record_key:
   #   label: "Human-readable source label"
   #   form_key: "000000:Skyrim.esm"
-  #   source: "skylink-live" # accepted: skylink-live | xedit-dump | verified-table; allowed-warn: user-provided
+  #   source: "skylink-live" # accepted: skylink-live | skyrim-patcher-mcp | spriggit-serialization | xedit-dump | verified-table | generated; allowed-warn: user-provided
   #   evidence: "Tool, file, or user statement used as evidence"
   #   record_type: "OPTIONAL record category"
   #   plugin: "OPTIONAL source plugin"
   #   runtime_form_id: "OPTIONAL runtime FormID from live game"
   #   notes: "OPTIONAL notes"
+  # If voice_type: "silent" is used, record the generated local VTYP instead:
+  # voice:
+  #   label: silent
+  #   form_key: 000803:{{ plugin_name }}.esp
+  #   source: generated
+  #   evidence: "voice_type: silent generated local VTYP"
+  #   record_type: VTYP

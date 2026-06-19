@@ -14,6 +14,8 @@
 # IMPORTANT: Always reference vanilla voice types directly.
 # Do NOT dupe/create new VTYP records -- SkyrimNet TTS maps by voice type FormID.
 # A duped FormID will result in silent NPCs or fallback TTS.
+# Exception: voice_type: "silent" generates a local plugin VTYP at 000803.
+# Do not add it as a fake FormKey in this verified table.
 #
 # RACE-SPECIFIC VOICES:
 #   Only Nord, Orc, Khajiit, Argonian, DarkElf, and ElfHaughty have

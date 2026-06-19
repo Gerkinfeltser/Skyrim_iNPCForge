@@ -1,0 +1,7 @@
+# Voice Type - generated when voice_type: "silent".
+# No voice files are bundled; Fuz Ro D-oh can handle unvoiced dialogue.
+FormKey: 000803:{{plugin_name}}.esp
+EditorID: {{editor_id}}_SilentVoice
+Name:
+  TargetLanguage: English
+  Value: Silent Voice

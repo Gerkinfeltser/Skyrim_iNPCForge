@@ -19,7 +19,7 @@ plugin_name: "Grok_iNPC"              # Name of the output .esp file (no extensi
 
 # === BODY (Record Layer) ===
 race: "OrcRace"                       # → data/races.yaml for options
-voice_type: "MaleOrc"                 # → data/voices.yaml (vanilla only, no dupes)
+voice_type: "MaleOrc"                 # → data/voices.yaml, or "silent" to generate a local VTYP
 combat_attitude: "friendly"           # friendly | neutral | hostile
 level: 25                             # NPC level (fixed)
 respawn: false                        # true = respawns on cell reset, false = stays dead

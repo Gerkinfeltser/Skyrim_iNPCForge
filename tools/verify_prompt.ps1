@@ -112,7 +112,7 @@ function Test-VerifiedFormKey {
 
     if ($ProvenanceKeys.ContainsKey($normalized)) {
         $source = $ProvenanceKeys[$normalized]
-        if ($source -in @("skylink-live", "skyrim-patcher-mcp", "spriggit-serialization", "xedit-dump", "verified-table")) {
+        if ($source -in @("skylink-live", "skyrim-patcher-mcp", "spriggit-serialization", "xedit-dump", "verified-table", "generated")) {
             Write-Host "[PASS] $Label $cleanFormKey (provenance: $source)" -ForegroundColor Green
             return
         }
@@ -166,6 +166,30 @@ function Find-NpcName {
         }
     }
     return $null
+}
+
+function Test-GeneratedSilentVoiceType {
+    param(
+        [string]$RootDir,
+        [string]$PluginName
+    )
+
+    $escapedPluginName = [regex]::Escape($PluginName)
+    $silentVoicePattern = "(?m)^FormKey:\s+000803:$escapedPluginName\.esp\s*$"
+    $voiceTypeRecord = Get-ChildItem -Path $RootDir -Recurse -Filter "*.yaml" |
+        Where-Object {
+            $raw = Get-Content $_.FullName -Raw
+            $raw -match $silentVoicePattern -and $raw -match "(?m)^EditorID:\s+\S+_SilentVoice\s*$"
+        } |
+        Select-Object -First 1
+
+    if ($voiceTypeRecord) {
+        Write-Host "[PASS] Generated silent VTYP record exists" -ForegroundColor Green
+        return
+    }
+
+    Write-Host "[FAIL] NPC uses generated silent VTYP 000803:$PluginName.esp but no matching VTYP record was found in Spriggit source" -ForegroundColor Red
+    $script:issues += "MISSING_SILENT_VTYP"
 }
 
 $placedNpc = Find-PlacedNpcFormKey $spriggitDir
@@ -440,7 +464,17 @@ foreach ($f in (Get-ChildItem -Path $spriggitDir -Recurse -Filter "*.yaml" | Whe
     }
 
     if ($raw -match "(?m)^Voice:\s+(\S+)") {
-        Test-VerifiedFormKey "Voice" $Matches[1] $verifiedVoices "data\voices.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
+        $voiceKey = $Matches[1]
+        $normalizedVoice = Normalize-FormKey $voiceKey
+        $normalizedSilentVoice = Normalize-FormKey "000803:$pluginLocalName.esp"
+
+        if ($normalizedVoice -eq $normalizedSilentVoice) {
+            Test-VerifiedFormKey "Voice" $voiceKey $verifiedVoices "data\voices.yaml" -AllowPluginLocal -ProvenanceKeys $provenanceKeys -Strict:$Strict
+            Test-GeneratedSilentVoiceType $spriggitDir $pluginLocalName
+        }
+        else {
+            Test-VerifiedFormKey "Voice" $voiceKey $verifiedVoices "data\voices.yaml" -ProvenanceKeys $provenanceKeys -Strict:$Strict
+        }
     }
 
     if ($raw -match "(?m)^DefaultOutfit:\s+(\S+)") {

@@ -143,7 +143,7 @@ output/{PluginName}/formkey-provenance.yaml
 Required fields per record: `label`, `form_key`, `source`, `evidence`.
 `evidence` is REQUIRED. For `verified-table` sources, evidence SHOULD name the table path (e.g. `data/voices.yaml`).
 
-Accepted sources: `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, `verified-table`.
+Accepted sources: `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, `verified-table`, `generated`.
 `user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
 Any source value outside the defined set is treated as `user-provided`-equivalent: warn by default, fail in strict mode.
 Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
@@ -154,6 +154,7 @@ Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
 - `spriggit-serialization` — Spriggit `serialize` on a plugin's `.esp` file to extract complete record YAML (FormKeys, EditorIDs, all fields). Use for mod-added records when the `.esp` is accessible but Skyrim is not running. Heavier than xEdit dumps but produces complete record data.
 - `xedit-dump` — xEdit Pascal script dump (FormID + EditorID + Name per line). Use for bulk table generation or when Spriggit serialization is impractical.
 - `verified-table` — Pre-verified `data/*.yaml` lookup table built from a prior xEdit or Spriggit dump
+- `generated` — Plugin-local record created by this recipe, such as the silent VTYP generated for `voice_type: "silent"`
 
 Example schema:
 
@@ -170,6 +171,13 @@ records:
     form_key: 013AEA:Skyrim.esm
     source: verified-table
     evidence: data/voices.yaml
+  # If voice_type: "silent" is used, record the generated local VTYP instead:
+  # voice:
+  #   label: silent
+  #   form_key: 000803:GrokTheSmith.esp
+  #   source: generated
+  #   evidence: "voice_type: silent generated local VTYP"
+  #   record_type: VTYP
   outfit_item:
     label: "Wayfarer's Skirt"
     form_key: 000ABC:WayfarerMod.esp
@@ -194,6 +202,7 @@ Default generated naming uses the `_iNPC` suffix for plugin/config/output names.
 
 - **data/races.yaml** → race EditorID to FormKey
 - **data/voices.yaml** → vanilla voice type to FormKey cache (NEVER dupe VTYP)
+  - `voice_type: "silent"` is a generated local VTYP option, not a lookup-table key.
 - **data/outfits.yaml** → outfit to FormKey, OR use `outfit_items` for custom OTFT
 - **data/locations.yaml** → location key to CELL FormKey
 
@@ -208,7 +217,7 @@ plugin_name: "Grok_iNPC"
 
 # === BODY ===
 race: "OrcRace"                 # → data/races.yaml
-voice_type: "MaleOrc"           # → data/voices.yaml
+voice_type: "MaleOrc"           # → data/voices.yaml, or "silent" for local VTYP
 combat_attitude: "friendly"     # friendly | neutral | hostile
 level: 25
 respawn: false
@@ -348,6 +357,29 @@ Items:
 
 Then reference `000802:{PluginName}.esp` in the NPC's `DefaultOutfit` field.
 
+### 3d2: Silent Voice Type (if voice_type is silent)
+
+If the config uses `voice_type: "silent"`, generate a local VTYP record instead
+of resolving a FormKey from `data/voices.yaml`.
+
+Use `templates/spriggit/voice_type_silent.yaml` with:
+
+```yaml
+FormKey: 000803:{PluginName}.esp
+EditorID: {editor_id}_SilentVoice
+Name:
+  TargetLanguage: English
+  Value: Silent Voice
+```
+
+Set the NPC base record `Voice` field to `000803:{PluginName}.esp`. Do not add
+`silent` to `data/voices.yaml`; it is a generated config value, not a verified
+external lookup key. Do not bundle `sound/voice/` files for the generated VTYP.
+Record provenance with `source: generated` and `record_type: VTYP`.
+
+This is an intentional exception to the normal "do not generate voice types"
+rule. It is only for deliberately unvoiced/silent workflows such as Fuz Ro D-oh.
+
 ### 3e: Cell Placement (REFR) — CRITICAL
 
 The NPC must be placed in a cell via a PlacedNpc REFR record. Without this, the NPC exists in the plugin but never appears in-game.
@@ -385,7 +417,8 @@ Temporary:
 - 0x800: NPC record
 - 0x801: REFR placement (ALWAYS — fixed so prompt suffix is deterministic)
 - 0x802: Custom outfit (if outfit_items used)
-- 0x803+: additional records
+- 0x803: Silent Voice VTYP (if voice_type is silent)
+- 0x804+: additional records
 
 ### 3f: RecordData.yaml (Mod Header)
 
@@ -544,7 +577,7 @@ RecordData.yaml. When Spriggit deserializes the YAML to `.esp`, the TES4
 header flags field is written with bit 0x200 set — the plugin is ESL-flagged
 from creation. No xEdit step required.
 
-The MVP FormID allocation (0x800–0x802) is within the ESL range (0x000–0xFFF),
+The MVP FormID allocation (0x800+) is within the ESL range (0x000–0xFFF),
 satisfying the ESL constraint. ESL-flagged plugins do not count against the
 255-plugin limit.
 
@@ -695,7 +728,8 @@ It checks:
 1. **Prompt filename** matches the REFR FormID suffix (read from cell placement YAML, not guessed)
 2. **Prompt format** has `{% block %}` tags (rejects plain text)
 3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
-4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
+4. **FormKey provenance** is present and all external/generated FormKeys are backed by `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, `verified-table`, or `generated` sources (warns on `user-provided`)
+5. **Generated silent VTYP** exists when an NPC record uses `Voice: 000803:{PluginName}.esp`
 
 For cloned/sculpted faces, also manually verify the FaceGen files exist because
 `verify_prompt.ps1` does not currently validate FaceGen assets:
@@ -728,6 +762,12 @@ on a source plugin, keep the source actor's VTYP (for example
 `00183F:018Auri.esp`) and add provenance. SkyrimNet can clone/map those
 source-master voices, but a duplicated VTYP record gets a new FormID and can
 break TTS mapping.
+
+`voice_type: "silent"` is the one intentional generated VTYP exception. It
+creates a local `{EditorID}_SilentVoice` record at `0x803` and assigns the NPC
+to that VTYP without bundling voice files. Use it only when the user wants an
+unvoiced/silent dialogue workflow such as Fuz Ro D-oh; do not use it to
+duplicate an existing vanilla or mod-added voice type.
 
 ### ESL Constraints
 - Record ID must be in `0x000-0xFFF` range (4096 max)
@@ -802,7 +842,7 @@ issues or the exact rendered face in a running game.
 - Papyrus follower scripts (use follower framework mods)
 - Sleep packages (requires bed furniture references)
 - Exterior world placement
-- New custom voice types / TTS voice samples
+- New custom voiced samples
 - Quest-driven behavior or dialogue trees
 - Leveled character spawns
 - Full day/night AI schedules

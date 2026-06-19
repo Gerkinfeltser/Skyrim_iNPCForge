@@ -106,10 +106,17 @@ the source plugin as a master, keep the source actor's VTYP (for example
 source-master voices, but a duplicated VTYP record gets a new FormID and can
 break TTS mapping.
 
+`voice_type: "silent"` is the one intentional generated VTYP exception. It
+creates a local `{EditorID}_SilentVoice` record at `0x803` and assigns the NPC
+to that VTYP without bundling voice files. Use it only when the user wants an
+unvoiced/silent dialogue workflow such as Fuz Ro D-oh; do not use it to
+duplicate an existing vanilla or mod-added voice type.
+
 ### ESL Constraints
 - Record IDs MUST be in the `0x000–0xFFF` range (4096 max).
 - MVP allocation: `0x800` = NPC base, `0x801` = PlacedNpc REFR (ALWAYS),
-  `0x802` = custom OTFT (if `outfit_items`), `0x803+` = additional records.
+  `0x802` = custom OTFT (if `outfit_items`), `0x803` = silent VTYP
+  (if `voice_type: "silent"`), `0x804+` = additional records.
 - Interior cells ONLY. No WRLD records, no exterior placement.
 - ESL-flagged ESPs do not count against the 255-plugin limit.
 
@@ -135,7 +142,8 @@ the NPC base record. With the MVP allocation (REFR always at `0x801`), the
 | `0x800` | NPC base record |
 | `0x801` | PlacedNpc REFR (ALWAYS — fixed so prompt suffix is deterministic) |
 | `0x802` | Custom OTFT outfit (if `outfit_items` used) |
-| `0x803+` | Additional records |
+| `0x803` | Silent Voice VTYP (if `voice_type: "silent"`) |
+| `0x804+` | Additional records |
 
 **Prompt filename uses the REFR FormID suffix** — SkyrimNet's
 `GenerateBioTemplateName` receives the PlacedNpc REFR from
@@ -238,7 +246,7 @@ generated output must include the referenced asset paths unchanged.
 | `data/voices.yaml` | Vanilla voice type → FormKey cache |
 | `data/outfits.yaml` | Vanilla outfit → FormKey |
 | `data/locations.yaml` | Interior cell key → CELL FormKey + group path |
-| `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml` |
+| `templates/spriggit/` | `RecordData.yaml`, `npc_base.yaml`, `cell_placement.yaml`, `outfit_custom.yaml`, `voice_type_silent.yaml` |
 | `templates/prompt/character.prompt` | 10-block personality Jinja template |
 | `templates/knowledge/world_knowledge.sknpack` | World knowledge pack template |
 | `templates/provenance/` | FormKey provenance file template |
@@ -279,7 +287,7 @@ generated output must include the referenced asset paths unchanged.
 ## Out of Scope (MVP)
 
 Multiple NPCs per plugin · Papyrus follower scripts · Sleep AI packages ·
-Exterior world placement · New custom voice types / TTS samples · Quest-driven
+Exterior world placement · New custom voiced samples · Quest-driven
 behavior · Leveled spawns · Full day/night schedules.
 
 ## After Generation
