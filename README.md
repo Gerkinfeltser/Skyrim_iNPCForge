@@ -12,10 +12,10 @@ Fill in one config file → get a ready-to-install mod folder with:
 3. **Optional FaceGen assets** — required when cloning a sculpted NPC face from another actor/plugin
 
 ```
-npc-yaml/{Name}_iNPC.yaml ──► {Name}_iNPC.esp (ESL, compiled)
-                         ──► {Name}_iNPC_spriggit/ (YAML source, editable)
-                           ──► characters/{name}_801.prompt (SkyrimNet AI)
-                         ──► {Name}_iNPC.sknpack (world knowledge)
+npc-yaml/{Name}_iNPC.yaml ──► output/{Name}_iNPC/{Name}_iNPC.esp (ESL, compiled)
+                         ──► output/{Name}_iNPC/{Name}_iNPC_spriggit/ (YAML source, editable)
+                         ──► output/{Name}_iNPC/SKSE/.../characters/{name}_801.prompt
+                         ──► output/{Name}_iNPC/WorldKnowledge-ManuallyImport/{Name}_iNPC.sknpack
 ```
 
 ## Quick Start
@@ -37,7 +37,7 @@ Read `.opencode/skills/skyrim-npc-template/SKILL.md` — it's the complete recip
 For mod-added records or load-order-specific clones, use
 `.opencode/skills/lookup-table-extension/SKILL.md`. It documents the preferred
 resolution chain: SkyLink AI live lookup, SkyrimPatcherMCP offline MO2 lookup,
-xEdit dumps, then verified tables.
+Spriggit serialization, xEdit dumps, then verified tables.
 
 ### For Humans
 
@@ -128,7 +128,7 @@ The `output/{PluginName}/` folder is MO2-ready. Three steps:
 
 The generated plugin is an MVP — functional but basic. To customize further:
 
-- **Edit the Spriggit YAML** in `{PluginName}_spriggit/` and re-serialize — no CK needed
+- **Edit the Spriggit YAML** in `output/{PluginName}/{PluginName}_spriggit/` and re-serialize — no CK needed
 - **Open the .esp in Creation Kit** for advanced edits (packages, placement, new face sculpting)
 - **Edit the .prompt file** — tweak personality, speech style, relationships
 - **Re-serialize with Spriggit** after CK edits to keep YAML source in sync

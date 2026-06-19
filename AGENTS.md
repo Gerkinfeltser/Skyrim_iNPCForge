@@ -25,8 +25,8 @@ npc-yaml/{Name}_iNPC.yaml ──► Spriggit YAML ──► {Name}_iNPC.esp   (r
 ```
 
 1. Fill `npc-yaml/{Name}_iNPC.yaml` (single source of truth for working NPC configs).
-2. Resolve FormKeys via SkyLinkAI > SkyrimPatcherMCP > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
-3. Generate Spriggit YAML into `output/{PluginName}_spriggit/` from `templates/spriggit/`.
+2. Resolve FormKeys via SkyLinkAI > SkyrimPatcherMCP > Spriggit serialization > xEdit > verified `data/*.yaml` tables (see SkyLink-Assisted Workflow).
+3. Generate Spriggit YAML into `output/{PluginName}/{PluginName}_spriggit/` from `templates/spriggit/`.
 4. Serialize to `.esp` with the Spriggit CLI.
 5. Generate the `.prompt` file from `templates/prompt/character.prompt`.
 6. (Optional) Generate `.sknpack` from the `world_knowledge` block.
@@ -54,7 +54,7 @@ staged path under `_tmp/` for validation only.
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
-  --InputPath "output\{PluginName}_spriggit" `
+  --InputPath "output\{PluginName}\{PluginName}_spriggit" `
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
@@ -63,7 +63,7 @@ staged path under `_tmp/` for validation only.
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
-  --InputPath "output\{PluginName}_spriggit" `
+  --InputPath "output\{PluginName}\{PluginName}_spriggit" `
   --OutputPath "_tmp\staged-esp\{PluginName}.esp" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
@@ -76,7 +76,7 @@ only after Skyrim is closed and the file lock is released.
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" serialize `
   --InputPath "output\{PluginName}\{PluginName}.esp" `
-  --OutputPath "output\{PluginName}_spriggit" `
+  --OutputPath "output\{PluginName}\{PluginName}_spriggit" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
 
@@ -180,7 +180,7 @@ Use `-Fix` to auto-copy a misnamed prompt file.
 For new NPCs, use the numbered interview form in the skill, then resolve FormKeys with this priority:
 
 ```text
-skylink-live > skyrim-patcher-mcp > xedit-dump > verified-table > user-provided
+skylink-live > skyrim-patcher-mcp > spriggit-serialization > xedit-dump > verified-table > user-provided
 ```
 
 SkyLinkAI is preferred for live FormKey resolution, especially mod-added gear,
@@ -266,7 +266,7 @@ generated output must include the referenced asset paths unchanged.
   unmapped locations → instruct the user to place manually in Creation Kit.
 - **AI packages**: `sandbox` for friendly, `none` for hostile. No sleep packages
   (requires placed bed furniture references — CK territory).
-- **Generated outputs** are disposable; the YAML source in `_spriggit/` is the
+- **Generated outputs** are disposable; the YAML source in `output/{PluginName}/{PluginName}_spriggit/` is the
   editable artifact. Re-serialize after edits.
 - **Appearance support**: Tier 1 body basics wire race, sex, height, weight,
   outfit, and equipment into the Spriggit record. `sex: "female"` maps to

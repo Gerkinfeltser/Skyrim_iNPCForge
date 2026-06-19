@@ -36,11 +36,12 @@ Extend `data/*.yaml` lookup tables with verified FormIDs from official masters o
 Use the most authoritative available source for the specific record type:
 
 ```text
-SkyLink AI live lookup -> SkyrimPatcherMCP offline lookup -> xEdit dump -> verified table -> user-provided
+SkyLink AI live lookup -> SkyrimPatcherMCP offline lookup -> Spriggit serialization -> xEdit dump -> verified table -> user-provided
 ```
 
 - **SkyLink AI** is runtime truth: use it when Skyrim is running and save-state/current-world context matters.
 - **SkyrimPatcherMCP** is offline MO2/load-order truth: use it when the record type is supported and Skyrim is closed or unavailable.
+- **Spriggit serialization** is plugin-file truth: use `spriggit.yaml.skyrim.exe serialize` on a specific `.esp` when the plugin is accessible and you need complete record YAML without launching Skyrim.
 - **xEdit dumps** remain required for unsupported record types and bulk table generation.
 - **Verified tables** are the repo baseline and should be enough for common official records once DLC coverage is complete.
 
@@ -49,16 +50,20 @@ SkyLink AI live lookup -> SkyrimPatcherMCP offline lookup -> xEdit dump -> verif
 | Table | Record Type | SkyrimPatcherMCP | Dump Script |
 | --- | --- | --- | --- |
 | `data/races.yaml` | RACE | `search_records` type `race` | `dump_races.pas` |
-| `data/voices.yaml` | VTYP | Not supported | `dump_voices.pas` |
+| `data/voices.yaml` | VTYP | `search_records` type `voiceType` / `voice` (read-only; sensitive write opt-in for writes) | `dump_voices.pas` |
 | `data/outfits.yaml` | OTFT | `search_records` type `outfit` | `dump_weapons_misc_outfits.pas` |
 | `data/factions.yaml` | FACT | `search_records` type `faction` | `dump_factions.pas` |
 | `data/locations.yaml` | CELL | Not supported by generic record search | `dump_cells_whiterun.pas` as a filtered pattern; clone/adapt for other regions |
-| `data/ai_packages.yaml` | PACK | Not supported | `dump_packages.pas` |
-| `data/headparts.yaml` | HDPT | Not supported | `dump_headparts.pas` |
-| `data/colors.yaml` | CLFM | Not supported | `dump_clfm.pas` |
-| NPC class references | CLAS | Not supported | `dump_classes.pas` TODO; no `data/classes.yaml` table yet |
+| `data/ai_packages.yaml` | PACK | `search_records` type `package` (read-only; sensitive write opt-in for writes) | `dump_packages.pas` |
+| `data/headparts.yaml` | HDPT | `search_records` type `headPart` / `hdpt` (read-only; sensitive write opt-in for writes) | `dump_headparts.pas` |
+| `data/colors.yaml` | CLFM | `search_records` type `colorRecord` / `color` (read-only; sensitive write opt-in for writes) | `dump_clfm.pas` |
+| NPC class references | CLAS | `search_records` type `class` (read-only; sensitive write opt-in for writes) | `dump_classes.pas` TODO; no `data/classes.yaml` table yet |
+| Individual armor items | ARMO | `search_records` type `armor` | Add `dump_armors.pas` if a persistent `data/armors.yaml` table is needed |
+| Individual weapon items | WEAP | `search_records` type `weapon` | Add `dump_weapons.pas` or extend `dump_weapons_misc_outfits.pas` if needed |
 
-SkyrimPatcherMCP also supports NPC lookup (`recordType: npc`), which is useful for cloned appearances and override-chain inspection even though NPC records are not a lookup table.
+SkyrimPatcherMCP also supports NPC lookup (`recordType: npc`), which is useful for cloned appearances, FaceMorph/TintLayers reference reads, and override-chain inspection even though NPC records are not a lookup table.
+
+Confirmed supported `search_records` types on the `feat-record-search-types` fork: `weapon`, `armor`, `npc`, `race`, `spell`, `perk`, `book`, `ingestible`, `ingredient`, `miscItem`, `ammunition`, `container`, `faction`, `keyword`, `leveledItem`, `leveledNpc`, `magicEffect`, `objectEffect`, `quest`, `light`, `outfit`, `voiceType`, `package`, `headPart`, `colorRecord`, `class`, `constructibleObject`, and `formList`.
 
 ## Scoping
 
@@ -91,13 +96,17 @@ Check `data/*.yaml` for the record the NPC config references. If missing or mark
 
 ### 2. Try SkyrimPatcherMCP For Supported Types
 
-If SkyrimPatcherMCP is available and the record type is supported, call `search_records` against the target MO2 root/profile. Prefer exact EditorID matches and inspect `definedIn`, `winner`, and `overrideCount` before adding entries.
+If SkyrimPatcherMCP is available and the record type is supported, call `search_records` against the target MO2 root/profile. Prefer exact EditorID matches and inspect `definedIn`, `winner`, and `overrideCount` before adding entries. Use `read_record` for one record when you need fields such as HeadParts, HairColor, FaceMorph, FaceParts, TintLayers, HeadTexture, or the winning override source.
 
 Example evidence:
 
 ```text
 SkyrimPatcherMCP search_records faction BanditFaction in ADT profile -> 01BCC0:Skyrim.esm, winner Unofficial Skyrim Modders Patch.esp
+SkyrimPatcherMCP search_records armor Forsworn in ASSOS profile -> ForswornHelmet 0D8D52:Skyrim.esm, winner unofficial skyrim special edition patch.esp
+SkyrimPatcherMCP read_record npc 0371D6:Skyrim.esm fromPlugin Skyrim.esm -> Maul's vanilla male Orc FaceMorph/TintLayers reference
 ```
+
+When using `read_record` for appearance, read from the original plugin (`fromPlugin:"Skyrim.esm"`) if you want vanilla race/sex tint structure, or omit `fromPlugin` if you intentionally want the modlist-winning appearance. Do not blindly copy a reference NPC's skin tint: Maul's male Orc skin base (`#00C6B0A8`, Index 1) rendered pale/Nord-like on Uri. Use the reference for indices/presets, then choose a race-appropriate skin color.
 
 ### 3. Run The Dump Script When Needed
 

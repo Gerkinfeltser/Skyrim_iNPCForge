@@ -109,7 +109,7 @@ record type is supported and Skyrim is closed or unavailable.
 Resolution priority:
 
 ```text
-skylink-live > skyrim-patcher-mcp > xedit-dump > verified-table > user-provided
+skylink-live > skyrim-patcher-mcp > spriggit-serialization > xedit-dump > verified-table > user-provided
 ```
 
 Before live lookup, check Skyrim:
@@ -143,10 +143,17 @@ output/{PluginName}/formkey-provenance.yaml
 Required fields per record: `label`, `form_key`, `source`, `evidence`.
 `evidence` is REQUIRED. For `verified-table` sources, evidence SHOULD name the table path (e.g. `data/voices.yaml`).
 
-Accepted sources: `skylink-live`, `skyrim-patcher-mcp`, `xedit-dump`, `verified-table`.
+Accepted sources: `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, `verified-table`.
 `user-provided` is allowed but SHOULD warn by default and fail in strict verification mode.
 Any source value outside the defined set is treated as `user-provided`-equivalent: warn by default, fail in strict mode.
 Entries marked `TODO` or `UNVERIFIED` in lookup tables do not count as verified.
+
+**Source descriptions:**
+- `skylink-live` — SkyLinkAI MCP lookup while Skyrim is running (live game state)
+- `skyrim-patcher-mcp` — SkyrimPatcherMCP offline MO2/load-order resolver
+- `spriggit-serialization` — Spriggit `serialize` on a plugin's `.esp` file to extract complete record YAML (FormKeys, EditorIDs, all fields). Use for mod-added records when the `.esp` is accessible but Skyrim is not running. Heavier than xEdit dumps but produces complete record data.
+- `xedit-dump` — xEdit Pascal script dump (FormID + EditorID + Name per line). Use for bulk table generation or when Spriggit serialization is impractical.
+- `verified-table` — Pre-verified `data/*.yaml` lookup table built from a prior xEdit or Spriggit dump
 
 Example schema:
 
@@ -252,11 +259,12 @@ With `npc-yaml/{Name}_iNPC.yaml` complete, proceed to generate the Spriggit YAML
 ### 3a: Create the Spriggit directory structure
 
 ```
-output/{PluginName}_spriggit/
-├── RecordData.yaml         # From templates/spriggit/RecordData.yaml
-├── Npcs/
-│   └── {editor_id}.yaml    # From templates/spriggit/npc_base.yaml
-└── .spriggit               # Config file
+output/{PluginName}/
+└── {PluginName}_spriggit/
+    ├── RecordData.yaml         # From templates/spriggit/RecordData.yaml
+    ├── Npcs/
+    │   └── {editor_id}.yaml    # From templates/spriggit/npc_base.yaml
+    └── .spriggit               # Config file
 ```
 
 ### 3b: RecordData.yaml
@@ -322,6 +330,8 @@ Items:
 # TintLayers, and Female flag from config/source records as needed
 # SoundLevel, MajorFlags
 ```
+
+**TintLayers reference (Tier 2 appearance):** When adding TintLayers to an NPC, read a vanilla NPC of the same race/sex as reference via SkyrimPatcherMCP (`read_record` with `fromPlugin:"Skyrim.esm"`). Watch for lighting bias: Maul the male Orc (refId `0371D6:Skyrim.esm`) has a pale skin tone at Index 1 (`#00C6B0A8`) because his Home cell (Understone Keep) has warm firelighting that throws off the baked tint. Use a greener/richer tone for standalone Orc NPCs — e.g. RGB(70, 100, 55) for Index 1 skin base. Also copy the `HeadTexture` field from the reference (`0F2069:Skyrim.esm` for Orcs) when available.
 
 ### 3d: Custom Outfit (if using outfit_items)
 
@@ -510,7 +520,7 @@ to a staged path instead:
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
-  --InputPath "output\{PluginName}_spriggit" `
+  --InputPath "output\{PluginName}\{PluginName}_spriggit" `
   --OutputPath "_tmp\staged-esp\{PluginName}.esp" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
@@ -522,7 +532,7 @@ Staging proves the YAML can build; it does not hot-reload the active game.
 
 ```powershell
 & "$env:USERPROFILE\.dotnet\tools\spriggit.yaml.skyrim.exe" deserialize `
-  --InputPath "output\{PluginName}_spriggit" `
+  --InputPath "output\{PluginName}\{PluginName}_spriggit" `
   --OutputPath "output\{PluginName}\{PluginName}.esp" `
   --DataFolder "$env:SKYRIM_DATA"
 ```
@@ -685,7 +695,7 @@ It checks:
 1. **Prompt filename** matches the REFR FormID suffix (read from cell placement YAML, not guessed)
 2. **Prompt format** has `{% block %}` tags (rejects plain text)
 3. **External FormKeys** exist in verified lookup tables for locations, races, voices, outfits, factions, and AI packages
-4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `skyrim-patcher-mcp`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
+4. **FormKey provenance** is present and all external FormKeys are backed by `skylink-live`, `skyrim-patcher-mcp`, `spriggit-serialization`, `xedit-dump`, or `verified-table` sources (warns on `user-provided`)
 
 For cloned/sculpted faces, also manually verify the FaceGen files exist because
 `verify_prompt.ps1` does not currently validate FaceGen assets:

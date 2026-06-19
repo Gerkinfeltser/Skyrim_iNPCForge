@@ -112,7 +112,7 @@ function Test-VerifiedFormKey {
 
     if ($ProvenanceKeys.ContainsKey($normalized)) {
         $source = $ProvenanceKeys[$normalized]
-        if ($source -in @("skylink-live", "xedit-dump", "verified-table")) {
+        if ($source -in @("skylink-live", "skyrim-patcher-mcp", "spriggit-serialization", "xedit-dump", "verified-table")) {
             Write-Host "[PASS] $Label $cleanFormKey (provenance: $source)" -ForegroundColor Green
             return
         }
@@ -197,6 +197,7 @@ $promptDir = Join-Path $OutputDir "SKSE\Plugins\SkyrimNet\prompts\characters"
 $promptPath = Join-Path $promptDir $expectedFilename
 
 $provenancePath = Join-Path $OutputDir "formkey-provenance.yaml"
+$provenanceExists = Test-Path $provenancePath
 $provenanceKeys = Load-ProvenanceFormKeys $provenancePath
 
 Write-Host "Expected prompt: $expectedFilename" -ForegroundColor Cyan
@@ -204,6 +205,16 @@ Write-Host "Expected path: $promptPath" -ForegroundColor Cyan
 Write-Host ""
 
 $issues = @()
+
+if (-not $provenanceExists) {
+    if ($Strict) {
+        Write-Host "[FAIL] formkey-provenance.yaml missing (required in Strict mode)" -ForegroundColor Red
+        $issues += "MISSING_PROVENANCE"
+    }
+    else {
+        Write-Host "[WARN] formkey-provenance.yaml missing (use -Strict to fail)" -ForegroundColor Yellow
+    }
+}
 
 # Required SkyrimNet prompt blocks; must match templates/prompt/character.prompt
 $requiredPromptBlocks = @(
