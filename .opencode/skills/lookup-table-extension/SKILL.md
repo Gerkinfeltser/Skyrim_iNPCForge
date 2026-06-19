@@ -65,6 +65,36 @@ SkyrimPatcherMCP also supports NPC lookup (`recordType: npc`), which is useful f
 
 Confirmed supported `search_records` types on the `feat-record-search-types` fork: `weapon`, `armor`, `npc`, `race`, `spell`, `perk`, `book`, `ingestible`, `ingredient`, `miscItem`, `ammunition`, `container`, `faction`, `keyword`, `leveledItem`, `leveledNpc`, `magicEffect`, `objectEffect`, `quest`, `light`, `outfit`, `voiceType`, `package`, `headPart`, `colorRecord`, `class`, `constructibleObject`, and `formList`.
 
+## SkyrimPatcherMCP Quick Path
+
+Use this before Spriggit-serializing a whole plugin or falling back to xEdit.
+
+1. Smoke test the MCP: `initialize`, `tools/list`, then `list_record_types`.
+2. Pick the narrowest tool: `search_records` for FormKey lookup; `read_record` for full NPC appearance fields; Spriggit serialization only when MCP cannot provide the needed fields.
+3. Keep calls simple: use `recordType` and `query`, do not truncate JSON before reading the result, and do not assume unsupported types before checking `list_record_types`.
+4. Common wins: `search_records armor Forsworn` finds individual ARMO records; `search_records weapon <name>` finds WEAP records; `read_record npc <FormKey> fromPlugin Skyrim.esm` gets vanilla FaceMorph/TintLayers.
+
+## When Not To Escalate
+
+Do not serialize all of `Skyrim.esm` for one record lookup.
+
+Escalation order for one-off lookups:
+
+1. SkyrimPatcherMCP `search_records`
+2. SkyrimPatcherMCP `read_record`
+3. Spriggit serialize the specific mod plugin
+4. xEdit dump
+5. Ask the user for the exact record or in-game name
+
+## MCP Red Flags
+
+Stop and simplify if:
+
+- You are writing async PowerShell before a simple MCP call works
+- You are truncating JSON before reading the result
+- You are about to serialize a master file for one FormKey
+- You are assuming a record type is unsupported without `list_record_types`
+
 ## Scoping
 
 The dump scripts process whatever node you right-click. Control scope by selecting the correct node before applying the script.
