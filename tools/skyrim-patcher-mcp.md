@@ -23,6 +23,22 @@ $env:MO2_ROOT = "D:\Modlists\ADT"
 The local ADT path above is an example only. Do not hardcode it in generated
 NPC output or repo templates.
 
+## Fork With Extended Record Types
+
+The upstream has limited `search_records` support. The fork branch
+[`Gerkinfeltser/SkyrimPatcherMCP@feat-record-search-types`](https://github.com/Gerkinfeltser/SkyrimPatcherMCP/tree/feat-record-search-types)
+adds `voiceType`, `package`, `headPart`, `colorRecord`, and `class` support
+while [upstream PR #1](https://github.com/ViceReversa/SkyrimPatcherMCP/pull/1)
+is open.
+
+```powershell
+git clone -b feat-record-search-types https://github.com/Gerkinfeltser/SkyrimPatcherMCP.git D:\git\SkyrimPatcherMCP
+```
+
+Build and configure the same way as upstream. The read-only tools below exist
+in both versions; the extended record types require the fork branch until the PR
+is merged upstream.
+
 ## Useful Read-Only Tools
 
 - `list_profiles` — confirm the MO2 root/profile selection
@@ -34,22 +50,31 @@ NPC output or repo templates.
 
 ## Confirmed Useful Record Types
 
+These are useful for iNPCForge lookups and are supported by upstream
+SkyrimPatcherMCP:
+
 - `race`
 - `outfit`
 - `faction`
+- `armor`
+- `weapon`
+- `miscItem`
+- `ammunition`
 - `npc` (useful for clone/source appearance lookup)
+
+The fork branch also supports:
+
+- `voiceType`
+- `package`
+- `headPart`
+- `colorRecord`
+- `class`
 
 ## Not A Replacement For xEdit Dumps
 
-Current SkyrimPatcherMCP generic lookup does not cover every iNPCForge table.
-Keep using xEdit dump scripts for:
+xEdit dumps are still required for:
 
-- `VTYP` voices
-- `PACK` AI packages
-- `HDPT` headparts
-- `CLFM` colors
-- `CELL` locations
-- `CLAS` classes
+- `CELL` locations (not a generically searchable record type)
 
 ## Provenance
 

@@ -176,7 +176,7 @@ folders into the generated output with the same relative paths.
 - [Spriggit](https://github.com/Mutagen-Modding/Spriggit) 0.40.0 (`dotnet tool install --global Spriggit.Yaml.Skyrim`)
 - Skyrim SE with SkyrimNet installed
 - Mod Organizer 2 (recommended)
-- Optional: [SkyrimPatcherMCP](https://github.com/ViceReversa/SkyrimPatcherMCP) for offline MO2/load-order record lookup
+- Optional: [SkyrimPatcherMCP](https://github.com/ViceReversa/SkyrimPatcherMCP) for offline MO2/load-order record lookup (see the [`feat-record-search-types` fork branch](https://github.com/Gerkinfeltser/SkyrimPatcherMCP/tree/feat-record-search-types) and [upstream PR #1](https://github.com/ViceReversa/SkyrimPatcherMCP/pull/1) for expanded record type support)
 
 ## Out of Scope (MVP)
 

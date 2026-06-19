@@ -51,9 +51,11 @@ Left for a later focused pass:
 1. Verify/fix `data/factions.yaml`, `data/ai_packages.yaml`, `data/headparts.yaml`, and `data/colors.yaml` against xEdit dumps or SkyrimPatcherMCP where supported.
 2. Fill full official DLC coverage for Dawnguard.esm, Dragonborn.esm, and Hearthfires.esm across relevant lookup tables.
 
-SkyrimPatcherMCP can help with supported offline lookups (race, outfit, faction,
-NPC winning records), but xEdit dumps remain required for unsupported types such
-as VTYP, PACK, HDPT, CLFM, CELL, and CLAS.
+The SkyrimPatcherMCP `feat-record-search-types` fork branch supports most
+iNPCForge record types (voiceType, package, headPart, colorRecord, and class in
+addition to the original race, outfit, faction, armor, weapon, miscItem,
+ammunition, and NPC lookups) while upstream PR #1 is open. xEdit dumps remain
+required for CELL locations.
 
 ## 2026-06-14: BanditFaction FormID CORRECTION
 
