@@ -611,6 +611,8 @@ gate — `GameMaster::CanNPCSpeakNearPlayer` explicitly states "Combat is NOT
 blocked" (GameMaster.cpp:491). Hostile NPCs get a combat-variant dialogue
 prompt and load bios identically to friendly NPCs.
 
+**Player references in prompts.** Use `{{ player.name }}` for the player character. Only hardcode a name (e.g. "Daylong") when referring to a specific different character, not the player.
+
 ### 4c: Place in output structure
 
 ```
@@ -826,6 +828,63 @@ via MO2/xEdit to JSON, including race, sex, height, weight, hair color,
 headparts, face morphs, tint layers, default outfit, voice, and class. Treat it
 as authoritative for static load-order record data, but not for runtime/save-state
 issues or the exact rendered face in a running game.
+
+## Clone Player Character Workflow
+
+Generating an NPC from a live player character. Requires Skyrim running with SkyLinkAI + RaceMenu installed.
+
+### Phase 1 — Scrape Player Data
+
+```text
+1. Close all in-game menus (SkyLinkAI tools error when paused/in menu)
+2. GetLoadOrder         → resolve FormID prefixes to plugin names
+3. GetAppearance        → race, sex, weight, height, all morphs, head parts
+4. GetEquippedItems     → armor, weapons per slot (mod FormIDs)
+5. GetInventory         → carried items (filter for desired ones)
+6. GetCellInfo          → current cell for placement coords + facing angle
+7. User: save RaceMenu preset (F5 in showracemenu) → .jslot file
+8. User: RaceMenu sculpt export (Face Sculpt → Export) → .nif + .dds
+```
+
+### Phase 2 — Map to NPC Config Fields
+
+| Source | NPC Config / Spriggit Field |
+|--------|---------------------------|
+| `get_appearance.race` | `race:` lookup in `data/races.yaml` |
+| `get_appearance.sex` | `sex:` + `Configuration.Flags: [Female]` if female |
+| `get_appearance.weight` | `weight:` |
+| `get_appearance.height` | `height:` (NOT default 1.0 — use this value) |
+| `get_appearance.morphs` (array of 18) | `FaceMorph:` (map by index to named field) |
+| `get_appearance.head_parts` | `HeadParts:` (6-digit FormIDs from each HDPT) |
+| `.jslot.actor.hairColor` (decimal) | `HairColor:` convert to 6-digit hex FormID or pick from `data/colors.yaml` |
+| `.jslot.actor.headTexture` | `HeadTexture:` reference (e.g. `03D2AB:Skyrim.esm`) |
+| `.jslot.morphs.default.presets` | `FaceParts:` nose/eyes/mouth preset indices |
+| `.jslot.morphs.default.morphs` (array of 18) | `FaceMorph:` same as get_appearance morphs (cross-check) |
+| `.jslot.tintInfo` | `TintLayers:` convert decimal color → `#AARRGGBB` (ABGR→ARGB byte swap), use InterpolationValue 1.0, Preset -1 |
+| `.jslot.morphs.sculpt.host` | The `.tri` ref for the baked sculpt (informational) |
+| `get_equipped_items` | `outfit_items:` FormKeys per slot + `Items:` for weapons |
+| `get_inventory` | `Items:` carried items (weapons, gold, etc.) |
+| `get_cell_info` | `location:` + `position:` + `rotation:` for cell placement |
+| Player's load order | `.spriggit` KnownMasters + `RecordData.yaml` MasterReferences |
+| Baked FaceGeom `.nif` | `output/{PluginName}/meshes/.../FaceGenData/FaceGeom/{PluginName}.esp/00000800.NIF` |
+| Baked FaceTint `.dds` | `output/{PluginName}/textures/.../FaceGenData/FaceTint/{PluginName}.esp/00000800.dds` |
+
+**Color conversion:** `.jslot` stores tints as decimal ABGR. Convert: hex string → ARGB byte swap → `#AARRGGBB`. Example: `4287988079` → `0xFF9E97EF` → ABGR bytes `FF|9E|97|EF` → ARGB `#FFEF979E`. The `00` prefix in some Spriggit dumps (`#00RRGGBB`) is Mutagen padding — use full `#AARRGGBB`.
+
+**HeadPart FormIDs:** `.jslot` stores them as `formIdentifier: "Skyrim.esm|051631"` — extract the 6-digit hex after the `|`.
+
+### Phase 3 — Verify Before Serializing
+
+Checklist:
+- [ ] All FormKeys resolved to a known mod/table or provenanced
+- [ ] `.spriggit` KnownMasters includes every plugin referenced
+- [ ] `RecordData.yaml` MasterReferences matches KnownMasters
+- [ ] FaceGen `.nif` + `.dds` filenames match the NPC base FormID (`00000800`)
+- [ ] `.prompt` filename suffix matches the REFR FormID (`801`)
+- [ ] Race, sex, voice, class, combat attitude set
+- [ ] Outfit items from mods listed as `{formId}:{ModName}.esp`
+- [ ] Hair color FormKey verified in `data/colors.yaml` or noted unverified
+- [ ] `Height` set from source — not hardcoded default unless verified
 
 ## NPC Flags Matrix
 
