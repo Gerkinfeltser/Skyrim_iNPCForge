@@ -26,6 +26,7 @@ FormID column — these scripts dump FormID **+ EditorID + Name** in one run.
 | `dump_headparts.pas` | `HDPT` | All headparts | Verify `data/headparts.yaml` |
 | `dump_clfm.pas` | `CLFM` | All color forms | Verify `data/colors.yaml` |
 | `dump_classes.pas` | `CLAS` | All classes | Verify NPC `Class:` references |
+| `DumpNpcAppearance.pas` | `NPC_` | Winning appearance records (headparts, morphs, tints) to JSON | Clone NPC faces offline |
 
 ## Scope
 
@@ -35,6 +36,22 @@ covered. To verify DLC records, run the same scripts against DLC masters
 individually: right-click `Dawnguard.esm` → Apply Script → select the dump
 script. The scripts have no hardcoded plugin filter — they process whatever
 file you right-click on.
+
+## DumpNpcAppearance.pas (JSON Output)
+
+Unlike the other scripts, `DumpNpcAppearance.pas` writes its output to a JSON
+file rather than the Messages panel. It dumps winning `NPC_` appearance records
+(headparts, face morphs, tint layers, race, height, weight, hair color) from
+the loaded profile — useful for offline NPC face cloning.
+
+**Output:** `_tmp/xedit-dumps/npc_appearance_dump.json` (about 7 MB for full Skyrim.esm dump)
+
+**Command-line usage (via MO2):**
+```text
+/D:"<modlist>\Game Root\Data" /S:"tools\xedit-scripts" /IKnowWhatImDoing /autoload /AllowDirectories /script:"DumpNpcAppearance.pas" /autoexit
+```
+
+See the script's header comment for the full working invocation.
 
 ## Adding New Scripts
 
